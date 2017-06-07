@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="{{static_url("css/bootstrap.min.css")}}" rel="stylesheet"></style>
+    <title>Learning Python</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">home</a>
+      </div>
+    </nav>
+    <header>
+      {% block header %} {% end %}
+    </header>
+    <content>
+      {% block content %} {% end %}
+    </content>
+    <footer>
+      {% set website = "<a href='http://192.18.20.182:8000'>welcome to my website</a>" %}
+      {% raw website %}
+    </footer>
+    <script src="{{static_url("js/jquery.min.js")}}"></script>
+    <script src="{{static_url("js/script.js")}}"></script>
+    <script src="{{static_url("js/bootstrap.min.js")}}"></script>
+  </body>
+</html>
