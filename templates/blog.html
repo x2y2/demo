@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block header %}
+<div class navbar-header navbar-right">
+  <a class="navbar-text navbar-right" href="/logout">logout</a>
+  <p class="navbar-text navbar-right">{{user}}</p>
+</div>
+{% end%}
+{% block content %}
+{{b_infos[page - 1][4]}}
+{% end %}

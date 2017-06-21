@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding=utf-8
+#coding=utf8
 
 from url import url
 
@@ -8,7 +8,10 @@ import os
 
 settings = dict(template_path = os.path.join(os.path.dirname(__file__),"templates"),
                 static_path = os.path.join(os.path.dirname(__file__),"statics"),
-                debug = True
+                cookie_secret = 'bZJc2sWbQLKos6GkHn/VB9oXwQt8S0R0kRvJ5/xJ89E=',
+                xsrf_cookie = 'True',
+                debug = 'True',
+                login_url = '/login'
                )
 
 application = tornado.web.Application(handlers = url,**settings)

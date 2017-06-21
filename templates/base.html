@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
   <head>
+    <title>Demo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="{{static_url("css/bootstrap.min.css")}}" rel="stylesheet"></style>
-    <title>Learning Python</title>
+    <link href="{{static_url("css/demo.css")}}" rel="stylesheet"></style>
   </head>
   <body>
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="#">home</a>
+    <nav class="navbar navbar-inverse" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">home</a>
+        </div>
+        <header>
+        {% block header %} {% end %}
+        </header>       
       </div>
     </nav>
-    <header>
-      {% block header %} {% end %}
-    </header>
+
     <content>
       {% block content %} {% end %}
     </content>
-    <footer>
-      {% set website = "<a href='http://192.18.20.182:8000'>welcome to my website</a>" %}
-      {% raw website %}
-    </footer>
+
     <script src="{{static_url("js/jquery.min.js")}}"></script>
     <script src="{{static_url("js/script.js")}}"></script>
     <script src="{{static_url("js/bootstrap.min.js")}}"></script>
