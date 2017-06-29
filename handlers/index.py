@@ -10,5 +10,4 @@ class IndexHandler(BaseHandler):
   #@tornado.web.authenticated
   def get(self):
     m_infos = db.select_blog_title(table='blogs',column='*')
-    m_infos = m_infos
-    self.render("index.html",m_infos=m_infos,user=self.current_user)
+    self.render("index.html",m_infos = m_infos,user=self.current_user)

@@ -47,3 +47,13 @@ def select_blog_content(table,column):
   conn.close()
   return lines
 
+def add_blog_content(id,user_id,user_name,title,content,created_at):
+  conn = db_conn()
+  cur = conn.cursor()
+  sql = "insert into blogs(id,user_id,user_name,title,content,created_at) values ({0},{1},'{2}','{3}','{4}','{5}')".format(id,user_id,user_name,title,content,created_at)
+  cur.execute(sql)
+  cur.close()
+  conn.commit()
+  conn.close()
+
+

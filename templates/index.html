@@ -6,25 +6,43 @@
 </div>
 {% end%}
 {% block content %}
+
+<div class="bs-docs-container">
 <div class="container">
-<table class="table  table-condensed">
-  <thead>
+  <table class="table table-hover table-condensed">
+    <div class="row" style="margin-top: 10px; margin-bottom: 10px;float: right;">
+      <div class="col-lg-6">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <a href="/blog/new/info" role="button" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus">新建</span></a>
+          </span>
+        </div> 
+      </div>
+    </div>
+    <!--<thead>
+      <tr>
+        <th>文章标题</th>
+      </tr>
+    </thead>-->
+    <tbody>
+    {% for m_info in m_infos %}
     <tr>
-      <th>ID</th>
-      <th>作者</th>
-      <th>文章标题</th>
+      <td><a href="/blog/{{m_info[0]}}">{{m_info[3]}}</a></td>
+      <td width="15%">
+        <button class="btn btn-link" id="deleteButton" data-bind="click:function(name){edit_blog(name)}">
+          <span class="glyphicon glyphicon-edit">编辑</span>
+        </button>
+        <button class="btn btn-link" id="deleteButton" data-bind="click:function(name){show_blog(name)}">
+          <span class="glyphicon glyphicon-search">更多</span>
+        </button>
+      </td>
     </tr>
-  </thead>
-  <tbody>
-  
-  {% for m_info in m_infos %}
-  <tr>
-    <td>{{m_info[0]}}</td>
-    <td>{{m_info[2]}}</td>
-    <td><a href="/blog/{{m_info[0]}}">{{m_info[3]}}</a></td>
-  </tr>
-  {% end %}
-  </tbody>
+    {% end %}
+    </tbody>
   </table>
-  </div>
+</div>
+<div id="pagination_box" class="pull-right">
+  <ul id="pagination_zc" class="pagination_sm"></ul>
+</div>
+</div>
 {% end %}
