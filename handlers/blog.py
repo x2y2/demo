@@ -50,6 +50,36 @@ class NewBlogHandler(BaseHandler):
     except Exception as e:
       self.json("error",str(e))
 
+class EditBlogHandler(BaseHandler):
+  def get(self,*args,**kwargs):
+    action = "_%s_action" % args[0]
+    if hasattr(self,action):
+      getattr(self,action)(*args,**kwargs)
+    else:
+      m_infos = db.select_blog_title(table='blogs',column='*')
+      self.render("index.html",m_infos = m_infos,user = self.current_user)
 
+  def _info_action(self,*args,**kwargs):
+    args = self.get_arguments('id','')
+    blog_id = args[0]
+    blog_title = db.select_content_byid(table='blogs',column='title',condition='id',value=blog_id)
+    blog_content = db.select_content_byid(table='blogs',column='content',condition='id',value=blog_id)
+    self.render("editblog.html",user=self.current_user,blog_id=blog_id,blog_title=blog_title,blog_content=blog_content)
+  
+  
+  def post(self,*args,**kwargs):
+    action = "_%s_action" % args[0]
+    if hasattr(self,action):
+      getattr(self,action)()
+    else:
+      self.json("fail","no action")
 
-    
+  def _update_blog_action(self):
+    blog_id = self.get_argument("blog_id",default="")
+    blog_title = self.get_argument("blog_title",default="")
+    blog_content = self.get_argument("blog_content",default="")
+    try:
+      db.update_blog_content(id=blog_id,user_id=1,user_name=self.current_user,title=blog_title,content=blog_content)
+      self.json("success",blog_title)
+    except Exception as e:
+      self.json("error",str(e))

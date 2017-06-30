@@ -56,4 +56,22 @@ def add_blog_content(id,user_id,user_name,title,content,created_at):
   conn.commit()
   conn.close()
 
+def select_content_byid(table,column,condition,value):
+  conn = db_conn()
+  cur = conn.cursor()
+  sql = "select {0} from {1} where {2} = '{3}'".format(column,table,condition,value)
+  cur.execute(sql)
+  lines = cur.fetchall()
+  cur.close()
+  conn.close()
+  return lines
+
+def update_blog_content(id,user_id,user_name,title,content):
+  conn = db_conn()
+  cur = conn.cursor()
+  sql = "update blogs set user_id={0},user_name='{1}',title='{2}',content＝'{3}' where id = '{4}'".format(user_id,user_name,title,content,id)
+  cur.execute(sql)
+  cur.close()
+  conn.commit()
+  conn.close()
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Demo</title>
+    <title>Tornado</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="{{static_url("css/bootstrap.min.css")}}" rel="stylesheet"></style>
@@ -15,7 +15,7 @@
     <nav class="navbar navbar-inverse" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">home</a>
+          <a class="navbar-brand" href="/">首页</a>
         </div>
         <header>
         {% block header %} {% end %}
@@ -32,6 +32,8 @@
     <script src="https://cdn.bootcss.com/bootstrap-markdown/2.10.0/js/bootstrap-markdown.min.js"></script>
     <script src="https://cdn.bootcss.com/to-markdown/3.0.4/to-markdown.js"></script>
     <script src="https://cdn.bootcss.com/markdown.js/0.5.0/markdown.min.js"></script>
+    <script src="https://cdn.bootcss.com/knockout.mapping/2.4.1/knockout.mapping.js"></script>
+    <script src="{{static_url("js/knockout-min.js")}}"></script>
     <script src="{{static_url("js/script.js")}}"></script>
     <script src="{{static_url("js/bootstrap.min.js")}}"></script>
   </body>

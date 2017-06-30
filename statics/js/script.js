@@ -13,7 +13,7 @@ $(document).ready(function(){
             data:pd,
             cache:false,
             success:function(data){
-                window.location.href = "/index/"+data;
+                window.location.href = "/";
             },
             error:function(){
                 alert("error");
@@ -22,30 +22,6 @@ $(document).ready(function(){
     });
 });
 
-/**
-var page_size = 1;
-var total_pages = 1;
-var visiblePages = 8;
-
-$(document).ready(function(){
-  get_all_blogs(1);
-});
-
-function twbsPagination() {
-  $('#pagination_zc').twbsPagination({
-    totalPages: total_pages,
-    visiblePages: visiblePages > 8 ? 8 : visiblePages,
-    startPage: 1,
-    first: "首页",
-    prev: "上一页",
-    next: "下一页",
-    last: "末页",
-    onPageClick: function(event,page) {
-      get_all_blogs(page);
-    }
-  });
-}
-**/
 
 
 function add_blog() {
@@ -84,5 +60,47 @@ function add_blog() {
       errNotify("网络异常");
     }
   });
+}
 
+
+
+function update_blog() {
+  var blog_id = $("#blog_id").text()
+  var blog_title = $("#blog_title").val();
+  var blog_content = $("#blog_content").val();
+  alert(blog_id)
+  if(blog_title == "")
+  {
+    alert("标题不能为空！");
+    return;
+  }
+  else if(blog_content == "") 
+  {
+    alert("正文不能为空");
+    return;
+  }
+
+
+  $.ajax({
+    type: "POST",
+    url: "/blog/edit/update_blog",
+    data: {
+      "blog_id": blog_id,
+      "blog_title": blog_title,
+      "blog_content": blog_content
+    },
+    success: function(data) {
+      if(data['status'] == 'fail') {
+        alert("提交失败" + data['info']);
+      }
+      else {
+        //window.location.href = "/index"
+        alert('ok'+ data['info']);
+      }
+    },
+    error: function() {
+      alert(data['info']);
+    }
+  });
+  
 }
