@@ -60,8 +60,7 @@ class EditBlogHandler(BaseHandler):
       self.render("index.html",m_infos = m_infos,user = self.current_user)
 
   def _info_action(self,*args,**kwargs):
-    args = self.get_arguments('id','')
-    blog_id = args[0]
+    blog_id = self.get_argument('id',default="")
     blog_title = db.select_content_byid(table='blogs',column='title',condition='id',value=blog_id)
     blog_content = db.select_content_byid(table='blogs',column='content',condition='id',value=blog_id)
     self.render("editblog.html",user=self.current_user,blog_id=blog_id,blog_title=blog_title,blog_content=blog_content)
@@ -76,8 +75,8 @@ class EditBlogHandler(BaseHandler):
 
   def _update_blog_action(self):
     blog_id = self.get_argument("blog_id",default="")
-    blog_title = self.get_argument("blog_title",default="")
-    blog_content = self.get_argument("blog_content",default="")
+    blog_title = self.get_argument("blog_title",default="").encode('utf8')
+    blog_content = self.get_argument("blog_content",default="").encode('utf8')
     try:
       db.update_blog_content(id=blog_id,user_id=1,user_name=self.current_user,title=blog_title,content=blog_content)
       self.json("success",blog_title)

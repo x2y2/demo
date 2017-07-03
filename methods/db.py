@@ -4,7 +4,7 @@
 import MySQLdb
 
 def db_conn():
-  conn = MySQLdb.connect(host='192.168.20.193',user='wangpei',passwd='123456',db='test',port=3306,charset='utf8')
+  conn = MySQLdb.connect(host='192.168.20.193',user='wangpei',passwd='123456',db='test',port=3306,charset='utf8mb4')
   return conn
 
 def select_table(table,column,condition,value):
@@ -69,7 +69,7 @@ def select_content_byid(table,column,condition,value):
 def update_blog_content(id,user_id,user_name,title,content):
   conn = db_conn()
   cur = conn.cursor()
-  sql = "update blogs set user_id={0},user_name='{1}',title='{2}',content＝'{3}' where id = '{4}'".format(user_id,user_name,title,content,id)
+  sql = "update blogs set user_id={0},user_name='{1}',title='{2}',content='{3}' where id={4}".format(user_id,user_name,title,content,id)
   cur.execute(sql)
   cur.close()
   conn.commit()

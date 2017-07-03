@@ -68,7 +68,7 @@ function update_blog() {
   var blog_id = $("#blog_id").text()
   var blog_title = $("#blog_title").val();
   var blog_content = $("#blog_content").val();
-  alert(blog_id)
+
   if(blog_title == "")
   {
     alert("标题不能为空！");
@@ -94,8 +94,8 @@ function update_blog() {
         alert("提交失败" + data['info']);
       }
       else {
-        //window.location.href = "/index"
-        alert('ok'+ data['info']);
+        window.location.href = "/index"
+        //alert('ok'+ data['info']);
       }
     },
     error: function() {
