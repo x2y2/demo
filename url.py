@@ -12,11 +12,13 @@ from handlers.blog import BlogContentHandler
 from handlers.blog import NewBlogHandler
 from handlers.blog import EditBlogHandler
 
+
 url = [(r'/',IndexHandler)]
 url += [(r'/index',IndexHandler)]
 url += [(r'/index/[a-zA-Z0-9]+',IndexHandler)]
 url += [(r'/login',LoginHandler)]
 url += [(r'/logout',LogoutHandler)]
-url += [(r'/blog/[0-9]+',BlogContentHandler)]
+url += [(r'/blog/[a-zA-Z0-9_=]+',BlogContentHandler)]
 url += [(r'/blog/new/(\w+)',NewBlogHandler)]
 url += [(r'/blog/edit/(\w+)',EditBlogHandler)]
+

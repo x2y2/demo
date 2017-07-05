@@ -1,7 +1,4 @@
-$(document).ready(function(){
-
-});
-
+/**
 $(document).ready(function(){
     $("#login").click(function(){
         var user = $("#username").val();
@@ -13,7 +10,8 @@ $(document).ready(function(){
             data:pd,
             cache:false,
             success:function(data){
-                window.location.href = "/";
+              alert(data['info']);
+              //window.location.href = "/";
             },
             error:function(){
                 alert("error");
@@ -21,7 +19,7 @@ $(document).ready(function(){
         });
     });
 });
-
+**/
 
 
 function add_blog() {
@@ -49,15 +47,14 @@ function add_blog() {
     },
     success: function(data) {
       if(data['status'] == 'fail') {
-        warningNotify("新增失败" + data['info']);
+        alert("新增失败" + data['info']);
       }
       else {
-        window.location.href = "/index"
-        //successNotify("新增成功" + data['info']);
+        window.location.href = "/";
       }
     },
-    error: function() {
-      errNotify("网络异常");
+    error: function(data) {
+      alert(data['info']);
     }
   });
 }
@@ -79,8 +76,6 @@ function update_blog() {
     alert("正文不能为空");
     return;
   }
-
-
   $.ajax({
     type: "POST",
     url: "/blog/edit/update_blog",
@@ -94,13 +89,49 @@ function update_blog() {
         alert("提交失败" + data['info']);
       }
       else {
-        window.location.href = "/index"
-        //alert('ok'+ data['info']);
+        window.location.href = "/index";
       }
     },
     error: function() {
       alert(data['info']);
     }
   });
-  
 }
+
+
+
+
+function del_blog(name) {
+  $.messager.confirm("操作提示",'确认删除吗?',function(data) {
+    var rows = name.parentNode.parentNode.rowIndex;
+    var blog_id = $("#blogIndex tr:eq("+rows+") td:eq(0)").text();
+    if (data) {
+    $.ajax({
+    type: "POST",
+    url: "/blog/edit/delete_blog",
+    data: {
+      "blog_id": blog_id
+    },
+    success: function(data) {
+      if(data['status'] == 'fail') {
+         alert(data['info']);
+      }
+      else {
+        window.location.href = "/index";
+        
+      }
+    },
+    error: function(data) {
+      alert(data['info']);
+    }
+  });
+  }
+});   
+}
+
+
+
+
+
+  
+

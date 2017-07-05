@@ -3,9 +3,11 @@
 
 import MySQLdb
 
+
 def db_conn():
   conn = MySQLdb.connect(host='192.168.20.193',user='wangpei',passwd='123456',db='test',port=3306,charset='utf8mb4')
   return conn
+
 
 def select_table(table,column,condition,value):
   conn = db_conn()
@@ -75,3 +77,11 @@ def update_blog_content(id,user_id,user_name,title,content):
   conn.commit()
   conn.close()
 
+def delete_blog_content(id):
+  conn = db_conn()
+  cur = conn.cursor()
+  sql = "delete from blogs where id={0}".format(id)
+  cur.execute(sql)
+  cur.close()
+  conn.commit()
+  conn.close()

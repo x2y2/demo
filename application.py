@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 #coding=utf8
 
-from url import url
-
 import tornado.web
 import os
 
@@ -14,4 +12,4 @@ settings = dict(template_path = os.path.join(os.path.dirname(__file__),"template
                 login_url = '/login'
                )
 
-application = tornado.web.Application(handlers = url,**settings)
+
