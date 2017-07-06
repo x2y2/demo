@@ -129,7 +129,42 @@ function del_blog(name) {
 }
 
 
+function edit_delete_blog() {
+  $.messager.confirm("操作提示",'确认删除吗?',function(data) {
+    var blog_id = $("#blog_id").text();
+    if (data) {
+    $.ajax({
+    type: "POST",
+    url: "/blog/edit/delete_blog",
+    data: {
+      "blog_id": blog_id
+    },
+    success: function(data) {
+      if(data['status'] == 'fail') {
+         alert(data['info']);
+      }
+      else {
+        window.location.href = "/index";
+        
+      }
+    },
+    error: function(data) {
+      alert(data['info']);
+    }
+  });
+  }
+});   
+}
 
+$(document).ready(function () {
+    $.goup({
+        trigger: 100,
+        bottomOffset: 150,
+        locationOffset: 100,
+        title: '回到顶部',
+        titleAsText: true
+    });
+});
 
 
   

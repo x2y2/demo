@@ -11,6 +11,7 @@ from handlers.logout import LogoutHandler
 from handlers.blog import BlogContentHandler
 from handlers.blog import NewBlogHandler
 from handlers.blog import EditBlogHandler
+from handlers.blog import UploadHandler
 
 
 url = [(r'/',IndexHandler)]
@@ -21,4 +22,5 @@ url += [(r'/logout',LogoutHandler)]
 url += [(r'/blog/[a-zA-Z0-9_=]+',BlogContentHandler)]
 url += [(r'/blog/new/(\w+)',NewBlogHandler)]
 url += [(r'/blog/edit/(\w+)',EditBlogHandler)]
+url += [(r'/blog/upload/(\w+)',UploadHandler)]
 

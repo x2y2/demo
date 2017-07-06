@@ -18,8 +18,8 @@ class BlogContentHandler(BaseHandler):
   def get(self):
     uri = self.request.uri
     page = uri.split('/')[-1]
-    b_infos = self.db.query("SELECT id,title,content,created_at FROM blogs WHERE id='{0}'".format(page))
-    c_infos = self.db.query("SELECT content FROM blogs WHERE id='{0}'".format(page))[0]['content'] 
+    b_infos = self.db.query("SELECT id,title,content,created_at FROM blogs WHERE id=%s",page)
+    c_infos = self.db.query("SELECT content FROM blogs WHERE id=%s",page)[0]['content'] 
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
@@ -87,7 +87,7 @@ class EditBlogHandler(BaseHandler):
 
   def _info_action(self,*args,**kwargs):
     blog_id = self.get_argument('id',default="")
-    blog_title_content = self.db.query("select title,content from blogs where id='{0}'".format(blog_id))
+    blog_title_content = self.db.query("select title,content from blogs where id=%s",blog_id)
     self.render("editblog.html",user=self.current_user,
                                 blog_id=blog_id,
                                 blog_title=blog_title_content[0]['title'],
@@ -106,7 +106,7 @@ class EditBlogHandler(BaseHandler):
     blog_title = self.get_argument("blog_title",default="").encode('utf8')
     blog_content = self.get_argument("blog_content",default="").encode('utf8')
     try:
-      self.db.execute("update blogs set title='{0}',content='{1}' where id='{2}'".format(blog_title,blog_content,blog_id))
+      self.db.execute("update blogs set title=%s,content=%s where id=%s",blog_title,blog_content,blog_id)
       self.json("success",blog_title)
     except Exception as e:
       self.json("error",str(e))
@@ -115,7 +115,24 @@ class EditBlogHandler(BaseHandler):
   def _delete_blog_action(self):
     blog_id = self.get_argument("blog_id",default="")
     try:
-      self.db.execute("delete from blogs where id='{0}'".format(blog_id))
+      self.db.execute("delete from blogs where id=%s",blog_id)
       self.json("success",'ok')
     except Exception as e:
       self.json("error",str(e))
+
+class UploadHandler(BaseHandler):
+  def get(self):
+    self.render("upload.html")
+
+  def post(seff):
+    if self.request.files:
+      myfile = self.request.files['myfile'][0]
+      random_time = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
+      str = ''.join([random_time,self.current_user])
+      str_md5 = hashlib.md5(str).hexdigest()
+      img_name = str_md5[0:16]
+      fd = open("/home/wangpei/demo/statics/upload/img/{0}.jpg".format(img_name),'w')
+      fd.write(myfile['body'])
+      fd.close()
+
+    

@@ -20,14 +20,13 @@
   <div class="container">
     <div class="col-md-8" style="margin-left: 200px">
       <div>
-        <h4 style="display: none;">{{b_infos[0]['id']}}</h4>
+        <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['id']}}</h4>
         <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
         <br/>
         <div>
           <a style="text-decoration:none;color: gray;">({{b_infos[0]['created_at']}})</a>
           {% if user is not None %}
           <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
-          <a onclick="del_blog(this)"><span>[删除]</span></a>
           {% end %}
         </div>
       </div>
