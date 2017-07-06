@@ -1,10 +1,44 @@
 {% extends "base.html" %}
 {% block header %}
-<div class navbar-header navbar-right">
-  <a class="navbar-text navbar-right" href="/logout">logout</a>
-  <p class="navbar-text navbar-right">{{user}}</p>
+<div class navbar-header">
+  <div class="collapse navbar-collapse">
+    {% if user is not None %}
+    <ul class="nav navbar-nav" style="float: right;">
+      <li><a><span class="glyphicon glyphicon-user">{{user}}</span></a></li>
+      <li><a href="/logout"><span class="glyphicon glyphicon-off">退出</span></a></li>
+    </ul>
+    {% else %}
+    <ul class="nav navbar-nav" style="float: right;">
+      <li><a href="/login"><span class="glyphicon glyphicon-log-in">登录</span></a></li>
+    </ul>
+    {% end %}
+  </div>  
 </div>
 {% end%}
 {% block content %}
-{{b_infos[0]['content']}}
+<div class="bs-docs-container">
+  <div class="container">
+    <a style="text-decoration:none;color: black;">正文</a>
+    <br/>
+    <br/>
+    <br/>
+    <div>
+      <h4 style="display: none;">{{b_infos[0]['id']}}</h4>
+      <a href="#">{{b_infos[0]['title']}}</a>
+      <a style="text-decoration:none;color: gray;">({{b_infos[0]['created_at']}})</a>
+      <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
+      <a onclick="del_blog(this)"><span>[删除]</span></a>
+    </div>
+    <table id="contentIndex" width="500" class="table table-hover table-border table-condensed">
+      <body>
+        <tr>
+          <td>
+            {{b_infos[0]['content']}}
+          </td>
+        </tr>
+      </body>
+    </table>
+  </div>
+</div>
+
 {% end %}

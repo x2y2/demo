@@ -16,20 +16,25 @@
 </div>
 {% end%}
 {% block content %}
-
+ <b style="margin-left: 370px;">全部博文({{blog_count[0]['count']}})</b>
+  <br/>
+  <br/>
 <div class="bs-docs-container">
 <div class="container">
     {% if user is not None %}
-    <div class="row" style="margin-top: 10px; margin-bottom: 10px;float: right;">
+    <a style="margin-left: 1000px;" href="/blog/new/info"><span class="glyphicon glyphicon-edit">发博文</span></a>   
+    <!--<div class="row" style="margin-top: 5px; margin-bottom: 5px; float: right;">
       <div class="col-lg-6">
         <div class="input-group">
           <span class="input-group-btn">
-            <a href="/blog/new/info" role="button" class="btn btn-info" data-toggle="modal"><span class="glyphicon glyphicon-plus">新建</span></a>
+            <a  href="/blog/new/info" ><span class="glyphicon glyphicon-edit">发博文</span></a>
           </span>
         </div> 
       </div>
-    </div>
+    </div>-->
     {% end %}
+  <br/>
+  <br/>
   <table id="blogIndex" class="table table-hover table-condensed">
     <tbody>
     {% for m_info in m_infos %}
@@ -39,9 +44,10 @@
         <a href="/blog/{{m_info['id']}}" id="blog_title">{{m_info['title']}}</a>
       </td>
       {% if user is not None%}
-      <td width="15%">
-        <a href="/blog/edit/info?id={{m_info['id']}}"><span　class="glyphicon glyphicon-edit">[编辑]</span></a>
-        <button class="btn btn-link" onclick="del_blog(this)" ><span>删除</span></button>
+      <td width="25%">
+        <a style="text-decoration:none;color:gray;">{{m_info['created_at']}}</a>
+        <a href="/blog/edit/info?id={{m_info['id']}}"><span>[编辑]</span></a>
+        <button class="btn btn-link" onclick="del_blog(this)"><span>删除</span></button>
         <!--确认删除模态框-->
         <!--data-toggle="modal" data-target="#myModal"
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -65,9 +71,17 @@
     {% end %}
     </tbody>
   </table>
+  <hr>
 </div>
-<div id="pagination_box" class="pull-right">
-  <ul id="pagination_zc" class="pagination_sm"></ul>
+
+<div class="container">
+  <ul class="pagination pagination-sm" style="float: right;">
+    <li><a>首页</a></li>
+    <li><a>上一页</a></li>
+    <li><a>...</a></li>
+    <li><a>下一页</a></li>
+    <li><a>尾页</a></li>
+  </ul>
 </div>
 </div>
 {% end %}

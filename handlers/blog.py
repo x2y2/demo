@@ -16,8 +16,7 @@ class BlogContentHandler(BaseHandler):
   def get(self):
     uri = self.request.uri
     page = uri.split('/')[-1]
-    #b_infos = db.select_blog_content(table='blogs',column='*')
-    b_infos = self.db.query("SELECT content FROM blogs WHERE id='{0}'".format(page))
+    b_infos = self.db.query("SELECT id,title,content,created_at FROM blogs WHERE id='{0}'".format(page))
     self.render("blog.html",b_infos=b_infos,user=self.current_user)
 
 class NewBlogHandler(BaseHandler):
@@ -40,8 +39,8 @@ class NewBlogHandler(BaseHandler):
       self.json("fail","no aciton!")
 
   def _add_blog_action(self):
-    blog_title = self.get_body_argument("blog_title",default="")
-    blog_content = self.get_body_argument("blog_content",default="")
+    blog_title = self.get_argument("blog_title",default="")
+    blog_content = self.get_argument("blog_content",default="")
     user_name = self.current_user
     created_at = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
     str = ''.join([created_at,user_name])
@@ -82,8 +81,11 @@ class EditBlogHandler(BaseHandler):
 
   def _info_action(self,*args,**kwargs):
     blog_id = self.get_argument('id',default="")
-    blog_title_content = self.db.query("select title,content from blogs where id={0}".format(blog_id))
-    self.render("editblog.html",user=self.current_user,blog_id=blog_id,blog_title=blog_title_content[0]['title'],blog_content=blog_title_content[0]['content'])
+    blog_title_content = self.db.query("select title,content from blogs where id='{0}'".format(blog_id))
+    self.render("editblog.html",user=self.current_user,
+                                blog_id=blog_id,
+                                blog_title=blog_title_content[0]['title'],
+                                blog_content=blog_title_content[0]['content'])
   
   
   def post(self,*args,**kwargs):
@@ -107,8 +109,7 @@ class EditBlogHandler(BaseHandler):
   def _delete_blog_action(self):
     blog_id = self.get_argument("blog_id",default="")
     try:
-      #db.delete_blog_content(id=blog_id)
-      self.db.execute("delete from blogs where id={0}".format(blog_id))
+      self.db.execute("delete from blogs where id='{0}'".format(blog_id))
       self.json("success",'ok')
     except Exception as e:
       self.json("error",str(e))

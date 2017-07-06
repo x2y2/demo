@@ -21,7 +21,6 @@ $(document).ready(function(){
 });
 **/
 
-
 function add_blog() {
   var blog_title = $("#blog_title").val();
   var blog_content = $("#blog_content").val();
