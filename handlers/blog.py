@@ -7,6 +7,8 @@ import methods.db as db
 import sys
 import datetime
 import hashlib
+import markdown2
+import HTMLParser
 
 
 reload(sys)
@@ -17,7 +19,11 @@ class BlogContentHandler(BaseHandler):
     uri = self.request.uri
     page = uri.split('/')[-1]
     b_infos = self.db.query("SELECT id,title,content,created_at FROM blogs WHERE id='{0}'".format(page))
-    self.render("blog.html",b_infos=b_infos,user=self.current_user)
+    c_infos = self.db.query("SELECT content FROM blogs WHERE id='{0}'".format(page))[0]['content'] 
+    c_infos_html = markdown2.markdown(c_infos)
+    html_parser = HTMLParser.HTMLParser()
+    html = html_parser.unescape(c_infos_html)
+    self.render("blog.html",b_infos=b_infos,user=self.current_user,c_infos_html=html)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):

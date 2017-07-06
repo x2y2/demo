@@ -9,7 +9,7 @@
     </ul>
     {% else %}
     <ul class="nav navbar-nav" style="float: right;">
-      <li><a href="/login"><span class="glyphicon glyphicon-log-in">登录</span></a></li>
+      <li><a href="/login"><span class="glyphicon glyphicon-log-in"> 登录</span></a></li>
     </ul>
     {% end %}
   </div>  
@@ -18,27 +18,24 @@
 {% block content %}
 <div class="bs-docs-container">
   <div class="container">
-    <a style="text-decoration:none;color: black;">正文</a>
-    <br/>
-    <br/>
-    <br/>
-    <div>
-      <h4 style="display: none;">{{b_infos[0]['id']}}</h4>
-      <a href="#">{{b_infos[0]['title']}}</a>
-      <a style="text-decoration:none;color: gray;">({{b_infos[0]['created_at']}})</a>
-      <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
-      <a onclick="del_blog(this)"><span>[删除]</span></a>
+    <div class="col-md-8" style="margin-left: 200px">
+      <div>
+        <h4 style="display: none;">{{b_infos[0]['id']}}</h4>
+        <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
+        <br/>
+        <div>
+          <a style="text-decoration:none;color: gray;">({{b_infos[0]['created_at']}})</a>
+          {% if user is not None %}
+          <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
+          <a onclick="del_blog(this)"><span>[删除]</span></a>
+          {% end %}
+        </div>
+      </div>
+      <br/>
+      <div style="font-size: 18px;">
+       {% raw c_infos_html %}
+      </div>
     </div>
-    <table id="contentIndex" width="500" class="table table-hover table-border table-condensed">
-      <body>
-        <tr>
-          <td>
-            {{b_infos[0]['content']}}
-          </td>
-        </tr>
-      </body>
-    </table>
   </div>
 </div>
-
 {% end %}
