@@ -18,12 +18,13 @@ class BlogContentHandler(BaseHandler):
   def get(self):
     uri = self.request.uri
     page = uri.split('/')[-1]
-    b_infos = self.db.query("SELECT id,title,content,created_at FROM blogs WHERE id=%s",page)
-    c_infos = self.db.query("SELECT content FROM blogs WHERE id=%s",page)[0]['content'] 
+    b_infos = self.db.query("SELECT id,user_name,title,created_at FROM blogs WHERE id=%s",page)
+    c_infos = self.db.query("SELECT content FROM blogs WHERE id=%s",page)
+    c_infos = c_infos[0]['content']
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
-    self.render("blog.html",b_infos=b_infos,user=self.current_user,c_infos_html=html)
+    self.render("blog.html",b_infos=b_infos,user=self.current_user,c_infos_html= html)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):

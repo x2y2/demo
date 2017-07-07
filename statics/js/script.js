@@ -88,7 +88,7 @@ function update_blog() {
         alert("提交失败" + data['info']);
       }
       else {
-        window.location.href = "/index";
+        window.location.href = "/blog/" + blog_id;
       }
     },
     error: function() {
@@ -144,7 +144,7 @@ function edit_delete_blog() {
          alert(data['info']);
       }
       else {
-        window.location.href = "/index";
+        window.location.href = "/blog/" + blog_id;
         
       }
     },

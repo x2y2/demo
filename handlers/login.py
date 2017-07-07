@@ -3,8 +3,9 @@
 
 import tornado.escape
 import tornado.web
-import methods.db as db
 from base import BaseHandler
+import base64
+import re
 
     
 class LoginHandler(BaseHandler):
@@ -12,39 +13,42 @@ class LoginHandler(BaseHandler):
     self.render("login.html")
 
   def post(self):
-    username = self.get_body_argument("username")
+    email = self.get_body_argument("email")
     password = self.get_body_argument("password")
+    password = base64.b64encode(password)
     cbox_remember = self.get_body_argument("cbox_remember",default="off")
 
-    if not self._checkusername_action(username):
-      self.redirect("/login?error=not_exists&user={0}".format(username))
+    if not self._checkemail_action(email):
+      self.redirect("/sign_up?error=not_exists&user={0}".format(email))
     else:
-      if not self._checkpasswd_action(username,password):
+      if not self._checkpasswd_action(email,password):
         self.redirect("/login?error=passwd_error")
       else:
+        ret = self.db.query("SELECT username FROM user WHERE email=%s",email)
+        username = ret[0]['username']
         if cbox_remember == "on":
           self.set_secure_cookie("username",username,expires_days=30)
         else:
           self.set_secure_cookie("username",username,expires_days=1)
         self.redirect('/')
 
-  def _checkusername_action(self,username):
-    #user_infos = user_infos = db.select_table(table="user",column="*",condition="username",value=username)
-    #user = user_infos[0][1]
-    user = self.db.query("select id from user where username='{0}'".format(username))
-    if len(user) == 0:
+  def _checkemail_action(self,email):
+    id = self.db.query("SELECT id FROM user WHERE email=%s",email)
+    if len(id) == 0:
       return False
     else:
       return True
 
-  def _checkpasswd_action(self,username,password):
-    #user_infos = user_infos = db.select_table(table="user",column="*",condition="username",value=username)
-    #user = user_infos[0][0]
-    user = self.db.query("select id from user where (username='{0}' and password={1})".format(username,password))
-    if not user:
+  def _checkpasswd_action(self,email,password):
+    id = self.db.query("SELECT id FROM user WHERE (email=%s and password=%s)",email,password)
+    if not id:
       return False
     else:
       return True
+
+  def _has_cn(self,text):
+    zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
+    return zhPattern.search(text)
       
 
 

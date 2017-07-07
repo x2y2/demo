@@ -1,20 +1,4 @@
 {% extends "base.html" %}
-{% block header %}
-<div class navbar-header">
-  <div class="collapse navbar-collapse">
-    {% if user is not None %}
-    <ul class="nav navbar-nav" style="float: right;">
-      <li><a><span class="glyphicon glyphicon-user">{{user}}</span></a></li>
-      <li><a href="/logout"><span class="glyphicon glyphicon-off">退出</span></a></li>
-    </ul>
-    {% else %}
-    <ul class="nav navbar-nav" style="float: right;">
-      <li><a href="/login"><span class="glyphicon glyphicon-log-in"> 登录</span></a></li>
-    </ul>
-    {% end %}
-  </div>  
-</div>
-{% end%}
 {% block content %}
 <div class="bs-docs-container">
   <div class="container">
@@ -24,10 +8,15 @@
         <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
         <br/>
         <div>
-          <a style="text-decoration:none;color: gray;">({{b_infos[0]['created_at']}})</a>
-          {% if user is not None %}
-          <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
-          {% end %}
+          <a style="text-decoration:none;color: black;font-size: 15px;">作者 {{b_infos[0]['user_name']}}</a>
+          <div>
+            <a style="text-decoration:none;color: gray;">{{b_infos[0]['created_at']}} </a>
+            <a style="text-decoration:none;color: gray;">阅读 </a>
+            <a style="text-decoration:none;color: gray;">评论 </a>
+            {% if user == b_infos[0]['user_name'] %}
+            <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
+            {% end %}
+          </div>
         </div>
       </div>
       <br/>

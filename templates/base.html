@@ -14,33 +14,73 @@
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
-  
-
   </head>
   <body>
-    <nav class="navbar navbar-inverse" role="navigation">
+    <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">首页</a>
+          <a class="navbar-brand" style="margin-left: 180px;color: red;font-size: 30px;font-weight: bold;" href="/">随笔</a>
+          <a class="navbar-brand" style="margin-left: 300px;" href="/">首页</a>
+          <a class="navbar-brand" href="#">评论</a>
+          <!--搜索表单-->
+          <!--<form class="narbar-form navbar-left" role="search">  
+            <div class="col-md-9" style="margin-top: 15px;"> 
+              <input type="text" class="head_search_kuang" placeholder="搜索"> 
+            </div>  
+          </form> -->
         </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav" style="margin-left: 700px;">
+              {% if user is not None %}
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-user">{{user}}</span>
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#"><span class="glyphicon glyphicon-user">个人主页</span></a></li>
+                  <li><a href="#"><span class="glyphicon glyphicon-cog">设置</span></a></li>
+                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out">退出</span></a></li>
+                </ul>
+              </li>
+              <!--<li>
+                <div role="button" class="btn btn-lg-9 btn-info glyphicon glyphicon-edit" style="margin-top: 10px">
+                  <a href="/blog/new/info" style="color: white;text-decoration:none;"><span>写文章</span></a>
+                </div>
+              </li>-->
+              {% else %}
+              <li><a href="/login"><span class="glyphicon glyphicon-log-in"> 登录</span></a></li>
+              <li>
+                <div role="button" class="btn btn-lg-9 btn-info" style="margin-top: 10px">
+                  <a href="/sign_up" style="color: white;text-decoration:none;"><span>注册</span></a>
+                </div>
+              </li>
+              {% end %}
+              <li>
+                <div role="button" class="btn btn-lg-9 btn-info" style="margin-top: 10px;margin-left: 10px;">
+                  {% if user is not None %}
+                    <a href="/blog/new/info" style="color: white;text-decoration:none;"><span>写文章</span></a>
+                  {% else %}
+                    <a href="/login" style="color: white;text-decoration:none;"><span>写文章</span></a>
+                  {% end %}
+                </div>
+              </li>
+          </ul>
+        </div>  
         <header>
-        {% block header %} {% end %}
+          {% block header %} {% end %}
         </header>       
       </div>
     </nav>
-
     <content>
       {% block content %} {% end %}
     </content>
-
     <script src="{{static_url("js/jquery.min.js")}}"></script>
     <script src="{{static_url("js/bootstrap-markdown.js")}}"></script>
     <script src="{{static_url("js/bootstrap-markdown.min.js")}}"></script>
     <script src="{{static_url("js/markdown.min.js")}}"></script>
     <script src="{{static_url("js/bootstrap.min.js")}}"></script>
-    <script src="{{static_url("jquery.goup.min.js")}}""></script>
     <script type="text/javascript" src="{{static_url("js/jquery.easyui.min.js")}}"></script>
     <script src="{{static_url("js/script.js")}}"></script>
-
-  </body>
+</body>
 </html>

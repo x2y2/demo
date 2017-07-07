@@ -8,3 +8,16 @@ padding: 5%;
 padding-left: 5%;
 padding-right: 5%;
 }
+
+.head_search_kuang { 
+  background:transparent url("{{static_url("img/head_search_kuang.png")}}") repeat scroll 0 0; 
+  border:0 none; 
+  float:left; 
+  font:normal 12px Arial;
+  height:19px; 
+  margin-left:20px; 
+  margin-top:3px; 
+  padding-left:28px; 
+  padding-top:5px; 
+  width:237px; 
+}
