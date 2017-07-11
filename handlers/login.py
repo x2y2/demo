@@ -16,7 +16,7 @@ class LoginHandler(BaseHandler):
     email = self.get_body_argument("email")
     password = self.get_body_argument("password")
     password = base64.b64encode(password)
-    cbox_remember = self.get_body_argument("cbox_remember",default="off")
+    cbox_remember = self.get_body_argument("cbox_remember",default="on")
 
     if not self._checkemail_action(email):
       self.redirect("/sign_up?error=not_exists&user={0}".format(email))

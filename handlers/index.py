@@ -11,5 +11,5 @@ class IndexHandler(BaseHandler):
   def get(self):
     m_infos = self.db.query("select id,user_name,title,content,created_at from blogs order by created_at desc")
     blog_count = self.db.query("SELECT count(id) count FROM blogs")
-    blog_summary = m_infos[0]['content']
-    self.render("index.html",m_infos = m_infos,user=self.current_user,blog_count=blog_count)
+    user = self.current_user
+    self.render("index.html",m_infos = m_infos,user=user,user_id=self.user_id)

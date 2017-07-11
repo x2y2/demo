@@ -1,28 +1,50 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="bs-docs-container">
-  <div class="container">
-    <div class="col-md-8" style="margin-left: 200px">
-      <div>
-        <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['id']}}</h4>
-        <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
-        <br/>
-        <div>
-          <a style="text-decoration:none;color: black;font-size: 15px;">作者 {{b_infos[0]['user_name']}}</a>
-          <div>
-            <a style="text-decoration:none;color: gray;">{{b_infos[0]['created_at']}} </a>
-            <a style="text-decoration:none;color: gray;">阅读 </a>
-            <a style="text-decoration:none;color: gray;">评论 </a>
-            {% if user == b_infos[0]['user_name'] %}
-            <a href="/blog/edit/info?id={{b_infos[0]['id']}}"><span>[编辑]</span></a>
-            {% end %}
+<div class="container">
+  <div class="col-md-8" style="margin-left: 200px">
+    <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['id']}}</h4>
+    <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
+    <div class="author">
+      <div class="main-top">
+        <a class="blog-avatar" href="">
+          <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 60px;height: 60px;">
+        </a>
+      </div>
+      <div class="blog-title">
+        <a href="" style="text-decoration: none;color: black;">作者 {{user}}</a>
+      </div>
+      <div class="blog-info">
+        <ul class="list-inline">
+          <li>
+            <div class="blog-meta-block">
+              <a  style="text-decoration: none;color: gray;">{{b_infos[0]['created_at']}}</a>
+            </div>
+          </li>
+          <li>
+            <div class="blog-meta-block">
+              <a  style="text-decoration: none;color: gray;">阅读 {{read}}</a>
+            </div>
+          </li>
+          <li>
+            <div class="blog-meta-block">
+              <a  style="text-decoration: none;color: gray;">评论 {{commented}}</a>
+            </div>
+          </li>
+        </ul>
+        {% if user == b_infos[0]['user_name']%}
+          <div class="blog-edit">
+            <a href="/blog/edit/info?id={{b_infos[0]['id']}}" style="text-decoration: none;color: gray;">编辑文章</a>
           </div>
-        </div>
+        {% end%}
       </div>
-      <br/>
-      <div style="font-size: 18px;">
-       {% raw c_infos_html %}
-      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="col-md-8" style="margin-left: 200px;margin-top: 10px;">
+    <div style="font-size: 18px;">
+     {% raw c_infos_html %}
     </div>
   </div>
 </div>

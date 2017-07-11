@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #coding=utf8
 
-import tornado.web
 from base import BaseHandler
 import methods.db as db
 import sys
@@ -24,7 +23,15 @@ class BlogContentHandler(BaseHandler):
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
-    self.render("blog.html",b_infos=b_infos,user=self.current_user,c_infos_html= html)
+    read = 0
+    commented = 0
+    self.render("blog.html",
+                b_infos=b_infos,
+                user=self.current_user,
+                c_infos_html= html,
+                user_id=self.user_id,
+                read=read,
+                commented=commented)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
@@ -33,10 +40,10 @@ class NewBlogHandler(BaseHandler):
       getattr(self,action)()
     else:
       m_infos = self.db.query("select id,title from blogs")
-      self.render("index.html",m_infos = m_infos,user = self.current_user)
+      self.render("index.html",m_infos = m_infos,user = self.current_user,user_id=self.user_id)
 
   def _info_action(self):
-    self.render("newblog.html",user=self.current_user)
+    self.render("newblog.html",user=self.current_user,user_id=self.user_id)
 
   def post(self,*args,**kwargs):
     action = "_%s_action" % args[0]
@@ -84,12 +91,13 @@ class EditBlogHandler(BaseHandler):
       getattr(self,action)(*args,**kwargs)
     else:
       m_infos = self.db.query("select id,title from blogs")
-      self.render("index.html",m_infos = m_infos,user = self.current_user)
+      self.render("index.html",m_infos = m_infos,user = self.current_user,user_id=self.user_id)
 
   def _info_action(self,*args,**kwargs):
     blog_id = self.get_argument('id',default="")
     blog_title_content = self.db.query("select title,content from blogs where id=%s",blog_id)
     self.render("editblog.html",user=self.current_user,
+                                user_id = self.user_id,
                                 blog_id=blog_id,
                                 blog_title=blog_title_content[0]['title'],
                                 blog_content=blog_title_content[0]['content'])

@@ -34,20 +34,26 @@
               {% if user is not None %}
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown">
-                  <span class="glyphicon glyphicon-user">{{user}}</span>
+                  <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 30px;height: 30px;">
+                  <span>{{user}}</span>
                   <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a href="#"><span class="glyphicon glyphicon-user">个人主页</span></a></li>
-                  <li><a href="#"><span class="glyphicon glyphicon-cog">设置</span></a></li>
-                  <li><a href="/logout"><span class="glyphicon glyphicon-log-out">退出</span></a></li>
+                  <li>
+                    <a href="/users/{{user_id}}?order_by=created_at"><span class="glyphicon glyphicon-user" style="height: 30px;">  我的主页</span></a>
+                  </li>
+                  <li>
+                   <a href="/setting/basic"><span class="glyphicon glyphicon-cog" style="height: 30px;">  设置</span></a>
+                  </li>
+                  <li>
+                    <a href="/contactus"><span class="glyphicon glyphicon-phone" style="height: 30px;">  联系我们</span></a>
+                  </li>
+                  <li>
+                    <a href="/logout"><span class="glyphicon glyphicon-log-out" style="height: 30px;">  退出</span></a>
+                    </li>
                 </ul>
               </li>
-              <!--<li>
-                <div role="button" class="btn btn-lg-9 btn-info glyphicon glyphicon-edit" style="margin-top: 10px">
-                  <a href="/blog/new/info" style="color: white;text-decoration:none;"><span>写文章</span></a>
-                </div>
-              </li>-->
+              
               {% else %}
               <li><a href="/login"><span class="glyphicon glyphicon-log-in"> 登录</span></a></li>
               <li>

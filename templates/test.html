@@ -1,36 +1,4 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>test</title>
-    <h2>login</h2>
-  </head>
-  <style type="text/css">
-    table {border-collapse: collapse;}
-    table,td,th {
-      border: 1px solid black;
-    }
-    th { background-color: black;
-         color: white;
-       }
-  </style>
-  <body>
-  <p>this is test</p>
-    <script src="../statics/js/test.js"></script>
-    <form name="myForm" action="submitpage.html" onsubmit="return validateForm()" method="post">
-      Name:<input type="text" name="fname">
-    <input type="submit" value="Submit">
-    </form>
-    <br>
-    <table>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-      </tr>
-      <tr>
-        <td>wang</td>
-        <td>pei</td>
-      </tr>
-    </table>
-  </body>
-</html>
-
+{% for m_info in m_infos %}
+ {{m_info['title']}}
+{%end%}
+{{user_id}}

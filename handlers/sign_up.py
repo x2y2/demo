@@ -42,10 +42,10 @@ class SignUpHandler(BaseHandler):
                          password)
       self.redirect("/login")
     else:
-      self.redirect("/sign_up?error=exists&user={0}&email=(1)".format(username,email))
+      self.redirect("/sign_up?error=exists&user={0}&email={1}".format(username,email))
 
   def _checkusername_action(self,username,email):
-    user_id = self.db.query("SELECT id FROM user WHERE (username=%s or email=%s)",username,email)
+    user_id = self.db.query("SELECT id FROM user WHERE (username=%s OR email=%s)",username,email)
     if len(user_id) == 0:
       return False
     else:

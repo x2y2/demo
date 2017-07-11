@@ -7,9 +7,18 @@
         <div class="item active" style="max-height: 750px；">
           <div class="login-center">
             <form role="form"　name="loginForm" action="/login" method="POST">
-              <div class="col-lg-12 text-center text-info">
-                <a href="/login" style="font-size: 20px;font-weight: bold;text-decoration:none;">登录   |</a>
-                <a href="/sign_up" style="font-size: 20px;font-weight: bold;text-decoration:none;">   注册</a>
+              {% raw xsrf_form_html() %}
+              <div class="container">
+                <div class="col-xs-6" style="margin-left: 70px;margin-bottom: 30px;">
+                  <ul class="list-inline">
+                    <li >
+                      <a href="/login" style="text-decoration: none;font-size: 20px;color: gray;font-weight: bold;">登录</a>
+                    </li>
+                    <li>
+                      <a href="/sign_up" style="text-decoration: none;font-size: 20px;color: gray;font-weight: bold;">注册</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <div class="input-group">
                 <span class="input-group-addon">登录邮箱 </span>
