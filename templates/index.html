@@ -1,28 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
- 
-<div class="bs-docs-container">
   <div class="container">
     <div class="col-md-8" style="margin-left: 200px">
     <div class="index-top">
       <img src="{{static_url("img/bg-1.png")}}" style="width: 730px;height: 200px;">
     </div>
     {% for m_info in m_infos %}
-      <div class="index">
-        <a href="">
-          <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
-        </a>
-        <a href="" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
-        <a style="text-decoration:none;color: gray;">{{m_info['created_at']}}</a>
-        <div style="margin-top: 10px;">
-          <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{m_info['id']}}" id="blog_title"><span>{{m_info['title']}}</span></a></p>
-        </div>
-        <span class="glyphicon glyphicon-eye-open" style="color: gray;"></span>
-        <span class="glyphicon glyphicon-comment" style="color: gray;"></span>
-        <span class="glyphicon glyphicon-heart" style="color: gray;"></span>
-     </div>
+    <div class="index">
+      <a href="" style="text-decoration: none;">
+        <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
+      </a>
+      <a href="" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
+      <a style="text-decoration:none;color: gray;">{{m_info['created_at']}}</a>
+      <div style="margin-top: 10px;">
+        <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{m_info['id']}}" id="blog_title"><span>{{m_info['title']}}</span></a></p>
+      </div>
+      <span class="glyphicon glyphicon-eye-open" style="color: gray;"></span>
+      <span class="glyphicon glyphicon-comment" style="color: gray;"></span>
+      <span class="glyphicon glyphicon-heart" style="color: gray;"></span>
+    </div>
     {% end %}
     </div>
   </div>
-</div>
 {% end %}
