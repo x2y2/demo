@@ -1,12 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="bs-docs-container">
   <div class="container">
-    <div class="col-md-8" style="margin-left: 200px">
-      <div>
-        <p>设置</p>
+      <div class="aside">
+        <ul style="list-style-type: none;">
+          <li style="height: 60px;">
+            <a href="/setting/basic" style="text-decoration: none;color: black;">
+            <div class="setting-icon"></div>
+              <span class="glyphicon glyphicon-list"> 基础设置</span>
+            </a>
+          </li>
+          <li style="height: 60px;">
+            <a href="/setting/profile" style="text-decoration: none;color: black;">
+            <div class="setting-icon"></div>
+              <span class="glyphicon glyphicon-book"> 个人资料</span>
+            </a>
+          </li>
+          <li style="height: 60px;">
+            <a href="/setting/misc" style="text-decoration: none;color: black;">
+            <div class="setting-icon"></div>
+              <span class="glyphicon glyphicon-cog"> 账号管理</span>
+            </a>
+          </li>
+        </ul>
       </div>
-    </div>
   </div>
-</div>
 {% end %}

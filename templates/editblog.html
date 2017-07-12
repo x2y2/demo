@@ -1,23 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="bs-docs-container">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="row" style="margin-top: 10px; margin-bottom: 10px">
-          <a id="blog_id" style="display: none;"><span>{{blog_id}}</span></a>
-          <input type="text" id="blog_title" style="font-weight: bold;" class="form-control" value={{blog_title}}>
-          </br>
-          <textarea id="blog_content" data-provide="markdown" rows="25" >{{blog_content}}</textarea>
-          <hr/>
-          <div role="button" class="btn btn-info" onclick="update_blog()" style="float: right;">
-            <span class="glyphicon glyphicon-save">更新</span>
-          </div>
-
-          <div role="button" class="btn btn-info" onclick="edit_delete_blog()" style="margin-left: 1020px;">
-            <span class="glyphicon glyphicon-trash">删除</span>
-          </div>
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 left-top">
+      <a id="blog_id" style="display: none;"><span>{{blog_id}}</span></a>
+      <input type="text" id="blog_title" style="font-weight: bold;" class="form-control" value={{blog_title}}>
+      </br>
+      <textarea id="blog_content" data-provide="markdown" rows="25" >{{blog_content}}</textarea>
+      <hr/>
+      <div role="button" class="btn btn-info" onclick="update_blog()" style="float: right;">
+        <span class="glyphicon glyphicon-save">更新</span>
+      </div>
+      <div role="button" class="btn btn-info" onclick="edit_delete_blog()" style="float: right;">
+        <span class="glyphicon glyphicon-trash">删除</span>
       </div>
     </div>
   </div>

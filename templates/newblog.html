@@ -1,20 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="bs-docs-container">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="row" style="margin-top: 10px; margin-bottom: 10px">
-            <input type="text" id="blog_title" name="blog_title" class="form-control" placeholder="文章标题"　required>
-            </br>
-            <textarea id="blog_content" name="blog_content" data-provide="markdown" rows="25" placeholder="文章正文"></textarea>
-            <hr/>
-            <div role="button" class="btn btn-info" onclick="add_blog()" style="float: right">
-              <span class="glyphicon glyphicon-save">保存</span>
-            </div>
-          </div>
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 left-top">
+      <input type="text" id="blog_title" name="blog_title" class="form-control" placeholder="文章标题"　required>
+      </br>
+      <textarea id="blog_content" name="blog_content" data-provide="markdown" rows="25" placeholder="文章正文"></textarea>
+      <hr/>
+      <div role="button" class="btn btn-info" onclick="add_blog()" style="float: right">
+        <span class="glyphicon glyphicon-save">保存</span>
       </div>
     </div>
   </div>
+</div>
 {% end %}

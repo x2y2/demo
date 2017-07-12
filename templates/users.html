@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="container">
-    <div class="col-xs-14" style="margin-left: 200px">
+    <div class="col-md-14 left-top">
       <div class="main-top">
         <a class="avatar" href="">
           <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
@@ -32,38 +32,35 @@
     </div>
   </div>
   <div class="container">
-   <div class="col-xs-6" style="margin-left: 200px">
-    <ul class="trigger-menu list-inline">
-      <li class="">
-        <a href="/users/{{user_id}}?order_by=created_at" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">文章</a>
-      </li>
-      <li class="active">
-        <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">动态</a>
-      </li>
-      <li>
-        <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">最新评论</a>
-      </li>
-    </ul>
-    </div>
-  </div>
-
-  <div class="container">
-      <div class="col-md-6" style="margin-left: 200px">
+    <div class="col-md-6 left-top" style="margin-top: 10px;">
+      <ul class="trigger-menu list-inline">
+        <li class="">
+          <a href="/users/{{user_id}}?order_by=created_at" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">文章</a>
+        </li>
+        <li class="active">
+          <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">动态</a>
+        </li>
+        <li>
+          <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">最新评论</a>
+        </li>
+      </ul>
+      <ul style="list-style-type: none;margin: 0px;padding: 0px;">
         {% for m_info in m_infos %}
-        <a href="">
-          <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
-        </a>
-        <a href="" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
-        <a style="text-decoration:none;color: gray;">{{m_info['created_at']}}</a>
-        <div class="index">
-          <div style="margin-top: 10px;">
-            <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{m_info['id']}}"><span>{{m_info['title']}}</span></a></p>
-          </div>
-          <span class="glyphicon glyphicon-eye-open" style="color: gray;margin-left: 10px;"> {{read}}</span>
-          <span class="glyphicon glyphicon-comment" style="color: gray;margin-left: 10px;"> {{comment}}</span>
-          <span class="glyphicon glyphicon-heart" style="color: gray;margin-left: 10px;"> {{good}}</span>
-        </div> 
+          <li class="index">
+            <a href="">
+              <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
+            </a>
+            <a href="" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
+            <a style="text-decoration:none;color: gray;">{{m_info['created_at']}}</a>
+            <div style="margin-top: 10px;">
+              <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{m_info['id']}}"><span>{{m_info['title']}}</span></a></p>
+            </div>
+            <span class="glyphicon glyphicon-eye-open" style="color: gray;margin-left: 10px;"> {{read}}</span>
+            <span class="glyphicon glyphicon-comment" style="color: gray;margin-left: 10px;"> {{comment}}</span>
+            <span class="glyphicon glyphicon-heart" style="color: gray;margin-left: 10px;"> {{good}}</span>
+          </li>
         {% end %}
-      </div>
+      </ul>
+    </div>
   </div>
 {% end %}

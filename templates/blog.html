@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  <div class="col-md-8" style="margin-left: 200px">
+  <div class="col-md-8 left-top">
     <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['id']}}</h4>
     <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
     <div class="author">
-      <div class="main-top">
+      <div>
         <a class="blog-avatar" href="">
           <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 60px;height: 60px;">
         </a>
@@ -13,7 +13,7 @@
       <div class="info">
         <span class="tag">作者</span>
         <span class="name">
-          <a href="" style="text-decoration: none;color: black;"> {{user}}</a>
+          <a href="" style="text-decoration: none;color: black;">{{user}}</a>
         </span>
       </div>
       <div class="blog-info">
@@ -33,19 +33,14 @@
               <a  style="text-decoration: none;color: gray;">评论 {{commented}}</a>
             </div>
           </li>
-        </ul>
-        {% if user == b_infos[0]['user_name']%}
-          <div class="blog-edit">
-            <a href="/blog/edit/info?id={{b_infos[0]['id']}}" style="text-decoration: none;color: gray;">编辑文章</a>
-          </div>
-        {% end%}
+          </ul>
+          {% if user == b_infos[0]['user_name']%}
+            <div class="blog-edit">
+              <a href="/blog/edit/info?id={{b_infos[0]['id']}}" style="text-decoration: none;color: gray;">编辑文章</a>
+            </div>
+          {% end%}
       </div>
     </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="col-md-8" style="margin-left: 200px;margin-top: 10px;">
     <div style="font-size: 18px;">
      {% raw c_infos_html %}
     </div>
