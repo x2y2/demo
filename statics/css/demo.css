@@ -9,18 +9,6 @@ padding-left: 5%;
 padding-right: 5%;
 }
 
-.head_search_kuang { 
-  background:transparent url("{{static_url("img/head_search_kuang.png")}}") repeat scroll 0 0; 
-  border:0 none; 
-  float:left; 
-  font:normal 12px Arial;
-  height:19px; 
-  margin-left:20px; 
-  margin-top:3px; 
-  padding-left:28px; 
-  padding-top:5px; 
-  width:237px; 
-}
 
 .index {
   margin-bottom: 20px;
@@ -208,6 +196,43 @@ padding-right: 5%;
   border-bottom-right-radius: 50px;
 }
 
+.change-pic {
+  float: right;
+  margin-bottom: 5px;
+  margin-top: -50px;
+  margin-left: -10px;
+  padding-top: 0px;
+  padding-right: 12px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  font-size: 14px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: green;
+  border-right-color: green;
+  border-bottom-color: green;
+  border-left-color: green;
+  -moz-border-left-color: none;
+  -moz-border-top-color: none;
+  -moz-border-right-color: none;
+  -moz-border-bottom-color: none;
+  border-image-source: none;
+  border-image-slice: none;
+  border-image-width: 1 1 1 1;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  line-height: 30px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+}
 .search-input {
   padding-top: 0px;
   padding-right: 40px;
@@ -241,15 +266,16 @@ padding-right: 5%;
   border-top-right-radius: 40px;
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
-  background-color: rgb(238, 238, 238);
-  background-image: none;
-  background-repeat: repeat;
+  background-image: url(../img/search.png);
+  /*background-color: rgb(238, 238, 238);*/
+  background-color: white;
+  background-repeat: no-repeat;
   background-attachment: scroll;
   background-clip: border-box;
   background-origin: padding-box;
-  background-position-x: 0%;
-  background-position-y: 0%;
-  background-size: auto auto;
+  background-position-x: 90%;
+  background-position-y: 60%;
+  background-size: 20px 20px;
   transition-property: width;
   transition-duration: 0.5s;
   transition-timing-function: ease;
@@ -290,7 +316,7 @@ padding-right: 5%;
   float: right;
   width: 100px;
   height: 38px;
-  line-height: 24px;
+  line-height: 38px;
   margin-top: 9px;
   margin-right: 15px;
   margin-bottom: 0px;
@@ -300,8 +326,8 @@ padding-right: 5%;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
   font-size: 15px;
-  color: white;
-  background-color: #20b2aa;
+  color: none;
+  /*background-color: white;*/
 }
 
 .btn {
@@ -310,7 +336,7 @@ padding-right: 5%;
   font-weight: 400;
   text-align: center;
   vertical-align: middle;
-  touch-action: manipulation;
+  /*touch-action: manipulation;*/
   cursor: pointer;
   background-image: none;
   border: 1px solid transparent;
@@ -346,11 +372,11 @@ padding-right: 5%;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  -webkit-user-select: none;
+  /*-webkit-user-select: none;
   -moz-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none;
+  user-select: none;*/
 }
 
 .user {
@@ -359,6 +385,7 @@ padding-right: 5%;
   height: 100%;
 }
 
+/*
  .sign_up {
   float: right;
   width: 80px;
@@ -398,15 +425,26 @@ padding-right: 5%;
   color: red;
   background-color: transparent;
 }
+*/
 
-.login {
+.sign_up {
   float: right;
-  margin-top: 11px;
+  margin-top: 15px;
   margin-right: 6px;
   margin-bottom: 0px;
   margin-left: 10px;
   font-size: 15px;
-  color: #969696;
+  color: red;
+}
+
+.login {
+  float: right;
+  margin-top: 15px;
+  margin-right: 6px;
+  margin-bottom: 0px;
+  margin-left: 10px;
+  font-size: 15px;
+  color: white;
 }
 
 .logo {
@@ -477,13 +515,19 @@ padding-right: 5%;
   margin-right: 15px;
   width: 32px;
   height: 32px;
-  text-align: center;
-  color: #fff;
-  background-color: #a0a0a0;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
+  background-image: none;
+  background-color: rgb(105,105,105);
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-origin: padding-box;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  background-size: 20px 20px;
   display: inline-block;
   vertical-align: middle;
 }

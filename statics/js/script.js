@@ -99,7 +99,7 @@ function update_blog() {
 
 
 
-
+/**
 function del_blog(name) {
   $.messager.confirm("操作提示",'确认删除吗?',function(data) {
     var rows = name.parentNode.parentNode.rowIndex;
@@ -127,7 +127,7 @@ function del_blog(name) {
   }
 });   
 }
-
+**/
 
 function edit_delete_blog() {
   $.messager.confirm("操作提示",'确认删除吗?',function(data) {
@@ -144,8 +144,7 @@ function edit_delete_blog() {
          alert(data['info']);
       }
       else {
-        window.location.href = "/blog/" + blog_id;
-        
+        window.location.href = "/";
       }
     },
     error: function(data) {

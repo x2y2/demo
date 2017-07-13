@@ -125,7 +125,8 @@ class EditBlogHandler(BaseHandler):
     blog_id = self.get_argument("blog_id",default="")
     try:
       self.db.execute("delete from blogs where id=%s",blog_id)
-      self.json("success",'ok')
+      user_id =  self.user_id
+      self.json("success",user_id)
     except Exception as e:
       self.json("error",str(e))
 

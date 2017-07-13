@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="container">
-    <div class="col-md-14 left-top">
+    <div class="col-md-6 left-top" style="margin-top: 30px;">
       <div class="main-top">
         <a class="avatar" href="">
           <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
@@ -26,8 +26,12 @@
             <div class="meta-block">
               <a href="" style="text-decoration: none;color: gray;"><p>0</p>粉丝</a>
             </div>
-          </li>
         </ul>
+        <div>
+          <a class="blog-edit" target="_blank" href="/blog/new/info" style="text-decoration: none;color: red;margin-left: 20px;">
+            写文章
+          </a>
+        </div>
       </div>
     </div>
   </div>

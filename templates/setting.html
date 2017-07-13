@@ -6,22 +6,36 @@
           <li style="height: 60px;">
             <a href="/setting/basic" style="text-decoration: none;color: black;">
             <div class="setting-icon"></div>
-              <span class="glyphicon glyphicon-list"> 基础设置</span>
+              <span> 基础设置</span>
             </a>
           </li>
           <li style="height: 60px;">
             <a href="/setting/profile" style="text-decoration: none;color: black;">
             <div class="setting-icon"></div>
-              <span class="glyphicon glyphicon-book"> 个人资料</span>
+              <span> 个人资料</span>
             </a>
           </li>
           <li style="height: 60px;">
             <a href="/setting/misc" style="text-decoration: none;color: black;">
             <div class="setting-icon"></div>
-              <span class="glyphicon glyphicon-cog"> 账号管理</span>
+              <span> 账号管理</span>
             </a>
           </li>
         </ul>
       </div>
+  </div>
+  <div class="container">
+    <div class="col-md-8 left-top">
+      <form role="form"　name="setting-form" action="/setting/basic" method="POST">
+      <a href="" style="text-decoration: none;">
+        <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 10px;">
+      </a>
+      <div>
+        <a class="change-pic" target="_blank" href="">
+          更改头像
+        </a>
+      </div>
+      </form>
+    </div>
   </div>
 {% end %}
