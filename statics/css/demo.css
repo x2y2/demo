@@ -197,14 +197,17 @@ padding-right: 5%;
 }
 
 .change-pic {
-  float: right;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   margin-top: -50px;
-  margin-left: -10px;
-  padding-top: 0px;
-  padding-right: 12px;
-  padding-bottom: 0px;
-  padding-left: 10px;
+  margin-left: 250px;
+  /*padding-top: 5px;
+  padding-right: 0px;
+  padding-bottom: 5px;
+  padding-left: 12px;*/
+  height: 30px;
+  width: 90px;
+  line-height: 30px;
+  text-align: center;
   font-size: 14px;
   border-top-width: 1px;
   border-right-width: 1px;
@@ -227,7 +230,6 @@ padding-right: 5%;
   border-image-width: 1 1 1 1;
   border-image-outset: 0 0 0 0;
   border-image-repeat: stretch stretch;
-  line-height: 30px;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
   border-bottom-left-radius: 50px;

@@ -27,13 +27,15 @@
   <div class="container">
     <div class="col-md-8 left-top">
       <form role="form"　name="setting-form" action="/setting/basic" method="POST">
-      <a href="" style="text-decoration: none;">
-        <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 10px;">
-      </a>
       <div>
-        <a class="change-pic" target="_blank" href="">
-          更改头像
+        <a href="" >
+          <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 10px;">
         </a>
+          <div class="change-pic">
+            <a target="_blank" href="" style="text-decoration: none;color: green;">
+              更改头像
+            </a>
+          </div>
       </div>
       </form>
     </div>
