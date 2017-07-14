@@ -15,11 +15,25 @@ sys.setdefaultencoding('utf8')
 
 class BlogContentHandler(BaseHandler):
   def get(self):
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
     uri = self.request.uri
     page = uri.split('/')[-1]
-    b_infos = self.db.query("SELECT id,user_name,title,created_at FROM blogs WHERE id=%s",page)
-    c_infos = self.db.query("SELECT content FROM blogs WHERE id=%s",page)
-    c_infos = c_infos[0]['content']
+    b_infos = self.db.query('''SELECT 
+                                  u.pic,
+                                  b.id,
+                                  b.user_name,
+                                  b.title,
+                                  b.content,
+                                  b.created_at 
+                                FROM blogs b,user u 
+                                WHERE 
+                                  b.user_id=u.id 
+                                AND 
+                                  b.id=%s
+                            ''',page
+                            )
+    c_infos = b_infos[0]['content']
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
@@ -31,7 +45,8 @@ class BlogContentHandler(BaseHandler):
                 c_infos_html= html,
                 user_id=self.user_id,
                 read=read,
-                commented=commented)
+                commented=commented,
+                pic_name=pic_name)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
@@ -39,11 +54,15 @@ class NewBlogHandler(BaseHandler):
     if hasattr(self,action):
       getattr(self,action)()
     else:
+      pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+      pic_name = pic[0]['pic']
       m_infos = self.db.query("select id,title from blogs")
-      self.render("index.html",m_infos = m_infos,user = self.current_user,user_id=self.user_id)
+      self.render("index.html",m_infos = m_infos,user = self.current_user,user_id=self.user_id,pic_name=pic_name)
 
   def _info_action(self):
-    self.render("newblog.html",user=self.current_user,user_id=self.user_id)
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
+    self.render("newblog.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
 
   def post(self,*args,**kwargs):
     action = "_%s_action" % args[0]
@@ -91,16 +110,25 @@ class EditBlogHandler(BaseHandler):
       getattr(self,action)(*args,**kwargs)
     else:
       m_infos = self.db.query("select id,title from blogs")
-      self.render("index.html",m_infos = m_infos,user = self.current_user,user_id=self.user_id)
+      pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+      pic_name = pic[0]['pic']
+      self.render("index.html",
+                   m_infos = m_infos,
+                   user = self.current_user,
+                   user_id=self.user_id,
+                   pic_name=pic_name)
 
   def _info_action(self,*args,**kwargs):
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
     blog_id = self.get_argument('id',default="")
     blog_title_content = self.db.query("select title,content from blogs where id=%s",blog_id)
     self.render("editblog.html",user=self.current_user,
                                 user_id = self.user_id,
                                 blog_id=blog_id,
                                 blog_title=blog_title_content[0]['title'],
-                                blog_content=blog_title_content[0]['content'])
+                                blog_content=blog_title_content[0]['content'],
+                                pic_name=pic_name)
   
   
   def post(self,*args,**kwargs):
@@ -130,19 +158,6 @@ class EditBlogHandler(BaseHandler):
     except Exception as e:
       self.json("error",str(e))
 
-class UploadHandler(BaseHandler):
-  def get(self):
-    self.render("upload.html")
 
-  def post(seff):
-    if self.request.files:
-      myfile = self.request.files['myfile'][0]
-      random_time = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
-      str = ''.join([random_time,self.current_user])
-      str_md5 = hashlib.md5(str).hexdigest()
-      img_name = str_md5[0:16]
-      fd = open("/home/wangpei/demo/statics/upload/img/{0}.jpg".format(img_name),'w')
-      fd.write(myfile['body'])
-      fd.close()
 
     

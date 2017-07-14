@@ -7,13 +7,17 @@
     <div class="author">
       <div>
         <a class="blog-avatar" href="">
-          <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 60px;height: 60px;">
+          {% if b_infos[0]['pic'] is None %}
+            <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 60px;height: 60px;">
+          {% else %}
+            <img src="{{static_url("upload/img/" + b_infos[0]['pic'])}}" class="img-circle" style="width: 60px;height: 60px;">
+          {% end %}
         </a>
       </div>
       <div class="info">
         <span class="tag">作者</span>
         <span class="name">
-          <a href="" style="text-decoration: none;color: black;">{{user}}</a>
+          <a href="" style="text-decoration: none;color: black;">{{b_infos[0]['user_name']}}</a>
         </span>
       </div>
       <div class="blog-info">

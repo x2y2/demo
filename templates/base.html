@@ -21,17 +21,6 @@
         <a class="logo" style="text-decoration: none;" href="/">
           随笔
         </a>
-        <!--{% if user is not None %}
-        <a  class="write-btn" target="_blank" href="/blog/new/info" style="font-size: 20px;text-decoration: none;">
-          写文章
-        </a>
-        {% else %}
-        <a class="sign_up" href="/sign_up" style="text-decoration: none;">注册</a>
-        <a class="login" href="/login" style="text-decoration: none;">登录</a>
-        <a class="write-btn" target="_blank" href="/login" style="font-size: 20px;text-decoration: none;">
-          写文章
-        </a>
-        {% end %}-->
         {% if user is None %}
           <a class="sign_up" href="/sign_up" style="text-decoration: none;color: red;">注册</a>
           <a class="login" href="/login" style="text-decoration: none;color: white;">登录</a>
@@ -41,8 +30,11 @@
         <div class="user">
           <div class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;cursor: pointer;">
-              <img src="{{static_url("img/user1.jpg")}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -5px;">
-              
+              {% if pic_name is not None %}
+              <img src="{{static_url("upload/img/" + pic_name)}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
+              {% else %}
+              <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
+              {% end %}
               <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">

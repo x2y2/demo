@@ -26,17 +26,41 @@
   </div>
   <div class="container">
     <div class="col-md-8 left-top">
-      <form role="form"　name="setting-form" action="/setting/basic" method="POST">
       <div>
-        <a href="" >
-          <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 10px;">
-        </a>
+        <img src="{{static_url("upload/img/" + pic_name)}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
+        <!--上传头像表单-->
+        <form role="form" name="upload-pic" id="upload-pic-form" action="/setting/upload/img" enctype="multipart/form-data" method="post">
           <div class="change-pic">
-            <a target="_blank" href="" style="text-decoration: none;color: green;">
-              更改头像
+            <a style="text-decoration: none;color: green;">
+              <input type="file" name="upload-pic" id="upload-pic" class="upload-pic" unselectable="on" />更改头像
             </a>
           </div>
+        </form>  
       </div>
+      <!--用户基本资料表单-->
+      <form role="form"　name="setting-form" action="/setting/basic" method="POST">
+        <div>
+          <ul style="list-style-type: none;margin: 0px;padding: 0px;">
+            <li class="setting-basic" style="margin-left: 100px;margin-top: 80px;">
+              <div>
+               <span class="setting-basic-text">昵称</span>
+                <input type="text" name="setting-nickname" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称">
+              </div>
+            </li>
+            <li class="setting-basic" style="margin-left: 100px;margin-top: 20px;">
+              <div>
+               <span class="setting-basic-text">电子邮件</span>
+               <input type="text" name="setting-nickname" class="setting-basic-input" style="width: 300px;" placeholder="请输入你的常用邮箱">
+               <div class="send-email">
+                 <a target="_blank" href="" style="text-decoration: none;color: green;">发送</a>
+               </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div style="margin-top: 30px;margin-left: 100px;">
+          <button class="btn  btn-success" type="submit">保存</button>
+        </div>
       </form>
     </div>
   </div>

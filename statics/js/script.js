@@ -165,6 +165,9 @@ $(document).ready(function () {
     });
 });
 
+$('#upload-pic').change(function(){
+  $('#upload-pic-form').submit();
+});
 
   
 

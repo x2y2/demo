@@ -4,7 +4,7 @@
     <div class="col-md-6 left-top" style="margin-top: 30px;">
       <div class="main-top">
         <a class="avatar" href="">
-          <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
+          <img src="{{static_url("upload/img/" + pic_name)}}"  class="img-circle" style="width: 80px;height: 80px;">
         </a>
       </div>
       <div class="title">
@@ -52,7 +52,7 @@
         {% for m_info in m_infos %}
           <li class="index">
             <a href="">
-              <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
+              <img src="{{static_url("upload/img/" + m_info['pic'])}}" class="img-circle" style="width: 25px;height: 25px;">
             </a>
             <a href="" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
             <a style="text-decoration:none;color: gray;">{{m_info['created_at']}}</a>

@@ -7,7 +7,9 @@ import hashlib
 
 class UsersHandler(BaseHandler):
   def get(self):
-    self.render("users.html",user=self.current_user,user_id=self.user_id)
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
+    self.render("users.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
 
 class UserArticleHandler(BaseHandler):  
   def get(self):
@@ -21,37 +23,35 @@ class UserArticleHandler(BaseHandler):
     read = 0
     comment = 0
     good = 0
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
     count_article = self.db.query('''SELECT 
                                         COUNT(*) count
-                                     FROM blogs 
-                                     WHERE user_id=
-                                          (SELECT 
-                                              id 
-                                           FROM
-                                              user 
-                                           WHERE 
-                                              username=%s
-                                          )''',self.current_user
+                                     FROM 
+                                        blogs 
+                                     WHERE 
+                                        user_name=%s
+                                  ''',
+                                  self.current_user
                                   )
 
     m_infos = self.db.query('''SELECT 
-                                 id,
-                                 user_name,
-                                 title,
-                                 content,
-                                 created_at 
-                               FROM
-                                 blogs 
+                                  u.pic,
+                                  b.id,
+                                  b.user_name,
+                                  b.title,
+                                  b.content,
+                                  b.created_at 
+                               FROM 
+                                  blogs b,
+                                  user u 
                                WHERE 
-                                 user_id=(
-                                 SELECT 
-                                  id 
-                                 FROM 
-                                  user 
-                                 WHERE 
-                                  username=%s)
-                               ORDER BY 
-                                 created_at DESC''',self.current_user)
+                                  b.user_id=u.id 
+                               AND 
+                                  b.user_name=%s
+                            ''',
+                            self.current_user
+                            )
     self.render("users.html",
                 user=self.current_user,
                 user_id=self.user_id,
@@ -59,7 +59,11 @@ class UserArticleHandler(BaseHandler):
                 count_article=count_article,
                 read=read,
                 comment=comment,
-                good=good
+                good=good,
+                pic_name=pic_name
                 )
 
+
+
+    
 
