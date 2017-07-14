@@ -30,6 +30,6 @@ url += [(r'/blog/edit/(\w+)',EditBlogHandler)]
 url += [(r'/users/[0-9a-z]+/timeline',UsersHandler)]
 url += [(r'/users/[0-9a-z?=_]+',UserArticleHandler)]
 url += [(r'/setting/\w+',SettingHandler)]
-url += [(r'/setting/upload/img',SettingHandler)]
+url += [(r'/setting/basic/\w+',SettingHandler)]
 url += [(r'/contactus',ContactusHandler)]
 

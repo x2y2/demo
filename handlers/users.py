@@ -18,7 +18,6 @@ class UserArticleHandler(BaseHandler):
     if hasattr(self,action):
       getattr(self,action)()
 
-
   def _created_at(self):
     read = 0
     comment = 0
