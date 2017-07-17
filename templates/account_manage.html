@@ -1,6 +1,35 @@
 {% extends "setting_base.html" %}
 {% block setting_content%}
-<div>
-  account manage
-</div>
+<form role="form"　name="setting_account_manage-form" action="/setting/account" method="POST">
+  <div>
+    <ul style="list-style-type: none;margin: 0px;padding: 0px;">
+      <li class="setting-basic" style="margin-left: 100px;margin-top: 20px;">
+        <div>
+          <p style="color: red;">修改密码</p>
+        </div>
+      </li>
+      <li  style="margin-left: 100px;margin-top: 20px;">
+        <div>
+         <span class="setting-basic-text">原始密码</span>
+          <input type="password" name="setting-origin-password" class="setting-basic-input" style="width: 200px;" placeholder="请输入原始密码">
+        </div>
+      </li>
+      <li style="margin-left: 100px;margin-top: 20px;">
+        <div>
+         <span class="setting-basic-text">新密码</span>
+         <input type="password" name="setting-new-password1" class="setting-basic-input" style="width: 200px;" placeholder="请输入新密码">
+        </div>
+      </li>
+      <li style="margin-left: 100px;margin-top: 20px;">
+        <div>
+         <span class="setting-basic-text">新密码</span>
+         <input type="password" name="setting-new-password2" class="setting-basic-input" style="width: 200px;" placeholder="请重新输入新密码">
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div style="margin-top: 30px;margin-left: 100px;">
+    <button class="btn btn-success" type="submit">保存</button>
+  </div>
+</form>
 {% end %}
