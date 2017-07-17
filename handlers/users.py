@@ -15,15 +15,6 @@ class UserArticleHandler(BaseHandler):
   def get(self):
     query = self.get_argument("order_by",default="")
     action = "_%s" % query
-    if hasattr(self,action):
-      getattr(self,action)()
-
-  def _created_at(self):
-    read = 0
-    comment = 0
-    good = 0
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
     count_article = self.db.query('''SELECT 
                                         COUNT(*) count
                                      FROM 
@@ -33,7 +24,15 @@ class UserArticleHandler(BaseHandler):
                                   ''',
                                   self.current_user
                                   )
+    if hasattr(self,action):
+      getattr(self,action)(count_article)
 
+  def _created_at(self,count_article):
+    read = 0
+    comment = 0
+    good = 0
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
     m_infos = self.db.query('''SELECT 
                                   u.pic,
                                   b.id,
@@ -51,17 +50,13 @@ class UserArticleHandler(BaseHandler):
                             ''',
                             self.current_user
                             )
-    self.render("users.html",
-                user=self.current_user,
-                user_id=self.user_id,
-                m_infos=m_infos,
-                count_article=count_article,
-                read=read,
-                comment=comment,
-                good=good,
-                pic_name=pic_name
-                )
+    self.render("users.html",user=self.current_user,user_id=self.user_id,m_infos=m_infos,count_article=count_article,read=read,
+                 comment=comment,good=good,pic_name=pic_name)
 
+  def _commented_at(self,count_article):
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
+    self.render("commented.html",user=self.current_user,pic_name=pic_name,user_id=self.user_id,count_article=count_article)
 
 
     

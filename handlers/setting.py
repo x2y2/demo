@@ -6,10 +6,29 @@ import os
 import hashlib
 
 class SettingHandler(BaseHandler):
-  def get(self,*args):
+  def get(self,*args,**kwargs):
+    uri = self.request.uri
+    page = uri.split('/')[-1]
+    action = "_%s_action" % page
+    if hasattr(self,action):
+      getattr(self,action)()
+
+
+  def _basic_action(self):
     pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
     pic_name = pic[0]['pic']
     self.render("setting.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
+
+  def _profile_action(self):
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
+    self.render("profile.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
+  
+  def _account_manage_action(self):
+    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
+    pic_name = pic[0]['pic']
+    self.render("account_manage.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
+
 
   def post(self,*args,**kwargs):
     uri = self.request.uri
@@ -34,4 +53,64 @@ class SettingHandler(BaseHandler):
           up.write(meta['body'])
         self.db.execute("UPDATE user SET pic=%s WHERE username=%s",img_name,self.current_user)
       self.redirect('/setting/basic')
+
+  def _save_action(self):
+    username = self.get_body_argument('setting-nickname',default="")
+    email = self.get_body_argument('setting-email',default="")
+    id = self.db.query("select id from user where username=%s",self.current_user)
+    cur_email = self.db.query("select email from user where username=%s",self.current_user)
+    cur_email = cur_email[0]['email']
+    user_id = id[0]['id']
+
+    if username == self.current_user:
+      if email == "" or email == cur_email:
+        self.redirect('/setting/basic')
+      else:
+        if not self._checkemail_action(email):
+          self.redirect("/sign_up?error=exists&email={0}".format(email))
+        else:
+          self.db.execute("update user set email=%s where id=%s",email,user_id)
+          self.redirect('/setting/basic')
+    else:
+      if not self._checkname_action(username) or username == "":
+        self.redirect("/sign_up?error=exists&user={0}".format(username))
+      else:
+        if email == "" or email == cur_email:
+          self.db.execute("update user set username=%s where id=%s",username,user_id)
+          self.db.execute("update blogs set user_name=%s where user_id=%s",username,user_id)
+          self.set_secure_cookie("username",username)
+          self.redirect('/setting/basic') 
+        else:
+          if not self._checkemail_action(email):
+            self.redirect("/sign_up?error=exists&email={0}".format(email))
+          else:
+            self.db.execute("update user set username=%s where id=%s",username,user_id)
+            self.db.execute("update blogs set user_name=%s where user_id=%s",username,user_id)
+            self.set_secure_cookie("username",username)
+            self.db.execute("update user set email=%s where id=%s",email,user_id)
+            self.redirect('/setting/basic')
+
+    #if email == "" or email == cur_email:
+    #  self.redirect('/setting/basic')
+    #else:
+    #  if not self._checkemail_action(email):
+    #    self.redirect("/sign_up?error=exists&email={0}".format(email))
+    #  else:
+    #    self.db.execute("update user set email=%s where id=%s",email,user_id)
+    #    self.redirect('/setting/basic')
+
+
+  def _checkname_action(self,username):
+    id = self.db.query("SELECT id FROM user WHERE username=%s",username)
+    if len(id) == 0:
+      return True
+    else:
+      return False
+
+  def _checkemail_action(self,email):
+    id = self.db.query("SELECT id FROM user WHERE email=%s",email)
+    if len(id) == 0:
+      return True
+    else:
+      return False   
   

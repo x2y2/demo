@@ -155,15 +155,6 @@ function edit_delete_blog() {
 });   
 }
 
-$(document).ready(function () {
-    $.goup({
-        trigger: 100,
-        bottomOffset: 150,
-        locationOffset: 100,
-        title: '回到顶部',
-        titleAsText: true
-    });
-});
 
 $('#upload-pic').change(function(){
   $('#upload-pic-form').submit();

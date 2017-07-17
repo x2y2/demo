@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container">
+      <div class="aside">
+        <ul style="list-style-type: none;">
+          <li style="height: 60px;">
+            <a href="/setting/basic" style="text-decoration: none;color: black;">
+            <div class="setting-icon"></div>
+              <span> 基础设置</span>
+            </a>
+          </li>
+          <li style="height: 60px;">
+            <a href="/setting/profile" style="text-decoration: none;color: black;">
+            <div class="setting-icon"></div>
+              <span> 个人资料</span>
+            </a>
+          </li>
+          <li style="height: 60px;">
+            <a href="/setting/account_manage" style="text-decoration: none;color: black;">
+            <div class="setting-icon"></div>
+              <span> 账号管理</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+  </div>
+  <div class="container">
+    <div class="col-md-8 left-top">
+      {% block setting_content%} {% end %}
+    </div>
+  </div>
+{% end %}
