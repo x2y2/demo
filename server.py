@@ -15,10 +15,10 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 define("port",default = 8000,help = "run on the given port",type = int)
-define("mysql_host",default="192.168.20.193",help="database host")
+define("mysql_host",default="127.0.0.1",help="database host")
 define("mysql_user",default="wangpei",help="database user")
 define("mysql_password",default="123456",help="database password")
-define("mysql_database",default="test",help="database name")
+define("mysql_database",default="suibi",help="database name")
 define("mysql_charset",default="utf8mb4",help="database charset")
 
 class Application(tornado.web.Application):
