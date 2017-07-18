@@ -26,18 +26,18 @@ class BlogContentHandler(BaseHandler):
       login_user = None
     bid = self.id
     b_infos = self.db.query('''SELECT 
-                                  u.uid u_id,
+                                  u.uid,
                                   u.pic,
-                                  b.id,
-                                  b.user_name,
-                                  b.title,
-                                  b.content,
-                                  b.created_at 
-                                FROM blogs b,user u 
+                                  a.aid,
+                                  a.user_name,
+                                  a.title,
+                                  a.content,
+                                  a.created_at 
+                                FROM articles a,user u 
                                 WHERE 
-                                  b.user_uid=u.uid 
+                                  a.user_uid=u.uid 
                                 AND 
-                                  b.id=%s
+                                  a.aid=%s
                             ''',bid
                             )
     c_infos = b_infos[0]['content']
@@ -67,7 +67,7 @@ class NewBlogHandler(BaseHandler):
     if hasattr(self,action):
       getattr(self,action)(login_user,login_user_id,login_user_pic)
     else:
-      m_infos = self.db.query("select id,title from blogs")
+      m_infos = self.db.query("select id,title from articles")
       self.render("index.html",m_infos = m_infos,login_user=login_user,login_user_id=login_user_id,login_user_pic=login_user_pic)
 
   def _info_action(self,login_user,login_user_id,login_user_pic):
@@ -89,8 +89,8 @@ class NewBlogHandler(BaseHandler):
     str_md5 = hashlib.md5(str).hexdigest()
     blog_id = str_md5[0:16]
     try:
-      self.db.execute('''INSERT INTO blogs
-                          (id,
+      self.db.execute('''INSERT INTO articles
+                          (aid,
                            user_uid,
                            user_name,
                            title,
@@ -128,7 +128,7 @@ class EditBlogHandler(BaseHandler):
     if hasattr(self,action):
       getattr(self,action)(login_user,login_user_id,login_user_pic)
     else:
-      m_infos = self.db.query("select id,title from blogs")
+      m_infos = self.db.query("select aid,title from articles")
       self.render("index.html",
                    m_infos = m_infos,
                    login_user=login_user,
@@ -137,7 +137,7 @@ class EditBlogHandler(BaseHandler):
 
   def _info_action(self,login_user,login_user_id,login_user_pic):
     blog_id = self.get_argument('id',default="")
-    blog_title_content = self.db.query("select title,content from blogs where id=%s",blog_id)
+    blog_title_content = self.db.query("select title,content from articles where aid=%s",blog_id)
     self.render("editblog.html",
                  login_user=login_user,
                  login_user_id=login_user_id,
@@ -159,7 +159,7 @@ class EditBlogHandler(BaseHandler):
     blog_title = self.get_argument("blog_title",default="").encode('utf8')
     blog_content = self.get_argument("blog_content",default="").encode('utf8')
     try:
-      self.db.execute("update blogs set title=%s,content=%s where id=%s",blog_title,blog_content,blog_id)
+      self.db.execute("update articles set title=%s,content=%s where aid=%s",blog_title,blog_content,blog_id)
       self.json("success",blog_title)
     except Exception as e:
       self.json("error",str(e))
@@ -168,7 +168,7 @@ class EditBlogHandler(BaseHandler):
   def _delete_blog_action(self):
     blog_id = self.get_argument("blog_id",default="")
     try:
-      self.db.execute("delete from blogs where id=%s",blog_id)
+      self.db.execute("delete from articles where aid=%s",blog_id)
       uid = self.db.query("select uid from user where username=%s",self.current_user)[0]['uid']
       self.json("success",uid)
     except Exception as e:

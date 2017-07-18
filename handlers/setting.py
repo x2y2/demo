@@ -90,7 +90,7 @@ class SettingHandler(BaseHandler):
       else:
         if email == "" or email == cur_email:
           self.db.execute("update user set username=%s where uid=%s",username,user_id)
-          self.db.execute("update blogs set user_name=%s where user_uid=%s",username,user_id)
+          self.db.execute("update articles set user_name=%s where user_uid=%s",username,user_id)
           self.set_secure_cookie("username",username)
           self.redirect('/setting/basic') 
         else:
@@ -98,7 +98,7 @@ class SettingHandler(BaseHandler):
             self.redirect("/sign_up?error=exists&email={0}".format(email))
           else:
             self.db.execute("update user set username=%s where uid=%s",username,user_id)
-            self.db.execute("update blogs set user_name=%s where user_uid=%s",username,user_id)
+            self.db.execute("update articles set user_name=%s where user_uid=%s",username,user_id)
             self.set_secure_cookie("username",username)
             self.db.execute("update user set email=%s where uid=%s",email,user_id)
             self.redirect('/setting/basic')

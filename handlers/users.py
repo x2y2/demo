@@ -11,10 +11,10 @@ class UsersHandler(BaseHandler):
     uid = self.id
     if uid is None: 
       author_name = self.current_user
-      count_article = self.db.query('''SELECT COUNT(*) count FROM blogs WHERE  user_name=%s''',self.current_user)[0]['count']
+      count_article = self.db.query('''SELECT COUNT(*) count FROM articles WHERE  user_name=%s''',self.current_user)[0]['count']
     else:
       author_name = self.db.query("select username from user where uid=%s",uid)[0]['username']
-      count_article = self.db.query("SELECT COUNT(*) count FROM blogs WHERE  user_uid=%s",uid)[0]['count']
+      count_article = self.db.query("SELECT COUNT(*) count FROM articles WHERE  user_uid=%s",uid)[0]['count']
     #登录用户信息
     if self.current_user is not None:
       login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
@@ -52,20 +52,20 @@ class UsersHandler(BaseHandler):
   #文章
   def _created_at(self,count_article,uid,author_name,author_pic,author_id,login_user_pic,login_user_id,login_user):
     m_infos = self.db.query('''SELECT
-                                  u.uid u_id, 
+                                  u.uid, 
                                   u.pic,
-                                  b.id,
-                                  b.user_name,
-                                  b.title,
-                                  b.content,
-                                  b.created_at 
+                                  a.aid,
+                                  a.user_name,
+                                  a.title,
+                                  a.content,
+                                  a.created_at 
                                FROM 
-                                  blogs b,
+                                  articles a,
                                   user u 
                                WHERE 
-                                  b.user_uid=u.uid 
+                                  a.user_uid=u.uid 
                                AND 
-                                  b.user_uid=%s
+                                  a.user_uid=%s
                                ORDER BY
                                   created_at
                                DESC

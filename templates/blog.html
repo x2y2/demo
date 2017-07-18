@@ -2,20 +2,20 @@
 {% block content %}
 <div class="container">
   <div class="col-md-8 left-top">
-    <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['id']}}</h4>
+    <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['aid']}}</h4>
     <p style="font-size:30px; font-weight:bold;color: black;">{{b_infos[0]['title']}}</p>
     <div class="author">
       <div class="blog-avatar">
         {% if b_infos[0]['pic'] is None %}
-         <a href="/users/{{b_infos[0]['u_id']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 60px;height: 60px;"></a>
+         <a href="/users/{{b_infos[0]['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 60px;height: 60px;"></a>
         {% else %}
-        <a href="/users/{{b_infos[0]['u_id']}}"><img src="{{static_url("upload/img/" + b_infos[0]['pic'])}}" class="img-circle" style="width: 60px;height: 60px;"></a>
+        <a href="/users/{{b_infos[0]['uid']}}"><img src="{{static_url("upload/img/" + b_infos[0]['pic'])}}" class="img-circle" style="width: 60px;height: 60px;"></a>
         {% end %}
       </div>
       <div class="info">
         <span class="tag">作者</span>
         <span class="name">
-          <a href="/users/{{b_infos[0]['u_id']}}" style="text-decoration: none;color: black;">{{b_infos[0]['user_name']}}</a>
+          <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;">{{b_infos[0]['user_name']}}</a>
         </span>
       </div>
       <div class="blog-info">
@@ -38,7 +38,7 @@
           </ul>
           {% if login_user == b_infos[0]['user_name']%}
             <div class="blog-edit">
-              <a href="/blog/edit/info?id={{b_infos[0]['id']}}" style="text-decoration: none;color: gray;">编辑文章</a>
+              <a href="/blog/edit/info?id={{b_infos[0]['aid']}}" style="text-decoration: none;color: gray;">编辑文章</a>
             </div>
           {% end%}
       </div>
