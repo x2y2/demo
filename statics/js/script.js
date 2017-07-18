@@ -49,7 +49,7 @@ function add_blog() {
         alert("新增失败" + data['info']);
       }
       else {
-        window.location.href = "/";
+        window.location.href = "/blog/" + data['info'];
       }
     },
     error: function(data) {
@@ -144,7 +144,8 @@ function edit_delete_blog() {
          alert(data['info']);
       }
       else {
-        window.location.href = "/";
+        //alert(data['info'])
+        window.location.href = "/users/" + data['info'];
       }
     },
     error: function(data) {

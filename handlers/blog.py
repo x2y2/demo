@@ -2,7 +2,6 @@
 #coding=utf8
 
 from base import BaseHandler
-import methods.db as db
 import sys
 import datetime
 import hashlib
@@ -15,11 +14,19 @@ sys.setdefaultencoding('utf8')
 
 class BlogContentHandler(BaseHandler):
   def get(self):
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
-    uri = self.request.uri
-    page = uri.split('/')[-1]
+    #登录用户信息
+    if self.current_user is not None:
+      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
+      login_user_pic = login_user_info[0]['pic']
+      login_user_id = login_user_info[0]['uid']
+      login_user = self.current_user
+    else:
+      login_user_pic = None
+      login_user_id = None
+      login_user = None
+    bid = self.id
     b_infos = self.db.query('''SELECT 
+                                  u.uid u_id,
                                   u.pic,
                                   b.id,
                                   b.user_name,
@@ -28,41 +35,43 @@ class BlogContentHandler(BaseHandler):
                                   b.created_at 
                                 FROM blogs b,user u 
                                 WHERE 
-                                  b.user_id=u.id 
+                                  b.user_uid=u.uid 
                                 AND 
                                   b.id=%s
-                            ''',page
+                            ''',bid
                             )
     c_infos = b_infos[0]['content']
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
-    read = 0
-    commented = 0
     self.render("blog.html",
                 b_infos=b_infos,
-                user=self.current_user,
                 c_infos_html= html,
-                user_id=self.user_id,
-                read=read,
-                commented=commented,
-                pic_name=pic_name)
+                login_user=login_user,
+                login_user_id=login_user_id,
+                login_user_pic=login_user_pic)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
+    if self.current_user is not None:
+      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
+      login_user_pic = login_user_info[0]['pic']
+      login_user_id = login_user_info[0]['uid']
+      login_user = self.current_user
+    else:
+      login_user_pic = None
+      login_user_id = None
+      login_user = None
+
     action = "_%s_action" % args[0]
     if hasattr(self,action):
-      getattr(self,action)()
+      getattr(self,action)(login_user,login_user_id,login_user_pic)
     else:
-      pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-      pic_name = pic[0]['pic']
       m_infos = self.db.query("select id,title from blogs")
-      self.render("index.html",m_infos = m_infos,user = self.current_user,user_id=self.user_id,pic_name=pic_name)
+      self.render("index.html",m_infos = m_infos,login_user=login_user,login_user_id=login_user_id,login_user_pic=login_user_pic)
 
-  def _info_action(self):
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
-    self.render("newblog.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
+  def _info_action(self,login_user,login_user_id,login_user_pic):
+    self.render("newblog.html",login_user=login_user,login_user_id=login_user_id,login_user_pic=login_user_pic)
 
   def post(self,*args,**kwargs):
     action = "_%s_action" % args[0]
@@ -82,7 +91,7 @@ class NewBlogHandler(BaseHandler):
     try:
       self.db.execute('''INSERT INTO blogs
                           (id,
-                           user_id,
+                           user_uid,
                            user_name,
                            title,
                            content,
@@ -90,7 +99,7 @@ class NewBlogHandler(BaseHandler):
                            )
                            VALUES
                            (%s,
-                           (SELECT id FROM user WHERE username=%s),
+                           (SELECT uid FROM user WHERE username=%s),
                            %s,%s,%s,%s
                            )''',
                            blog_id,
@@ -99,36 +108,43 @@ class NewBlogHandler(BaseHandler):
                            blog_title,
                            blog_content,
                            created_at)
-      self.json("success",blog_title)
+      self.json("success",blog_id)
     except Exception as e:
       self.json('error',str(e))
 
 class EditBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
+    if self.current_user is not None:
+      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
+      login_user_pic = login_user_info[0]['pic']
+      login_user_id = login_user_info[0]['uid']
+      login_user = self.current_user
+    else:
+      login_user_pic = None
+      login_user_id = None
+      login_user = None
+
     action = "_%s_action" % args[0]
     if hasattr(self,action):
-      getattr(self,action)(*args,**kwargs)
+      getattr(self,action)(login_user,login_user_id,login_user_pic)
     else:
       m_infos = self.db.query("select id,title from blogs")
-      pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-      pic_name = pic[0]['pic']
       self.render("index.html",
                    m_infos = m_infos,
-                   user = self.current_user,
-                   user_id=self.user_id,
-                   pic_name=pic_name)
+                   login_user=login_user,
+                   login_user_id=login_user_id,
+                   login_user_pic=login_user_pic)
 
-  def _info_action(self,*args,**kwargs):
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
+  def _info_action(self,login_user,login_user_id,login_user_pic):
     blog_id = self.get_argument('id',default="")
     blog_title_content = self.db.query("select title,content from blogs where id=%s",blog_id)
-    self.render("editblog.html",user=self.current_user,
-                                user_id = self.user_id,
-                                blog_id=blog_id,
-                                blog_title=blog_title_content[0]['title'],
-                                blog_content=blog_title_content[0]['content'],
-                                pic_name=pic_name)
+    self.render("editblog.html",
+                 login_user=login_user,
+                 login_user_id=login_user_id,
+                 login_user_pic=login_user_pic,
+                 blog_id=blog_id,
+                 blog_title=blog_title_content[0]['title'],
+                 blog_content=blog_title_content[0]['content'])
   
   
   def post(self,*args,**kwargs):
@@ -153,8 +169,8 @@ class EditBlogHandler(BaseHandler):
     blog_id = self.get_argument("blog_id",default="")
     try:
       self.db.execute("delete from blogs where id=%s",blog_id)
-      user_id =  self.user_id
-      self.json("success",user_id)
+      uid = self.db.query("select uid from user where username=%s",self.current_user)[0]['uid']
+      self.json("success",uid)
     except Exception as e:
       self.json("error",str(e))
 

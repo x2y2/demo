@@ -1,8 +1,8 @@
 {% extends "setting_base.html" %}
 {% block setting_content%}
 <div>
-  {% if pic_name is not None %}
-  <img src="{{static_url("upload/img/" + pic_name)}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
+  {% if login_user_pic is not None %}
+  <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
   {% else %}
   <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
   {% end %}
@@ -22,7 +22,7 @@
       <li class="setting-basic" style="margin-left: 100px;margin-top: 80px;">
         <div>
          <span class="setting-basic-text">昵称</span>
-          <input type="text" name="setting-nickname" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称" value="{{user}}">
+          <input type="text" name="setting-nickname" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称" value="{{login_user}}">
         </div>
       </li>
       <li class="setting-basic" style="margin-left: 100px;margin-top: 20px;">

@@ -7,8 +7,8 @@ import tornado.ioloop
 import tornado.options
 import tornado.httpserver
 import tornado.web
-from application import settings
 
+from application import settings
 from url import url
 from tornado.options import define,options
 reload(sys)

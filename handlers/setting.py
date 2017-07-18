@@ -8,33 +8,44 @@ import base64
 
 class SettingHandler(BaseHandler):
   def get(self,*args,**kwargs):
-    uri = self.request.uri
-    page = uri.split('/')[-1]
-    action = "_%s_action" % page
+    #登录用户信息
+    if self.current_user is not None:
+      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
+      login_user_pic = login_user_info[0]['pic']
+      login_user_id = login_user_info[0]['uid']
+      login_user = self.current_user
+    else:
+      login_user_pic = None
+      login_user_id = None
+      login_user = None
+
+    action = self.id
+    action = "_%s_action" % action
     if hasattr(self,action):
-      getattr(self,action)()
+      getattr(self,action)(login_user,login_user_id,login_user_pic)
 
 
-  def _basic_action(self):
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
-    self.render("setting.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
+  def _basic_action(self,login_user,login_user_id,login_user_pic):
+    self.render("setting.html",
+                 login_user=login_user,
+                 login_user_id=login_user_id,
+                 login_user_pic=login_user_pic)
 
-  def _profile_action(self):
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
-    self.render("profile.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
+  def _profile_action(self,login_user,login_user_id,login_user_pic):
+    self.render("profile.html",
+                 login_user=login_user,
+                 login_user_id=login_user_id,
+                 login_user_pic=login_user_pic)
   
-  def _account_manage_action(self):
-    pic = self.db.query("SELECT pic FROM user WHERE username=%s",self.current_user)
-    pic_name = pic[0]['pic']
-    self.render("account_manage.html",user=self.current_user,user_id=self.user_id,pic_name=pic_name)
-
+  def _account_manage_action(self,login_user,login_user_id,login_user_pic):
+    self.render("account_manage.html",
+                 login_user=login_user,
+                 login_user_id=login_user_id,
+                 login_user_pic=login_user_pic)
 
   def post(self,*args,**kwargs):
-    uri = self.request.uri
-    page = uri.split('/')[-1]
-    action = "_%s_action" % page
+    action = self.id
+    action = "_%s_action" % action
     if hasattr(self,action):
       getattr(self,action)()
     else:
@@ -58,10 +69,11 @@ class SettingHandler(BaseHandler):
   def _info_action(self):
     username = self.get_body_argument('setting-nickname',default="")
     email = self.get_body_argument('setting-email',default="")
-    id = self.db.query("select id from user where username=%s",self.current_user)
+    uid = self.db.query("select uid from user where username=%s",self.current_user)
+    user_id = uid[0]['uid']
     cur_email = self.db.query("select email from user where username=%s",self.current_user)
     cur_email = cur_email[0]['email']
-    user_id = id[0]['id']
+    
 
     if username == self.current_user:
       if email == "" or email == cur_email:
@@ -70,38 +82,38 @@ class SettingHandler(BaseHandler):
         if not self._checkemail_action(email) or '@' not in email:
           self.redirect("/sign_up?error=exists&email={0}".format(email))
         else:
-          self.db.execute("update user set email=%s where id=%s",email,user_id)
+          self.db.execute("update user set email=%s where uid=%s",email,user_id)
           self.redirect('/setting/basic')
     else:
       if not self._checkname_action(username) or username == "":
         self.redirect("/sign_up?error=exists&user={0}".format(username))
       else:
         if email == "" or email == cur_email:
-          self.db.execute("update user set username=%s where id=%s",username,user_id)
-          self.db.execute("update blogs set user_name=%s where user_id=%s",username,user_id)
+          self.db.execute("update user set username=%s where uid=%s",username,user_id)
+          self.db.execute("update blogs set user_name=%s where user_uid=%s",username,user_id)
           self.set_secure_cookie("username",username)
           self.redirect('/setting/basic') 
         else:
           if not self._checkemail_action(email):
             self.redirect("/sign_up?error=exists&email={0}".format(email))
           else:
-            self.db.execute("update user set username=%s where id=%s",username,user_id)
-            self.db.execute("update blogs set user_name=%s where user_id=%s",username,user_id)
+            self.db.execute("update user set username=%s where uid=%s",username,user_id)
+            self.db.execute("update blogs set user_name=%s where user_uid=%s",username,user_id)
             self.set_secure_cookie("username",username)
-            self.db.execute("update user set email=%s where id=%s",email,user_id)
+            self.db.execute("update user set email=%s where uid=%s",email,user_id)
             self.redirect('/setting/basic')
 
 
   def _checkname_action(self,username):
-    id = self.db.query("SELECT id FROM user WHERE username=%s",username)
-    if len(id) == 0:
+    uid = self.db.query("SELECT uid FROM user WHERE username=%s",username)
+    if len(uid) == 0:
       return True
     else:
       return False
 
   def _checkemail_action(self,email):
-    id = self.db.query("SELECT id FROM user WHERE email=%s",email)
-    if len(id) == 0:
+    uid = self.db.query("SELECT uid FROM user WHERE email=%s",email)
+    if len(uid) == 0:
       return True
     else:
       return False   

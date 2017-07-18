@@ -4,15 +4,17 @@
     <div class="col-md-6 left-top" style="margin-top: 30px;">
       <div class="main-top">
         <a class="avatar" href="">
-          {% if pic_name is not None %}
-          <img src="{{static_url("upload/img/" + pic_name)}}"  class="img-circle" style="width: 80px;height: 80px;">
+          <!--显示作者头像-->
+          {% if author_pic is not None %}
+          <img src="{{static_url("upload/img/" + author_pic)}}"  class="img-circle" style="width: 80px;height: 80px;">
           {% else %}
           <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
           {% end %}
         </a>
       </div>
+      <!--显示作者名称-->
       <div class="title">
-        <a href="" style="text-decoration: none;color: black;">{{user}}</a>
+        <a href="" style="text-decoration: none;color: black;">{{author_name}}</a>
       </div>
       <div class="info">
         <ul class="list-inline">
@@ -23,7 +25,7 @@
           </li>
           <li>
             <div class="meta-block">
-              <a href="/users/{{user_id}}?order_by=created_at" style="text-decoration: none;color: gray;"><p>{{count_article[0]['count']}}</p>文章</a>
+              <a href="/users/{{author_id}}?order_by=created_at" style="text-decoration: none;color: gray;"><p>{{count_article}}</p>文章</a>
             </div>
           </li>
           <li>
@@ -31,11 +33,13 @@
               <a href="" style="text-decoration: none;color: gray;"><p>0</p>粉丝</a>
             </div>
         </ul>
+        {% if login_user == author_name %}
         <div>
           <a class="blog-edit" target="_blank" href="/blog/new/info" style="text-decoration: none;color: red;margin-left: 20px;">
             写文章
           </a>
         </div>
+        {% end %}
       </div>
     </div>
   </div>
@@ -43,13 +47,13 @@
     <div class="col-md-6 left-top" style="margin-top: 10px;">
       <ul class="trigger-menu list-inline">
         <li class="">
-          <a href="/users/{{user_id}}?order_by=created_at" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">文章</a>
+          <a href="/users/{{author_id}}?order_by=created_at" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">文章</a>
         </li>
-        <!--<li class="active">
-          <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">动态</a>
-        </li>-->
+        <li class="active">
+          <a href="/users/{{author_id}}" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">动态</a>
+        </li>
         <li>
-          <a href="/users/{{user_id}}?order_by=commented_at" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">最新评论</a>
+          <a href="/users/{{author_id}}?order_by=commented_at" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">最新评论</a>
         </li>
       </ul>
       {% block user_content %} {% end %}

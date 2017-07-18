@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="{{static_url("css/bootstrap.min.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/bootstrap-markdown.min.css")}}" rel="stylesheet"></style>
-    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">-->
-    <!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css">-->
     <link href="{{static_url("css/style.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/icon.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/easyui.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/color.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/demo.css")}}" rel="stylesheet"></style>
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css">-->
     <!--<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">
@@ -24,17 +24,18 @@
         <a class="logo" style="text-decoration: none;" href="/">
           随笔
         </a>
-        {% if user is None %}
+        {% if login_user is None %}
           <a class="sign_up" href="/sign_up" style="text-decoration: none;color: red;">注册</a>
           <a class="login" href="/login" style="text-decoration: none;color: white;">登录</a>
         {% end %}
         <!--如果用户已登录，显示下拉列表菜单-->
-        {% if user is not None %}
+        {% if login_user is not None %}
         <div class="user">
           <div class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;cursor: pointer;">
-              {% if pic_name is not None %}
-              <img src="{{static_url("upload/img/" + pic_name)}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
+              <!--显示登录用户的头像-->
+              {% if login_user_pic is not None %}
+              <img src="{{static_url("upload/img/" + login_user_pic)}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
               {% else %}
               <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
               {% end %}
@@ -42,7 +43,7 @@
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="/users/{{user_id}}?order_by=created_at"><span class="glyphicon glyphicon-user" style="height: 30px;">  我的主页</span></a>
+                <a href="/users/{{login_user_id}}"><span class="glyphicon glyphicon-user" style="height: 30px;">  我的主页</span></a>
               </li>
               <li>
                <a href="/setting/basic"><span class="glyphicon glyphicon-wrench" style="height: 30px;">  设置</span></a>
@@ -51,7 +52,7 @@
                 <a href="/contactus"><span class="glyphicon glyphicon-phone" style="height: 30px;">  联系我们</span></a>
               </li>
               <li>
-                <a href="/logout"><span class="glyphicon glyphicon-off" style="height: 30px;">  退出 {{user}}</span></a>
+                <a href="/logout"><span class="glyphicon glyphicon-off" style="height: 30px;">  退出 {{login_user}}</span></a>
               </li>
             </ul>
           </div>

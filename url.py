@@ -15,20 +15,18 @@ from handlers.blog import EditBlogHandler
 from handlers.users import UsersHandler
 from handlers.setting import SettingHandler
 from handlers.contactus import ContactusHandler
-from handlers.users import UserArticleHandler
+
 
 
 url = [(r'/',IndexHandler)]
 url += [(r'/index',IndexHandler)]
-url += [(r'/index/[a-zA-Z0-9]+',IndexHandler)]
 url += [(r'/sign_up',SignUpHandler)]
 url += [(r'/login',LoginHandler)]
 url += [(r'/logout',LogoutHandler)]
-url += [(r'/blog/[a-zA-Z0-9_=]+',BlogContentHandler)]
+url += [(r'/blog/[0-9a-z]+',BlogContentHandler)]
 url += [(r'/blog/new/(\w+)',NewBlogHandler)]
 url += [(r'/blog/edit/(\w+)',EditBlogHandler)]
-url += [(r'/users/[0-9a-z]+/timeline',UsersHandler)]
-url += [(r'/users/[0-9a-z?=_]+',UserArticleHandler)]
+url += [(r'/users/[0-9a-z]+',UsersHandler)]
 url += [(r'/setting/\w+',SettingHandler)]
 url += [(r'/setting/basic/\w+',SettingHandler)]
 url += [(r'/setting/accouont?\w+',SettingHandler)]

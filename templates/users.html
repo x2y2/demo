@@ -3,21 +3,21 @@
 <ul style="list-style-type: none;margin: 0px;padding: 0px;">
   {% for m_info in m_infos %}
     <li class="index">
-      <a href="">
-        {% if pic_name is not None%}
+      <a href="/users/{{m_info['u_id']}}?order_by=created_at" style="text-decoration: none;">
+        {% if m_info['pic'] is not None%}
         <img src="{{static_url("upload/img/" + m_info['pic'])}}" class="img-circle" style="width: 25px;height: 25px;">
         {% else %}
         <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
         {% end %}
       </a>
-      <a href="" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
+      <a href="/users/{{m_info['u_id']}}?order_by=created_at" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{m_info['user_name']}}</a>
       <a style="text-decoration:none;color: gray;">{{m_info['created_at']}}</a>
       <div style="margin-top: 10px;">
         <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{m_info['id']}}"><span>{{m_info['title']}}</span></a></p>
       </div>
-      <span class="glyphicon glyphicon-eye-open" style="color: gray;margin-left: 10px;"> {{read}}</span>
-      <span class="glyphicon glyphicon-comment" style="color: gray;margin-left: 10px;"> {{comment}}</span>
-      <span class="glyphicon glyphicon-heart" style="color: gray;margin-left: 10px;"> {{good}}</span>
+      <span class="glyphicon glyphicon-eye-open" style="color: gray;margin-left: 10px;"></span>
+      <span class="glyphicon glyphicon-comment" style="color: gray;margin-left: 10px;"></span>
+      <span class="glyphicon glyphicon-heart" style="color: gray;margin-left: 10px;"></span>
     </li>
   {% end %}
 </ul>
