@@ -7,6 +7,7 @@ import datetime
 import hashlib
 import markdown2
 import HTMLParser
+import json
 
 
 reload(sys)
@@ -44,12 +45,16 @@ class BlogContentHandler(BaseHandler):
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
+    comment_infos = self.db.query("select u.username,u.pic,c.comment_time,c.comment_content from comments c,user u where c.user_uid=u.uid and c.article_aid=%s",bid)
+    comment_count = self.db.query("select count(*) count from comments where article_aid=%s",bid)[0]['count']
     self.render("blog.html",
                 b_infos=b_infos,
                 c_infos_html= html,
                 login_user=login_user,
                 login_user_id=login_user_id,
-                login_user_pic=login_user_pic)
+                login_user_pic=login_user_pic,
+                comment_count=comment_count,
+                comment_infos=comment_infos)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
@@ -175,5 +180,43 @@ class EditBlogHandler(BaseHandler):
       self.json("error",str(e))
 
 
+class CommentBlogHandler(BaseHandler):
+  def post(self):
+    article_aid = self.get_body_argument('article_aid',default='')
+    comment_content = self.get_body_argument('new-comment',default='')
+    comment_user = self.current_user
+    comment_time = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
+    str = ''.join([comment_time,comment_user])
+    str_md5 = hashlib.md5(str).hexdigest()
+    comment_cid = str_md5[0:16]
+    if comment_content:
+      try:
+        self.db.execute('''INSERT INTO comments(
+                                        user_uid,
+                                        article_aid,
+                                        comment_cid,
+                                        comment_user,
+                                        comment_content,
+                                        comment_time,
+                                        comment_flag
+                                                )
+                           VALUES
+                                  ((select uid from user where username=%s),
+                                   %s,%s,%s,%s,%s,'0')''',
+                                   comment_user,
+                                   article_aid,
+                                   comment_cid,
+                                   comment_user,
+                                   comment_content,
+                                   comment_time
+                                   )
+        self.redirect("/blog/" + article_aid)
+      except Exception as e:
+        pass
+    else:
+      self.redirect("/blog/" + article_aid)
 
+
+
+    
     

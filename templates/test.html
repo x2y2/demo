@@ -5,44 +5,8 @@
   <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 </head>
 <body>
-
-
-<div class="alert"></div>
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-         
-    //提示成功信息    
-    ShowSuccessMessage = function(message, life) {
-        var time = 50000;
-        if (!life) {
-            time = life;
-        }
-         
-        if ($("#tip_message").text().length > 0) {
-            var msg = "<span>" + message + "</span>";
-            $("#tip_message").empty().append(msg);
-        } else {
-            var msg = "<div id="tip_message"><span>" + message + "</span>";
-            $("body").append(msg);
-        }
-         
-        $("#tip_message").fadeIn(time);
-   
-        setTimeout($("#tip_message").fadeOut(time), time);
- 
-    };
-     
-    //提示错误信息
-    ShowErrorMessage = function(message, life) {
-        ShowSuccessMessage(message, life);
-        $("#tip_message span").addClass("error");
-    };
-     
-    ShowMessage("Hello success!", 5000); // 第二个参数life是指消息显示时间
-    ShowErrorMessage("Hello error!", 50000);
-    });
- 
-</script>
+aa
+{{article_aid}}
+{{comment_content}}
 </body>
 </html>

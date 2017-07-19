@@ -639,3 +639,97 @@ padding-right: 5%;
     border: 1px solid transparent;
     border-radius: 4px;
 }
+
+.textarea,.sign-container{
+  margin-top: -30px;
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  float: right;
+  width: 695px;
+  height: 80px;
+  font-size: 13px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(220, 220, 220);
+  border-right-color: rgb(220, 220, 220);
+  border-bottom-color: rgb(220, 220, 220);
+  border-left-color: rgb(220, 220, 220);
+  -moz-border-top-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  border-image-source: none;
+  border-image-slice: 100% 100% 100% 100%;
+  border-image-width: 1 1 1 1;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  background-color: hsla(0,0%,71%,.1);
+  resize: none;
+  display: inline-block;
+  vertical-align: top;
+  outline-style: none;
+}
+
+.btn-login {
+  width: 78px;
+  margin-top: 11px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  margin-left: 280px;
+  padding-top: 7px;
+  padding-right: 18px;
+  padding-bottom: 7px;
+  padding-left: 18px;
+  font-size: 16px;
+  border-top-width: medium;
+  border-right-width: medium;
+  border-bottom-width: medium;
+  border-left-width: medium;
+  border-top-style: none;
+  border-right-style: none;
+  border-bottom-style: none;
+  border-left-style: none;
+  border-top-color: currentcolor;
+  border-right-color: currentcolor;
+  border-bottom-color: currentcolor;
+  border-left-color: currentcolor;
+  -moz-border-top-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  border-image-source: none;
+  border-image-slice: 100% 100% 100% 100%;
+  border-image-width: 1 1 1 1;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  color: #fff !important;
+  background-color: #3194d0;
+  outline: none;
+  outline-width: medium;
+  outline-style: none;
+  outline-color: currentcolor;
+}
+
+.comment {
+  margin-top: 20px;
+  margin-left: 0px;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #eaeaea;
+}

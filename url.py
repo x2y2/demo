@@ -12,6 +12,7 @@ from handlers.logout import LogoutHandler
 from handlers.blog import BlogContentHandler
 from handlers.blog import NewBlogHandler
 from handlers.blog import EditBlogHandler
+from handlers.blog import CommentBlogHandler
 from handlers.users import UsersHandler
 from handlers.setting import SettingHandler
 from handlers.contactus import ContactusHandler
@@ -26,6 +27,7 @@ url += [(r'/logout',LogoutHandler)]
 url += [(r'/blog/[0-9a-z]+',BlogContentHandler)]
 url += [(r'/blog/new/(\w+)',NewBlogHandler)]
 url += [(r'/blog/edit/(\w+)',EditBlogHandler)]
+url += [(r'/blog/[0-9a-z]+/comment',CommentBlogHandler)]
 url += [(r'/users/[0-9a-z]+',UsersHandler)]
 url += [(r'/setting/\w+',SettingHandler)]
 url += [(r'/setting/basic/\w+',SettingHandler)]
