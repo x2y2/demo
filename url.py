@@ -17,8 +17,6 @@ from handlers.users import UsersHandler
 from handlers.setting import SettingHandler
 from handlers.contactus import ContactusHandler
 
-
-
 url = [(r'/',IndexHandler)]
 url += [(r'/index',IndexHandler)]
 url += [(r'/sign_up',SignUpHandler)]
