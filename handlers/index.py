@@ -15,7 +15,7 @@ class IndexHandler(BaseHandler):
     else:
       login_user_pic = None;
       login_user_id = None;
-    m_infos = self.db.query('''SELECT u.uid,u.username,u.pic,a.aid,a.title,a.content,a.created_at 
+    m_infos = self.db.query('''SELECT u.uid,u.username,u.pic,a.aid,a.title,a.content,a.created_at,a.comment_count 
                                FROM articles a,user u 
                                WHERE a.user_uid=u.uid 
                                ORDER BY created_at 

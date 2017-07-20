@@ -82,38 +82,44 @@
     {% end %}
     </div>
     <!--评论展示-->
+    {% if b_infos[0]['comment_count'] != 0 %}
     <div style="margin-top: 120px;">
       <div>
-        <span style="font-size: 18px;font-weight: bold;">{{comment_count}}条评论</span>
+        <span style="font-size: 18px;font-weight: bold;">{{b_infos[0]['comment_count']}}条评论</span>
         <div style="float: right;color: gray;">
           <span>按时间正序</span>
           <span>按时间倒序</span>
         </div>
       </div>
     </div>
+    {% end %}
+    {% for comment_info in comment_infos %}
     <div class="comment">
-      {% for comment_info in comment_infos %}
       <div class="blog-avatar" style="margin-top: 20px;">
-        {% if comment_info[0]['pic'] is None %}
-         <a href="/users/{{comment_info[0]['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;"></a>
+        {% if comment_info['pic'] is None %}
+         <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;"></a>
         {% else %}
-        <a href="/users/{{comment_info[0]['uid']}}"><img src="{{static_url("upload/img/" + comment_info[0]['pic'])}}" class="img-circle" style="width: 30px;height: 30px;"></a>
+        <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("upload/img/" + comment_info['pic'])}}" class="img-circle" style="width: 30px;height: 30px;"></a>
         {% end %}
       </div>
       <div style="margin-top: 20px;">
         <span>
-          <a href="/users/{{comment_info[0]['uid']}}" style="text-decoration: none;color: black;">{{comment_info[0]['username']}}</a>
+          <a href="/users/{{comment_info['uid']}}" style="text-decoration: none;color: black;">{{comment_info['username']}}</a>
         </span>
         <p>
-          <span style="color: gray;">楼  </span>
-          <span style="color: gray;">{{comment_info[0]['comment_time']}}</span>
+          <span style="color: gray;">{{comment_info['comment_floor']}}楼  </span>
+          <span style="color: gray;">{{comment_info['comment_time']}}</span>
         </p>
-        <div>
-          {{comment_info[0]['comment_content']}}
+        <div style="font-size: 16px;">
+          {{comment_info['comment_content']}}
+        </div>
+        <div style="margin-top: 10px;color: gray;font-size: 14px;">
+          <span class="glyphicon glyphicon-thumbs-up">赞</span>
+          <span class="glyphicon glyphicon-comment">回复</span>
         </div>
       </div>
-      {% end %}
     </div>
+    {% end %}
   </div>
 </div>
 {% end %}

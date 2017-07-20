@@ -26,6 +26,7 @@ class BlogContentHandler(BaseHandler):
       login_user_id = None
       login_user = None
     bid = self.id
+    #文章信息
     b_infos = self.db.query('''SELECT 
                                   u.uid,
                                   u.pic,
@@ -33,7 +34,8 @@ class BlogContentHandler(BaseHandler):
                                   a.user_name,
                                   a.title,
                                   a.content,
-                                  a.created_at 
+                                  a.created_at,
+                                  a.comment_count 
                                 FROM articles a,user u 
                                 WHERE 
                                   a.user_uid=u.uid 
@@ -45,15 +47,20 @@ class BlogContentHandler(BaseHandler):
     c_infos_html = markdown2.markdown(c_infos)
     html_parser = HTMLParser.HTMLParser()
     html = html_parser.unescape(c_infos_html)
-    comment_infos = self.db.query("select u.username,u.pic,c.comment_time,c.comment_content from comments c,user u where c.user_uid=u.uid and c.article_aid=%s",bid)
-    comment_count = self.db.query("select count(*) count from comments where article_aid=%s",bid)[0]['count']
+    #评论信息
+    comment_infos = self.db.query('''SELECT u.uid,u.username,u.pic,c.comment_time,c.comment_content,c.comment_floor 
+                                     FROM comments c,user u 
+                                     WHERE c.user_uid=u.uid 
+                                     AND c.article_aid=%s 
+                                     ORDER BY comment_time 
+                                     DESC''',bid)
+
     self.render("blog.html",
                 b_infos=b_infos,
                 c_infos_html= html,
                 login_user=login_user,
                 login_user_id=login_user_id,
                 login_user_pic=login_user_pic,
-                comment_count=comment_count,
                 comment_infos=comment_infos)
 
 class NewBlogHandler(BaseHandler):
@@ -189,6 +196,14 @@ class CommentBlogHandler(BaseHandler):
     str = ''.join([comment_time,comment_user])
     str_md5 = hashlib.md5(str).hexdigest()
     comment_cid = str_md5[0:16]
+    max_f = self.db.query("select max(comment_floor) max_f from comments where article_aid=%s",article_aid)[0]['max_f']
+    if not max_f:
+      max_f = 0
+    comment_floor = int(max_f) + 1
+    comment_count = self.db.query("select comment_count from articles where aid=%s",article_aid)[0]['comment_count']
+    if not comment_count:
+      comment_count = 0
+    comment_count = int(comment_count) + 1
     if comment_content:
       try:
         self.db.execute('''INSERT INTO comments(
@@ -198,18 +213,21 @@ class CommentBlogHandler(BaseHandler):
                                         comment_user,
                                         comment_content,
                                         comment_time,
+                                        comment_floor,
                                         comment_flag
                                                 )
                            VALUES
                                   ((select uid from user where username=%s),
-                                   %s,%s,%s,%s,%s,'0')''',
+                                   %s,%s,%s,%s,%s,%s,'0')''',
                                    comment_user,
                                    article_aid,
                                    comment_cid,
                                    comment_user,
                                    comment_content,
-                                   comment_time
+                                   comment_time,
+                                   comment_floor
                                    )
+        self.db.execute("update articles set comment_count=%s where aid=%s",comment_count,article_aid)
         self.redirect("/blog/" + article_aid)
       except Exception as e:
         pass
