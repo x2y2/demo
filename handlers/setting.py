@@ -19,8 +19,7 @@ class SettingHandler(BaseHandler):
       login_user_id = None
       login_user = None
 
-    action = self.id
-    action = "_%s_action" % action
+    action = "_%s_action" % self.id
     if hasattr(self,action):
       getattr(self,action)(login_user,login_user_id,login_user_pic)
 
@@ -90,7 +89,6 @@ class SettingHandler(BaseHandler):
       else:
         if email == "" or email == cur_email:
           self.db.execute("UPDATE user SET username=%s WHERE uid=%s",username,user_id)
-          self.db.execute("UPDATE articles SET user_name=%s WHERE user_uid=%s",username,user_id)
           self.set_secure_cookie("username",username)
           self.redirect('/setting/basic') 
         else:
@@ -98,7 +96,6 @@ class SettingHandler(BaseHandler):
             self.redirect("/sign_up?error=exists&email={0}".format(email))
           else:
             self.db.execute("UPDATE user SET username=%s WHERE uid=%s",username,user_id)
-            self.db.execute("UPDATE articles SET user_name=%s WHERE user_uid=%s",username,user_id)
             self.set_secure_cookie("username",username)
             self.db.execute("UPDATE user SET email=%s WHERE uid=%s",email,user_id)
             self.redirect('/setting/basic')

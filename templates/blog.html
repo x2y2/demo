@@ -15,7 +15,7 @@
       <div class="info">
         <span class="tag">作者</span>
         <span class="name">
-          <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;">{{b_infos[0]['user_name']}}</a>
+          <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;">{{b_infos[0]['username']}}</a>
         </span>
       </div>
       <div class="blog-info">
@@ -27,7 +27,7 @@
           </li>
           <li>
             <div class="blog-meta-block">
-              <a  style="text-decoration: none;color: gray;">阅读 </a>
+              <a  style="text-decoration: none;color: gray;">阅读 {{b_infos[0]['read_count']}}</a>
             </div>
           </li>
           <li>
@@ -36,7 +36,7 @@
             </div>
           </li>
           </ul>
-          {% if login_user == b_infos[0]['user_name']%}
+          {% if login_user == b_infos[0]['username']%}
             <div class="blog-edit">
               <a href="/blog/edit/info?id={{b_infos[0]['aid']}}" style="text-decoration: none;color: gray;">编辑文章</a>
             </div>
@@ -47,7 +47,7 @@
      {% raw c_infos_html %}
     </div>
     <hr>
-    
+    <!--评论框 -->
     <div>
     {% if login_user is not None %}
       <form role="form"　name="comment-form" action="/blog/{{b_infos[0]['aid']}}/comment" method="POST">
@@ -64,12 +64,13 @@
         <div>
           <textarea id="new-comment" name="new-comment" class="textarea" placeholder="写下你的评论"></textarea>
         </div>
-        <div style="float: right;margin-top: 10px;">
-          <a role="button" class="btn" style="font-size: 16px;text-decoration: none;color: gray;" href="">取消</a>
+        <div id="under-comment" style="float: right;margin-top: 10px;">
+          <a class="btn" id="cancel-comment" style="font-size: 16px;text-decoration: none;color: gray;">取消</a>
           <input class="btn btn-success" type="submit" value="发送"/>
         </div>
       </form>
     {% else %}
+    <!--登录后评论-->
       <form>
         <a>
           <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;">

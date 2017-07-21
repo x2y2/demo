@@ -26,16 +26,19 @@ class BlogContentHandler(BaseHandler):
       login_user_id = None
       login_user = None
     bid = self.id
+    #记录阅读次数
+    self.db.execute("update articles set read_count=read_count + 1 where aid=%s",bid)
     #文章信息
     b_infos = self.db.query('''SELECT 
                                   u.uid,
+                                  u.username,
                                   u.pic,
                                   a.aid,
-                                  a.user_name,
                                   a.title,
                                   a.content,
                                   a.created_at,
-                                  a.comment_count 
+                                  a.comment_count,
+                                  a.read_count 
                                 FROM articles a,user u 
                                 WHERE 
                                   a.user_uid=u.uid 
@@ -104,7 +107,6 @@ class NewBlogHandler(BaseHandler):
       self.db.execute('''INSERT INTO articles
                           (aid,
                            user_uid,
-                           user_name,
                            title,
                            content,
                            created_at
@@ -112,10 +114,9 @@ class NewBlogHandler(BaseHandler):
                            VALUES
                            (%s,
                            (SELECT uid FROM user WHERE username=%s),
-                           %s,%s,%s,%s
+                           %s,%s,%s
                            )''',
                            blog_id,
-                           user_name,
                            user_name,
                            blog_title,
                            blog_content,
@@ -168,8 +169,8 @@ class EditBlogHandler(BaseHandler):
 
   def _update_blog_action(self):
     blog_id = self.get_argument("blog_id",default="")
-    blog_title = self.get_argument("blog_title",default="").encode('utf8')
-    blog_content = self.get_argument("blog_content",default="").encode('utf8')
+    blog_title = self.get_argument("blog_title",default="")
+    blog_content = self.get_argument("blog_content",default="")
     try:
       self.db.execute("update articles set title=%s,content=%s where aid=%s",blog_title,blog_content,blog_id)
       self.json("success",blog_title)
@@ -196,21 +197,18 @@ class CommentBlogHandler(BaseHandler):
     str = ''.join([comment_time,comment_user])
     str_md5 = hashlib.md5(str).hexdigest()
     comment_cid = str_md5[0:16]
+    #评论楼层
     max_f = self.db.query("select max(comment_floor) max_f from comments where article_aid=%s",article_aid)[0]['max_f']
     if not max_f:
       max_f = 0
     comment_floor = int(max_f) + 1
-    comment_count = self.db.query("select comment_count from articles where aid=%s",article_aid)[0]['comment_count']
-    if not comment_count:
-      comment_count = 0
-    comment_count = int(comment_count) + 1
+    
     if comment_content:
       try:
         self.db.execute('''INSERT INTO comments(
                                         user_uid,
                                         article_aid,
                                         comment_cid,
-                                        comment_user,
                                         comment_content,
                                         comment_time,
                                         comment_floor,
@@ -218,19 +216,23 @@ class CommentBlogHandler(BaseHandler):
                                                 )
                            VALUES
                                   ((select uid from user where username=%s),
-                                   %s,%s,%s,%s,%s,%s,'0')''',
+                                   %s,%s,%s,%s,%s,'0')''',
                                    comment_user,
                                    article_aid,
                                    comment_cid,
-                                   comment_user,
                                    comment_content,
                                    comment_time,
                                    comment_floor
                                    )
+        comment_count = self.db.query("select comment_count from articles where aid=%s",article_aid)[0]['comment_count']
+        if not comment_count:
+          comment_count = 0
+        comment_count = int(comment_count) + 1
         self.db.execute("update articles set comment_count=%s where aid=%s",comment_count,article_aid)
         self.redirect("/blog/" + article_aid)
       except Exception as e:
         pass
+        #self.write(json.dumps({'messsage':e}))
     else:
       self.redirect("/blog/" + article_aid)
 

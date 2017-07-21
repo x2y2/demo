@@ -161,39 +161,36 @@ $('#upload-pic').change(function(){
   $('#upload-pic-form').submit();
 });
 
-/**
-function scrolltop() {
-  document.body.scrollTop = document.documentElement.scrollTop = 0;
-  if (document.documentElement.scrollTop + document.blog.scrollTop >100) {
-    document.getElementById('scrolltop').style.display = "block";
 
-  }
-  else {
-    document.getElementById('scrolltop').style.display = "none";
-  }
-
-}
-**/
-
- $(document).ready(function() {
-    //首先将#scrolltop隐藏
-    $("#scrolltop").hide();
-    //当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失
-    $(function() {
-      $(window).scroll(function() {
-        if ($(window).scrollTop() > 100) {
-          $("#scrolltop").show();
-        } else {
-          $("#scrolltop").hide();
-        }
-      });
-      //当点击跳转链接后，回到页面顶部位置
-      $("#scrolltop").click(function() {
-        $('body,html').animate({
-          scrollTop: 0
-        },
-        1000);
-        return false;
-      });
+$(document).ready(function() {
+  //首先将#scrolltop隐藏
+  $("#scrolltop").hide();
+  //当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失
+  $(function() {
+    $(window).scroll(function() {
+      if ($(window).scrollTop() > 100) {
+        $("#scrolltop").show();
+      } else {
+        $("#scrolltop").hide();
+      }
+    });
+    //当点击跳转链接后，回到页面顶部位置
+    $("#scrolltop").click(function() {
+      $('body,html').animate({
+        scrollTop: 0
+      },
+      1000);
+      return false;
     });
   });
+});
+
+$(document).ready(function(){
+  $("#under-comment").hide();
+  $("#new-comment").click(function(){
+    $("#under-comment").show();
+  });
+  $("#cancel-comment").click(function(){
+    $("#under-comment").hide();
+  });
+});

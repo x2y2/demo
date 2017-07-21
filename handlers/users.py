@@ -4,8 +4,6 @@
 from base import BaseHandler
 import hashlib
 
-
-
 class UsersHandler(BaseHandler):
   def get(self):
     uid = self.id
@@ -51,24 +49,11 @@ class UsersHandler(BaseHandler):
                  count_article=count_article)
   #文章
   def _created_at(self,count_article,uid,author_name,author_pic,author_id,login_user_pic,login_user_id,login_user):
-    m_infos = self.db.query('''SELECT
-                                  u.uid, 
-                                  u.pic,
-                                  a.aid,
-                                  a.user_name,
-                                  a.title,
-                                  a.content,
-                                  a.created_at,
-                                  a.comment_count 
-                               FROM 
-                                  articles a,
-                                  user u 
-                               WHERE 
-                                  a.user_uid=u.uid 
-                               AND 
-                                  a.user_uid=%s
-                               ORDER BY
-                                  created_at
+    m_infos = self.db.query('''SELECT u.uid,u.pic,u.username,a.aid,a.title,a.content,a.created_at,a.comment_count,a.read_count 
+                               FROM articles a,user u 
+                               WHERE a.user_uid=u.uid 
+                               AND a.user_uid=%s
+                               ORDER BY created_at
                                DESC
                             ''',
                             uid
@@ -86,15 +71,14 @@ class UsersHandler(BaseHandler):
                  login_user=login_user)
   #按最新评论排序显示文章
   def _commented_at(self,count_article,uid,author_name,author_pic,author_id,login_user_pic,login_user_id,login_user):
-    uid = self.id
-    comment_infos = self.db.query('''SELECT a.aid,a.user_uid uid,a.user_name,u.pic,a.title,a.created_at,a.comment_count 
+    comment_infos = self.db.query('''SELECT a.aid,a.user_uid uid,u.username,u.pic,a.title,a.created_at,a.comment_count,a.read_count 
                                      FROM comments c,articles a,user u
                                      WHERE c.article_aid=a.aid 
                                      AND a.user_uid=u.uid
                                      AND a.user_uid=%s
                                      GROUP BY a.title 
                                      ORDER BY c.comment_time 
-                                     DESC;''',uid)
+                                     DESC''',uid)
  
     self.render("commented.html",
                  author_name=author_name,
@@ -106,6 +90,25 @@ class UsersHandler(BaseHandler):
                  login_user=login_user,
                  comment_infos=comment_infos)
 
+  #显示热门文章
+  def _top(self,count_article,uid,author_name,author_pic,author_id,login_user_pic,login_user_id,login_user):
+    hot_infos = self.db.query('''SELECT a.aid,a.user_uid uid,u.username,u.pic,a.title,a.created_at,a.comment_count,a.read_count 
+                                 FROM comments c,articles a,user u
+                                 WHERE c.article_aid=a.aid 
+                                 AND a.user_uid=u.uid
+                                 AND a.user_uid=%s
+                                 GROUP BY a.title 
+                                 ORDER BY a.read_count
+                                 DESC''',uid)
+    self.render("hot.html",
+               author_name=author_name,
+               author_pic=author_pic,
+               author_id=author_id,
+               count_article=count_article,
+               login_user_pic=login_user_pic,
+               login_user_id=login_user_id,
+               login_user=login_user,
+               hot_infos=hot_infos)
 
     
 

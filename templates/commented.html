@@ -10,12 +10,12 @@
         <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
         {% end %}
       </a>
-      <a href="/users/{{comment_info['uid']}}?order_by=commented_at" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{comment_info['user_name']}}</a>
+      <a href="/users/{{comment_info['uid']}}?order_by=commented_at" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{comment_info['username']}}</a>
       <a style="text-decoration:none;color: gray;">{{comment_info['created_at']}}</a>
       <div style="margin-top: 10px;">
         <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{comment_info['aid']}}"><span>{{comment_info['title']}}</span></a></p>
       </div>
-      <span class="glyphicon glyphicon-eye-open" style="color: gray;margin-left: 10px;"></span>
+      <span class="glyphicon glyphicon-eye-open" style="color: gray;margin-left: 10px;"> {{comment_info['read_count']}}</span>
       <span class="glyphicon glyphicon-comment" style="color: gray;margin-left: 10px;"> {{comment_info['comment_count']}}</span>
       <span class="glyphicon glyphicon-heart" style="color: gray;margin-left: 10px;"></span>
     </li>
