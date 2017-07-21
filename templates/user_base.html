@@ -33,11 +33,14 @@
               <a href="" style="text-decoration: none;color: gray;"><p>0</p>粉丝</a>
             </div>
         </ul>
-        {% if login_user == author_name %}
-        <div>
-          <a class="blog-edit" target="_blank" href="/blog/new/info" style="text-decoration: none;color: red;margin-left: 20px;">
-            写文章
-          </a>
+        {% if login_user != author_name %}
+        <div style="float: right; margin-top: -70px;">
+          <div >
+            <a  href="" class="send-message btn" style="text-decoration: none;color: #42c02c;">发简信
+            </a>
+            <a  href="" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;color: white;">关注
+            </a>
+          </div>
         </div>
         {% end %}
       </div>
