@@ -34,14 +34,14 @@
             </div>
         </ul>
         {% if login_user != author_name %}
-        <div style="float: right; margin-top: -70px;">
-          <div >
-            <a  href="" class="send-message btn" style="text-decoration: none;color: #42c02c;">发简信
-            </a>
-            <a  href="" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;color: white;">关注
-            </a>
+          <div style="float: right; margin-top: -70px;">
+            <div >
+              <a  href="" class="send-message btn" style="text-decoration: none;color: #42c02c;">发简信
+              </a>
+              <a  href="" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;color: white;">关注
+              </a>
+            </div>
           </div>
-        </div>
         {% end %}
       </div>
     </div>
@@ -60,6 +60,12 @@
         </li>
         <li>
           <a href="/users/{{author_id}}?order_by=top" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">热门</a>
+        </li>
+        <li>
+          <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">关注用户</a>
+        </li>
+        <li>
+          <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">粉丝</a>
         </li>
       </ul>
       {% block user_content %} {% end %}
