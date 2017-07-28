@@ -133,25 +133,25 @@ function edit_delete_blog() {
   $.messager.confirm("操作提示",'确认删除吗?',function(data) {
     var blog_id = $("#blog_id").text();
     if (data) {
-    $.ajax({
-    type: "POST",
-    url: "/blog/edit/delete_blog",
-    data: {
-      "blog_id": blog_id
-    },
-    success: function(data) {
-      if(data['status'] == 'fail') {
-         alert(data['info']);
-      }
-      else {
-        //alert(data['info'])
-        window.location.href = "/users/" + data['info'];
-      }
-    },
-    error: function(data) {
-      alert(data['info']);
-    }
-  });
+      $.ajax({
+        type: "POST",
+        url: "/blog/edit/delete_blog",
+        data: {
+          "blog_id": blog_id
+        },
+        success: function(data) {
+          if(data['status'] == 'fail') {
+             alert(data['info']);
+          }
+          else {
+            //alert(data['info'])
+            window.location.href = "/users/" + data['info'];
+          }
+        },
+        error: function(data) {
+          alert(data['info']);
+        }
+    });
   }
 });   
 }
@@ -192,5 +192,63 @@ $(document).ready(function(){
   });
   $("#cancel-comment").click(function(){
     $("#under-comment").hide();
+  });
+});
+
+$(document).ready(function(){
+  var path = window.location.pathname.substring(0,23);
+  var url = path + '/' + 'follower';
+  $("#follower").click(function(){
+    $.ajax({
+    type: "post",
+    url: url,
+    cache: false,
+    data: {"url": url},
+    success: function(data) {
+      if (data['status'] == 'success') {
+        $("#follower").val('已经关注')
+        window.location.href = data['info'];
+      }
+      else if (data['status'] == '/login'){
+        //alert(data['info']);
+        window.location.href = data['info'];
+      }
+    },
+    error: function(data) {
+      alert(data['info']);
+    },
+  });    
+  });
+});
+
+$(document).ready(function(){
+  var path = window.location.pathname.substring(0,23);
+  var url = path + '/' + 'follower_remove';
+  $("#followed").mouseover(function(){
+    $("#cancel-follow").show();
+    $("#followed").hide();
+  }).mouseout(function(){
+    $("#followed").show();
+    $("#cancel-follow").hide();
+  });
+  $("#cancel-follow").click(function(){
+    $.ajax({
+    type: "post",
+    url: url,
+    cache: false,
+    data: {"url": url},
+    success: function(data) {
+      if (data['status'] == 'success') {
+        window.location.href = data['info'];
+      }
+      else if (data['status'] == '/login'){
+        //alert(data['info']);
+        window.location.href = data['info'];
+      }
+    },
+    error: function(data) {
+      alert(data['info']);
+    },
+  });    
   });
 });

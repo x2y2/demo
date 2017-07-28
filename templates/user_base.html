@@ -29,18 +29,41 @@
             </div>
           </li>
           <li>
-            <div class="meta-block">
+            <div class="meta-block" style="border-right-style: none;">
               <a href="" style="text-decoration: none;color: gray;"><p>0</p>粉丝</a>
             </div>
         </ul>
+        <!--添加关注和发简讯-->
         {% if login_user != author_name %}
           <div style="float: right; margin-top: -70px;">
-            <div >
-              <a  href="" class="send-message btn" style="text-decoration: none;color: #42c02c;">发简信
-              </a>
-              <a  href="" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;color: white;">关注
-              </a>
-            </div>
+              <div>
+                {% if follower == False %}
+                  {% if login_user is None%}
+                  <div>
+                    <a href="/login" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;">关注
+                    </a>
+                  </div>
+                  {% else %}
+                  <div id="follower">
+                    <a  class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;">关注
+                    </a>
+                  </div>
+                  {% end %}
+                {% else %}
+                <div class="followed btn" id="followed">
+                  <a class="glyphicon glyphicon-ok" style="text-decoration: none;color: #c8c8d0;">已关注
+                  </a>
+                </div>
+                <div class="followed btn" id="cancel-follow" style="display: none;">
+                  <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
+                  </a>
+                </div>
+                {% end %}
+              </div>
+              <div class="send-message btn">
+                <a id="send-message" style="text-decoration: none;color: #42c02c;">发简信
+                </a>
+              </div>
           </div>
         {% end %}
       </div>
@@ -62,7 +85,7 @@
           <a href="/users/{{author_id}}?order_by=top" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">热门</a>
         </li>
         <li>
-          <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">关注用户</a>
+          <a href="/users/{{author_id}}/following" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">关注用户</a>
         </li>
         <li>
           <a href="" style="text-decoration: none;font-size: 15px;color: gray;font-weight: bold;">粉丝</a>

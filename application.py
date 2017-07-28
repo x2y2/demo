@@ -7,7 +7,6 @@ from tornado.options import define,options
 from url import url
 import os
 
-define("port",default = 8000,help = "run on the given port",type = int)
 define("mysql_host",default="127.0.0.1",help="database host")
 define("mysql_user",default="wangpei",help="database user")
 define("mysql_password",default="123456",help="database password")
