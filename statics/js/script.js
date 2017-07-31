@@ -21,6 +21,7 @@ $(document).ready(function(){
 });
 **/
 
+
 function add_blog() {
   var blog_title = $("#blog_title").val();
   var blog_content = $("#blog_content").val();
@@ -57,7 +58,6 @@ function add_blog() {
     }
   });
 }
-
 
 
 function update_blog() {
@@ -157,12 +157,11 @@ function edit_delete_blog() {
 }
 
 
+$(document).ready(function() {
 $('#upload-pic').change(function(){
   $('#upload-pic-form').submit();
 });
 
-
-$(document).ready(function() {
   //首先将#scrolltop隐藏
   $("#scrolltop").hide();
   //当滚动条的位置处于距顶部100像素以下时，跳转链接出现，否则消失
@@ -183,9 +182,7 @@ $(document).ready(function() {
       return false;
     });
   });
-});
 
-$(document).ready(function(){
   $("#under-comment").hide();
   $("#new-comment").click(function(){
     $("#under-comment").show();
@@ -224,6 +221,7 @@ $(document).ready(function(){
 $(document).ready(function(){
   var path = window.location.pathname.substring(0,23);
   var url = path + '/' + 'follower_remove';
+  /**
   $("#followed").mouseover(function(){
     $("#cancel-follow").show();
     $("#followed").hide();
@@ -231,7 +229,8 @@ $(document).ready(function(){
     $("#followed").show();
     $("#cancel-follow").hide();
   });
-  $("#cancel-follow").click(function(){
+  **/
+  $("#followed").click(function(){
     $.ajax({
     type: "post",
     url: url,
@@ -251,4 +250,14 @@ $(document).ready(function(){
     },
   });    
   });
+});
+
+
+$(function(){
+    $("#following > li").each(function(){
+    $(this).find("#following-follower,#following-followed").click(function(){
+      var idx = $(this).closest('li').index();
+      alert(idx);
+    });
+});
 });

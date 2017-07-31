@@ -902,3 +902,43 @@ padding-right: 5%;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
 }
+
+.blog-edit {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  float: right;
+  margin-top: -50px;
+  padding-top: 0px;
+  padding-right: 12px;
+  padding-bottom: 0px;
+  padding-left: 12px;
+  font-size: 14px;
+  text-align: center;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: rgb(200,200,200);
+  border-right-color: rgb(200,200,200);
+  border-bottom-color: rgb(200,200,200);
+  border-left-color: rgb(200,200,200);
+  background-color: rgb(255,255,255);
+  -moz-border-left-color: none;
+  -moz-border-top-color: none;
+  -moz-border-right-color: none;
+  -moz-border-bottom-color: none;
+  border-image-source: none;
+  border-image-slice: none;
+  border-image-width: 1 1 1 1;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+}

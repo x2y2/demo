@@ -21,5 +21,13 @@ class BaseHandler(tornado.web.RequestHandler):
     url = self.request.uri
     ret = urlparse.urlparse(url)
     path = ret.path
-    id = path.split('/')[-1]
+    id = path.split('/')[2]
     return id
+
+  @property
+  def arg(self):
+    url = self.request.uri
+    ret = urlparse.urlparse(url)
+    path = ret.path
+    arg = path.split('/')[-1]
+    return arg

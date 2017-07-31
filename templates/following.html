@@ -1,22 +1,24 @@
 {% extends "user_base.html" %}
 {% block user_content %}
-{% for f_info in f_infos %}
-<div class="following-top">
-  <ul style="list-style-type: none;margin: 0px;padding: 0px;">
+<div class="following-top" id="following-top">
+  <ul id="following" style="list-style-type: none;margin: 0px;padding: 0px;">
+    {% for f_info in f_infos %}
     <li class="following-index">
+      <h4 id="following-user-id" style="display: none;">{{f_info['uid']}}</h4>
+      <!--显示作者头像-->
       <a  href="/users/{{f_info['uid']}}">
-        <!--显示作者头像-->
         {% if f_info['pic'] is not None %}
         <img src="{{static_url("upload/img/" + f_info['pic'])}}"  class="img-circle" style="width: 50px;height: 50px;">
         {% else %}
         <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 50px;height: 50px;">
         {% end %}
       </a>
+      <!--显示作者-->
       <div class="following-author">
         <a href="/users/{{f_info['uid']}}" style="text-decoration: none;color: black;">{{f_info['username']}}</a>
       </div>
       <div style="margin-left: 65px;">
-        <ul class="list-inline">
+        <ul class="list-inline" id="stop">
           <li>
             <div class="following-meta-block">
               <a style="text-decoration: none;color: gray;">关注</a>
@@ -36,54 +38,42 @@
       </div>
       <!--加关注-->
       <div style="float: right; margin-top: -35px;">
-          <!--共同的关注用户显示已关注-->
           {% if f_info['uid'] not in common_id %}
               <!--未登录的用户跳转到登录界面-->
               {% if login_user is None%}
-              <div>
-                <a href="/login" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;">关注
-                </a>
-              </div>
+                <div>
+                  <a href="/login" class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;">关注
+                  </a>
+                </div>
               {% else %}
-                  <!--作者本人不关注已关注用户-->
-                  {% if login_user == author_name %}
-                    <div class="followed btn" id="followed">
-                      <a class="glyphicon glyphicon-ok" style="text-decoration: none;color: #c8c8d0;">已关注
-                      </a>
-                    </div>
-                    <div class="followed btn" id="cancel-follow" style="display: none;">
-                      <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
-                      </a>
-                    </div>
-                  {% else %}
-                    <!--不关注自己-->
-                    {% if login_user == f_info['username'] %}
-                      <div></div>
-                    {%else%}
-                      <div id="follower">
-                        <a  class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;">关注
-                        </a>
-                      </div>
-                      <div class="followed btn" id="cancel-follow" style="display: none;">
-                        <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
-                        </a>
-                      </div>
-                    {% end %}
-                  {% end %} 
+                <!--不关注自己-->
+                {% if login_user == f_info['username'] %}
+                  <div></div>
+                {%else%}
+                  <div id="following-follower">
+                    <a  class="add-follow btn glyphicon glyphicon-plus" style="text-decoration: none;">关注
+                    </a>
+                  </div>
+                  <div class="followed btn" id="following-cancel-follow" style="display: none;">
+                    <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
+                    </a>
+                  </div>
+                {% end %}  
               {% end %}
           {% else %}
-              <div class="followed btn" id="followed">
+              <!--共同的关注用户显示已关注-->
+              <div class="followed btn" id="following-followed">
                 <a class="glyphicon glyphicon-ok" style="text-decoration: none;color: #c8c8d0;">已关注
                 </a>
               </div>
-              <div class="followed btn" id="cancel-follow" style="display: none;">
+              <div class="followed btn" id="following-cancel-follow" style="display: none;">
                 <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
                 </a>
               </div>
           {% end %} 
       </div>
     </li>
+  {% end %}
   </ul>
 </div>
-{% end %}
 {% end %}

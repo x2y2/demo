@@ -11,7 +11,7 @@ class UsersHandler(BaseHandler):
     uid = self.id
     if uid is None: 
       author_name = self.current_user
-      count_article = self.db.query('''SELECT COUNT(*) count FROM articles WHERE  user_name=%s''',self.current_user)[0]['count']
+      count_article = self.db.query('''SELECT COUNT(*) count FROM articles WHERE  (select uid from user where username=%s)''',self.current_user)[0]['count']
     else:
       author_name = self.db.query("select username from user where uid=%s",uid)[0]['username']
       count_article = self.db.query("SELECT COUNT(*) count FROM articles WHERE  user_uid=%s",uid)[0]['count']
@@ -130,10 +130,11 @@ class UsersHandler(BaseHandler):
 
 class FollowHandler(BaseHandler):
   def get(self):
-    url = self.request.uri
-    ret = urlparse.urlparse(url)
-    path = ret.path
-    uid = path.split('/')[2]
+    #url = self.request.uri
+    #ret = urlparse.urlparse(url)
+    #path = ret.path
+    #uid = path.split('/')[2]
+    uid = self.id
     #作者姓名
     if uid is None: 
       author_name = self.current_user
@@ -245,7 +246,7 @@ class FollowHandler(BaseHandler):
 
   def _follower_remove_action(self,url):
     current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
-    user_id = url.split('/')[-2]
+    user_id = self.id
 
     try:
       self.db.execute("delete from relation where from_user_id=%s and to_user_id=%s and type='2'",current_user_id,user_id)

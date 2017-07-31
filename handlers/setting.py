@@ -43,7 +43,7 @@ class SettingHandler(BaseHandler):
                  login_user_pic=login_user_pic)
 
   def post(self,*args,**kwargs):
-    action = self.id
+    action = self.arg
     action = "_%s_action" % action
     if hasattr(self,action):
       getattr(self,action)()
