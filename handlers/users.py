@@ -227,30 +227,50 @@ class FollowHandler(BaseHandler):
 
     if self.current_user:
       if hasattr(self,action):
-        getattr(self,action)(url)
+        getattr(self,action)()
       else:
         self.json("fail","no aciton!")
     else:
       self.json('login','/login')
 
-  def _follower_action(self,url):
+  #添加作者为关注用户
+  def _follower_action(self):
     current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
-    user_id = url.split('/')[-2]
-
+    user_id = self.id
     try:
       self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
       #self.redirect('/users/' + user_id)
-      self.json('success','/users/' + user_id)
+      self.json('success','/users/' + user_id + '/following')
     except Exception as e:
       self.json('error',e)
 
-  def _follower_remove_action(self,url):
+  #将作者的关注用户添加为自己的关注用户
+  def _follower_u_add_action(self):
+    current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
+    user_id = self.get_argument("user_id",default="")
+    try:
+      self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
+      self.json('success','/users/' + self.id + '/following')
+    except Exception as e:
+      self.json('error',e)
+
+  #将作者从关注用户中删除
+  def _follower_remove_action(self):
     current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
     user_id = self.id
-
     try:
       self.db.execute("delete from relation where from_user_id=%s and to_user_id=%s and type='2'",current_user_id,user_id)
-      #self.redirect('/users/' + user_id)
-      self.json('success','/users/' + user_id)
+      self.json('success','/users/' + self.id + '/following')
     except Exception as e:
       self.json('error',e)
+      
+  #将作者的关注用户从我的关注列表中删除
+  def _follower_u_remove_action(self):
+    current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
+    user_id = self.get_argument("user_id",default="")
+    try:
+      self.db.execute("delete from relation where from_user_id=%s and to_user_id=%s and type='2'",current_user_id,user_id)
+      self.json('success','/users/' + self.id + '/following')
+    except Exception as e:
+      self.json('error',e)
+

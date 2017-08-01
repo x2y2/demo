@@ -218,7 +218,7 @@ $(document).ready(function(){
   });
 });
 
-$(document).ready(function(){
+$(function(){
   var path = window.location.pathname.substring(0,23);
   var url = path + '/' + 'follower_remove';
   /**
@@ -250,14 +250,43 @@ $(document).ready(function(){
     },
   });    
   });
-});
 
-
-$(function(){
+    var path = window.location.pathname.substring(0,23);
     $("#following > li").each(function(){
-    $(this).find("#following-follower,#following-followed").click(function(){
-      var idx = $(this).closest('li').index();
-      alert(idx);
+      $(this).find("#following-followed").click(function(){
+        var url = path + '/' + 'follower_u_remove';
+        var user_id = $(this).closest('li').find("#following-user-id").html();
+        $.ajax({
+          type: "post",
+          url: url,
+          cache: false,
+          data: {"url": url,"user_id": user_id},
+          success: function(data) {
+            window.location.href = data['info'];
+          },
+          error: function(data) {
+            alert(data['info']);
+          },
+        });
+      });
     });
-});
+
+    $("#following > li").each(function(){
+      $(this).find("#following-follower").click(function(){
+        var url = path + '/' + 'follower_u_add';
+        var user_id = $(this).closest('li').find("#following-user-id").html();
+        $.ajax({
+          type: "post",
+          url: url,
+          cache: false,
+          data: {"url": url,"user_id": user_id},
+          success: function(data) {
+            window.location.href = data['info'];
+          },
+          error: function(data) {
+            alert(data['info']);
+          },
+        });
+      });
+    });
 });
