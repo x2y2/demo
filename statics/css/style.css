@@ -942,3 +942,8 @@ padding-right: 5%;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
 }
+
+.change {
+  background-color: gray;
+  cursor: pointer;
+}

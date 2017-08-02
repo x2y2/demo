@@ -192,6 +192,7 @@ $('#upload-pic').change(function(){
   });
 });
 
+
 $(document).ready(function(){
   var path = window.location.pathname.substring(0,23);
   var url = path + '/' + 'follower';
@@ -290,3 +291,4 @@ $(function(){
       });
     });
 });
+

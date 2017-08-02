@@ -26,15 +26,58 @@ CREATE TABLE `articles` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `aid` char(16) NOT NULL,
   `user_uid` varchar(16) NOT NULL,
-  `user_name` varchar(50) NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` mediumtext NOT NULL,
   `created_at` datetime NOT NULL,
+  `comment_count` int(11) DEFAULT '0',
+  `read_count` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_created_at` (`created_at`),
-  KEY `FK_ID` (`user_uid`),
-  CONSTRAINT `FK_ID` FOREIGN KEY (`user_uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+  KEY `idx_articles_aid` (`aid`),
+  KEY `FK_ARTICLES_USERUID` (`user_uid`),
+  CONSTRAINT `FK_ARTICLES_USERUID` FOREIGN KEY (`user_uid`) REFERENCES `user` (`uid`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_uid` char(16) NOT NULL,
+  `article_aid` char(16) NOT NULL,
+  `comment_cid` char(16) NOT NULL,
+  `comment_content` varchar(512) NOT NULL,
+  `comment_time` datetime NOT NULL,
+  `comment_floor` int(11) DEFAULT '0',
+  `comment_flag` char(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_comment_cid` (`comment_cid`),
+  KEY `COMMENTS_FK_AID` (`article_aid`),
+  KEY `FK_COMMENTS_UID` (`user_uid`),
+  CONSTRAINT `FK_COMMENTS_UID` FOREIGN KEY (`user_uid`) REFERENCES `user` (`uid`) ON DELETE CASCADE,
+  CONSTRAINT `COMMENTS_FK_AID` FOREIGN KEY (`article_aid`) REFERENCES `articles` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `relation`
+--
+
+DROP TABLE IF EXISTS `relation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `relation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `from_user_id` varchar(16) NOT NULL,
+  `to_user_id` varchar(16) NOT NULL,
+  `type` int(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,12 +93,13 @@ CREATE TABLE `user` (
   `username` varchar(10) NOT NULL,
   `password` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL,
-  `register_time` date NOT NULL,
+  `register_time` datetime NOT NULL,
   `admin` char(1) NOT NULL,
-  `pic` varchar(24) NOT NULL,
+  `pic` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_user_uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+  KEY `index_user_uid` (`uid`),
+  KEY `idex_user_name` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -67,4 +111,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-07-19 11:50:07
+-- Dump completed on 2017-08-01 10:59:27
