@@ -1,3 +1,11 @@
+a:hover {
+  text-decoration: none;
+}
+
+ul {
+  list-style-type: none;
+}
+
 .login-center {
 margin-top: 100px;
 margin-left:auto;
@@ -122,6 +130,7 @@ padding-right: 5%;
 
 .following-meta-block {
   font-size: 12px;
+  color: gray;
   margin-top: 0px;
   margin-right: 0px;
   margin-bottom: 6px;
@@ -327,6 +336,39 @@ padding-right: 5%;
   border-bottom-right-radius: 50px;
 }
 
+.aside-list {
+  height: 50px;
+  width: 100%;
+  color: black;
+  line-height: 45px;
+  padding-left: 10px;
+  cursor: pointer;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: white;
+  border-right-color: white;
+  border-bottom-color: white;
+  border-left-color: white;
+  -moz-border-left-color: none;
+  -moz-border-top-color: none;
+  -moz-border-right-color: none;
+  -moz-border-bottom-color: none;
+  border-image-source: none;
+  border-image-slice: none;
+  border-image-width: 1 1 1 1;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
 
 .search-input {
   margin-top: -1px;
@@ -334,7 +376,7 @@ padding-right: 5%;
   padding-right: 40px;
   padding-bottom: 0px;
   padding-left: 20px;
-  width: 160px;
+  width: 200px;
   height: 38px;
   font-size: 14px;
   border-top-width: 1px;

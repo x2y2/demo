@@ -194,68 +194,79 @@ $('#upload-pic').change(function(){
 
 
 $(document).ready(function(){
-  var path = window.location.pathname.substring(0,23);
-  var url = path + '/' + 'follower';
+  /**搜索框伸缩**/
+  $("#q").focus(function(){
+    $("#q").animate({"width":300},400);
+  });
+  $("#q").blur(function(){
+    $("#q").animate({"width":200},400);
+  });
+
+  
   $("#follower").click(function(){
-    $.ajax({
-    type: "post",
-    url: url,
-    cache: false,
-    data: {"url": url},
-    success: function(data) {
-      if (data['status'] == 'success') {
-        $("#follower").val('已经关注')
-        window.location.href = data['info'];
-      }
-      else if (data['status'] == '/login'){
-        //alert(data['info']);
-        window.location.href = data['info'];
-      }
-    },
-    error: function(data) {
-      alert(data['info']);
-    },
-  });    
-  });
-});
-
-$(function(){
-  var path = window.location.pathname.substring(0,23);
-  var url = path + '/' + 'follower_remove';
-  /**
-  $("#followed").mouseover(function(){
-    $("#cancel-follow").show();
-    $("#followed").hide();
-  }).mouseout(function(){
-    $("#followed").show();
-    $("#cancel-follow").hide();
-  });
-  **/
-  $("#followed").click(function(){
-    $.ajax({
-    type: "post",
-    url: url,
-    cache: false,
-    data: {"url": url},
-    success: function(data) {
-      if (data['status'] == 'success') {
-        window.location.href = data['info'];
-      }
-      else if (data['status'] == '/login'){
-        //alert(data['info']);
-        window.location.href = data['info'];
-      }
-    },
-    error: function(data) {
-      alert(data['info']);
-    },
-  });    
-  });
-
     var path = window.location.pathname.substring(0,23);
+    var url = path + '/' + 'following';
+    $.ajax({
+      type: "post",
+      url: url,
+      cache: false,
+      data: {"url": url},
+      success: function(data) {
+        if (data['status'] == 'success') {
+          $("#follower").hide();
+          $("#followed").show();
+        }
+        else if (data['status'] == '/login'){
+          alert(data['info']);
+          //window.location.href = data['info'];
+        }
+      },
+      error: function(data) {
+        alert(data['info']);
+      },
+    });    
+  });
+
+  
+  $("#followed").click(function(){
+    var path = window.location.pathname.substring(0,23);
+    var url = path + '/' + 'following_remove';
+    $.ajax({
+      type: "post",
+      url: url,
+      cache: false,
+      data: {"url": url},
+      success: function(data) {
+        if (data['status'] == 'success') {
+          $("#follower").show();
+          $("#followed").hide();
+        //alert(data['info']);
+        }
+        else if (data['status'] == '/login'){
+          alert(data['info']);
+        }
+      },
+      error: function(data) {
+        alert(data['info']);
+      },
+    });    
+  });
+
+    
     $("#following > li").each(function(){
+      $(this).find("#following-follower").click(function(){
+        $(this).hide();
+        $(this).closest('li').find("#following-followed").show();
+      });
       $(this).find("#following-followed").click(function(){
-        var url = path + '/' + 'follower_u_remove';
+        $(this).hide();
+        $(this).closest('li').find("#following-follower").show();
+      });
+
+      //从关注页面添加关注用户
+      $(this).find("#following-follower").click(function(){
+        var path = window.location.pathname.substring(0,23);
+        var url = path + '/' + 'following_u_add';
         var user_id = $(this).closest('li').find("#following-user-id").html();
         $.ajax({
           type: "post",
@@ -263,7 +274,24 @@ $(function(){
           cache: false,
           data: {"url": url,"user_id": user_id},
           success: function(data) {
-            window.location.href = data['info'];
+          },
+          error: function(data) {
+            alert(data['info']);
+          },
+        });
+      });
+
+      //从关注页面删除关注用户
+      $(this).find("#following-followed").click(function(){
+        var path = window.location.pathname.substring(0,23);
+        var url = path + '/' + 'following_u_remove';
+        var user_id = $(this).closest('li').find("#following-user-id").html();
+        $.ajax({
+          type: "post",
+          url: url,
+          cache: false,
+          data: {"url": url,"user_id": user_id},
+          success: function(data) {
           },
           error: function(data) {
             alert(data['info']);
@@ -272,17 +300,61 @@ $(function(){
       });
     });
 
-    $("#following > li").each(function(){
-      $(this).find("#following-follower").click(function(){
+    /**个人设置页面鼠标悬停效果**/
+    $("li#aside-list").mouseover(function(){
+      $(this).css({"background-color":"#ededed"});
+    });  
+    $("li#aside-list").mouseout(function(){
+      $(this).css({"background-color":"white"});
+    });
+
+    
+    $("#follower-ul > li").each(function(){
+      $(this).find("#follower-following").click(function(){
+        $(this).hide();
+        $(this).closest('li').find("#follower-followed").show();
+      });
+      $(this).find("#follower-followed").click(function(){
+        $(this).hide();
+        $(this).closest('li').find("#follower-following").show();
+      });
+      //从粉丝页面添加关注用户
+      $(this).find("#follower-following").click(function(){
+        var path = window.location.pathname.substring(0,23);
         var url = path + '/' + 'follower_u_add';
-        var user_id = $(this).closest('li').find("#following-user-id").html();
+        var user_id = $(this).closest('li').find("#follower-user-id").html();
         $.ajax({
           type: "post",
           url: url,
           cache: false,
           data: {"url": url,"user_id": user_id},
           success: function(data) {
-            window.location.href = data['info'];
+            if (data['status'] == 'success'){
+            } else {
+              alert(data['info']);
+            }
+          },
+          error: function(data) {
+            alert(data['info']);
+          },
+        });
+      });
+      //从粉丝页面取消关注用户
+      $(this).find("#follower-followed").click(function(){
+        var path = window.location.pathname.substring(0,23);
+        var url = path + '/' + 'follower_u_remove';
+        var user_id = $(this).closest('li').find("#follower-user-id").html();
+        $.ajax({
+          type: "post",
+          url: url,
+          cache: false,
+          data: {"url": url,"user_id": user_id},
+          success: function(data) {
+            if (data['status'] == 'success'){
+            } else
+            {
+              alert(data['info']);
+            }
           },
           error: function(data) {
             alert(data['info']);

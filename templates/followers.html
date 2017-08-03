@@ -1,10 +1,10 @@
 {% extends "user_base.html" %}
 {% block user_content %}
-<div class="following-top" id="following-top">
-  <ul id="following" style="margin: 0px;padding: 0px;">
+<div class="following-top">
+  <ul id="follower-ul" style="margin: 0px;padding: 0px;">
     {% for f_info in f_infos %}
     <li class="following-index">
-      <h4 id="following-user-id" style="display: none;">{{f_info['uid']}}</h4>
+      <h4 id="follower-user-id" style="display: none;">{{f_info['uid']}}</h4>
       <!--显示作者头像-->
       <a  href="/users/{{f_info['uid']}}">
         {% if f_info['pic'] is not None %}
@@ -21,63 +21,60 @@
         <ul class="list-inline" id="stop">
           <li>
             <div class="following-meta-block">
-              <span>关注 {{dic_following[f_info['uid']]}}</span>
+              <span>关注</span>
             </div>
           </li>
           <li>
             <div class="following-meta-block">
-              <span>粉丝 {{dic_follower[f_info['uid']]}}</span>
+              <span>粉丝</span>
             </div>
           </li>
           <li>
             <div class="following-meta-block" style="border-right-style: none;">
-              <span>文章 {{dic_articles[f_info['uid']]}}</span>
+              <span>文章</span>
             </div>
           </li>
         </ul>
       </div>
-      <!--加关注-->
+    <!--加关注-->
       <div style="float: right; margin-top: -35px;">
           {% if f_info['uid'] not in common_id %}
               <!--未登录的用户跳转到登录界面-->
               {% if login_user is None%}
                 <div>
-                  <a href="/login" class="add-follow btn glyphicon glyphicon-plus" >关注
-                  </a>
+                  <a href="/login" class="add-follow btn glyphicon glyphicon-plus" >关注</a>
                 </div>
               {% else %}
                 <!--不关注自己-->
                 {% if login_user == f_info['username'] %}
                   <div></div>
-                {%else%}
-                  <div id="following-follower">
-                    <a  class="add-follow btn glyphicon glyphicon-plus" >关注
-                    </a>
+                {% else %}
+                  <div id="follower-following">
+                    <a class="add-follow btn glyphicon glyphicon-plus">关注</a>
                   </div>
-                  <div class="followed btn" id="following-followed" style="display: none;">
-                    <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
-                    </a>
+                  <div id="follower-followed" class="followed btn" style="display: none;">
+                    <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注</a>
                   </div>
-                  <!--<div class="followed btn" id="following-cancel-follow" style="display: none;">
-                    <a  class="glyphicon glyphicon-remove" style="color: #c8c8d0;">取消关注
-                    </a>
-                  </div>-->
                 {% end %}  
               {% end %}
           {% else %}
               <!--共同的关注用户显示已关注-->
-              <div class="followed btn" id="following-followed">
-                <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+              <div id="follower-followed" class="followed btn">
+                <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注</a>
+              </div>
+              <div id="follower-following" style="display: none;">
+                <a class="add-follow btn glyphicon glyphicon-plus" >关注</a>
+              </div>
+              <!--
+              <div class="followed btn" style="display: none;">
+                <a  class="glyphicon glyphicon-remove" style="color: #c8c8d0;">取消关注
                 </a>
               </div>
-              <div id="following-follower" style="display: none;">
-                <a  class="add-follow btn glyphicon glyphicon-plus" >关注
-                </a>
-              </div>
+              -->
           {% end %} 
       </div>
     </li>
-  {% end %}
+    {% end %}
   </ul>
 </div>
 {% end %}
