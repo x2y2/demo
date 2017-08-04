@@ -1,34 +1,18 @@
 {% extends "main.html" %}
 {% block content %}
-
-<div class="container" style="margin-left: 750px;margin-top: 80px;">
-  <div class="col-md-6" style="width: 300px;">
-    <form role="form"　name="loginForm" action="/login" method="POST">
-      {% raw xsrf_form_html() %}
-      <div style="margin-left: 85px;margin-bottom: 50px;">
-        <ul class="list-inline">
-          <li>
-            <a href="/login" style="font-size: 20px;color: gray;font-weight: bold;">登录</a>
-          </li>
-          <li>
-            <a href="/sign_up" style="font-size: 20px;color: gray;font-weight: bold;">注册</a>
-          </li>
-        </ul>
-      </div>
-      <div class="input-group">
-        <span class="input-group-addon">登录账号 </span>
-        <input type="text" class="form-control" name="account" placeholder="请输入你的邮箱或用户名" required>
-      </div>
-      <div class="input-group">
-        <span class="input-group-addon">登录密码 </span>
-        <input type="password" class="form-control" name="password" placeholder="请输入密码" required>
-      </div>
-      </br>
-      <div>
-        <label><input type="checkbox" name="cbox_remeber">记住我</input></label>
-      </div>
-        <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录"/>
-    </form>
+<form role="form"　name="loginForm" action="/login" method="POST">
+  <div class="input-group">
+    <span class="input-group-addon">登录账号 </span>
+    <input type="text" class="form-control" name="account" placeholder="请输入你的邮箱或用户名" required>
   </div>
-</div>
+  <div class="input-group">
+    <span class="input-group-addon">登录密码 </span>
+    <input type="password" class="form-control" name="password" placeholder="请输入密码" required>
+  </div>
+  <br>
+  <div>
+    <label><input type="checkbox" name="cbox_remeber">记住我</input></label>
+  </div>
+  <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录"/>
+</form>
 {% end %}

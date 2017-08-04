@@ -1,107 +1,103 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
-    <div class="col-md-6 left-top" style="margin-top: 30px;">
-      <div class="main-top">
-        <a href="/users/{{author_id}}" class="avatar">
-          <!--显示作者头像-->
-          {% if author_pic is not None %}
-          <img src="{{static_url("upload/img/" + author_pic)}}"  class="img-circle" style="width: 80px;height: 80px;">
-          {% else %}
-          <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
-          {% end %}
-        </a>
-      </div>
-      <!--显示作者名称-->
-      <div class="title">
-        <a href="/users/{{author_id}}" style="color: black;">{{author_name}}</a>
-      </div>
-      <div class="info">
-        <ul class="list-inline">
-          <li>
-            <div class="meta-block">
-              <a href="/users/{{author_id}}/following" style="color: gray;"><p>{{following_count}}</p>关注</a>
-            </div>
-          </li>
-          <li>
-            <div class="meta-block">
-              <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;"><p>{{count_article}}</p>文章</a>
-            </div>
-          </li>
-          <li>
-            <div class="meta-block" style="border-right-style: none;">
-              <a href="/users/{{author_id}}/followers" style="color: gray;"><p>{{follower_count}}</p>粉丝</a>
-            </div>
-        </ul>
-        <!--添加关注和发简讯-->
-        {% if login_user != author_name %}
-          <div style="float: right; margin-top: -70px;">
-              <div>
-                {% if follower == False %}
-                    {% if login_user is None%}
-                    <div>
-                      <a href="/login" class="add-follow btn glyphicon glyphicon-plus">关注
-                      </a>
-                    </div>
-                    {% else %}
-                    <div id="follower">
-                      <a  class="add-follow btn glyphicon glyphicon-plus">关注
-                      </a>
-                    </div>
-                    <div class="followed btn" id="followed" style="display: none;">
-                      <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
-                      </a>
-                    </div>
-                    {% end %}
+<div class="users-header">
+  <div class="main-top">
+    <a href="/users/{{author_id}}" class="avatar">
+      <!--显示作者头像-->
+      {% if author_pic is not None %}
+      <img src="{{static_url("upload/img/" + author_pic)}}"  class="img-circle" style="width: 80px;height: 80px;">
+      {% else %}
+      <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
+      {% end %}
+    </a>
+  </div>
+  <!--显示作者名称-->
+  <div class="title">
+    <a href="/users/{{author_id}}" style="color: black;">{{author_name}}</a>
+  </div>
+  <div class="info">
+    <ul class="list-inline">
+      <li>
+        <div class="meta-block">
+          <a href="/users/{{author_id}}/following" style="color: gray;"><p>{{following_count}}</p>关注</a>
+        </div>
+      </li>
+      <li>
+        <div class="meta-block">
+          <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;"><p>{{count_article}}</p>文章</a>
+        </div>
+      </li>
+      <li>
+        <div class="meta-block" style="border-right-style: none;">
+          <a href="/users/{{author_id}}/followers" style="color: gray;"><p>{{follower_count}}</p>粉丝</a>
+        </div>
+    </ul>
+    <!--添加关注和发简讯-->
+    {% if login_user != author_name %}
+      <div style="float: right; margin-top: -70px;">
+          <div>
+            {% if follower == False %}
+                {% if login_user is None%}
+                <div>
+                  <a href="/login" class="add-follow btn glyphicon glyphicon-plus">关注
+                  </a>
+                </div>
                 {% else %}
-                    <div class="followed btn" id="followed">
-                      <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
-                      </a>
-                    </div>
-                    <div id="follower" style="display: none;">
-                      <a  class="add-follow btn glyphicon glyphicon-plus">关注
-                      </a>
-                    </div>
-                    <!--
-                    <div class="followed btn" id="cancel-follow" style="display: none;">
-                      <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
-                      </a>
-                    </div>
-                    -->
+                <div id="follower">
+                  <a  class="add-follow btn glyphicon glyphicon-plus">关注
+                  </a>
+                </div>
+                <div class="followed btn" id="followed" style="display: none;">
+                  <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+                  </a>
+                </div>
                 {% end %}
-              </div>
-              <div class="send-message btn">
-                <a id="send-message" style="color: #42c02c;">发简信
-                </a>
-              </div>
+            {% else %}
+                <div class="followed btn" id="followed">
+                  <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+                  </a>
+                </div>
+                <div id="follower" style="display: none;">
+                  <a  class="add-follow btn glyphicon glyphicon-plus">关注
+                  </a>
+                </div>
+                <!--
+                <div class="followed btn" id="cancel-follow" style="display: none;">
+                  <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
+                  </a>
+                </div>
+                -->
+            {% end %}
           </div>
-        {% end %}
+          <div class="send-message btn">
+            <a id="send-message" style="color: #42c02c;">发简信
+            </a>
+          </div>
       </div>
-    </div>
+    {% end %}
   </div>
-  <div class="container">
-    <div class="col-md-6 left-top" style="margin-top: 10px;">
-      <ul id="menu-list" class="trigger-menu list-inline">
-        <li>
-          <a href="/users/{{author_id}}?order_by=created_at" onfocus="this.blur()">文章</a>
-        </li>
-        <li>
-          <a href="/users/{{author_id}}" onfocus="this.blur()">动态</a>
-        </li>
-        <li>
-          <a href="/users/{{author_id}}?order_by=commented_at" onfocus="this.blur()">最新评论</a>
-        </li>
-        <li>
-          <a href="/users/{{author_id}}?order_by=top" onfocus="this.blur()">热门</a>
-        </li>
-        <li>
-          <a href="/users/{{author_id}}/following" onfocus="this.blur()">关注用户</a>
-        </li>
-        <li>
-          <a href="/users/{{author_id}}/followers" onfocus="this.blur()">粉丝</a>
-        </li>
-      </ul>
-      {% block user_content %} {% end %}
-    </div>
-  </div>
+</div>
+<div class="users-body">
+  <ul id="menu-list" class="trigger-menu list-inline">
+    <li>
+      <a href="/users/{{author_id}}?order_by=created_at" onfocus="this.blur()">文章</a>
+    </li>
+    <li>
+      <a href="/users/{{author_id}}" onfocus="this.blur()">动态</a>
+    </li>
+    <li>
+      <a href="/users/{{author_id}}?order_by=commented_at" onfocus="this.blur()">最新评论</a>
+    </li>
+    <li>
+      <a href="/users/{{author_id}}?order_by=top" onfocus="this.blur()">热门</a>
+    </li>
+    <li>
+      <a href="/users/{{author_id}}/following" onfocus="this.blur()">关注用户</a>
+    </li>
+    <li>
+      <a href="/users/{{author_id}}/followers" onfocus="this.blur()">粉丝</a>
+    </li>
+  </ul>
+  {% block user_content %} {% end %}
+</div>
 {% end %}

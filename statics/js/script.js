@@ -294,6 +294,15 @@ $(function(){
       }
     });
   });
+
+  $(window).on("load hashchange",function(){
+    $(".login-sign-title").find('a').each(function(){
+      var url = window.location.protocol + '//' +  window.location.hostname + ':' + location.port
+      if (url + $(this).attr('href') == String(window.location)) {
+        $(this).addClass("active");
+      }
+    });
+  });
 /**end**/
 });
 

@@ -1,35 +1,21 @@
 {% extends "main.html" %}
 {% block content %}
-<div class="container" style="margin-left: 750px;margin-top: 80px;">
-  <div class="col-md-6" style="width: 300px;">
-    <form role="form"　name="signup-form" action="/sign_up" method="POST">
-      {% raw xsrf_form_html() %}
-      <div style="margin-left: 85px;margin-bottom: 50px;">
-        <ul class="list-inline">
-          <li>
-            <a href="/login" style="text-decoration: none;font-size: 20px;color: gray;font-weight: bold;">登录</a>
-          </li>
-          <li>
-            <a href="/sign_up" style="text-decoration: none;font-size: 20px;color: gray;font-weight: bold;">注册</a>
-          </li>
-        </ul>
-      </div>
-      <br/>
-      <div class="input-group">
-        <span class="input-group-addon">你的昵称 </span>
-        <input type="text" class="form-control" name="username" placeholder="请输入昵称" required="">
-      </div>
-      <div class="input-group">
-        <span class="input-group-addon">你的邮箱 </span>
-        <input type="text" class="form-control" name="email" placeholder="请输入邮箱" required="">
-      </div>
-      <div class="input-group">
-        <span class="input-group-addon">设置密码 </span>
-        <input type="password" class="form-control" name="password" placeholder="请输入密码" required="">
-      </div>
-      </br>
-      <input class="btn btn-lg btn-primary btn-block" type="submit" value="注册"/>
-    </form>
-  </div>
+<div>
+  <form role="form"　name="signup-form" action="/sign_up" method="POST">
+    <div class="input-group">
+      <span class="input-group-addon">你的昵称 </span>
+      <input type="text" class="form-control" name="username" placeholder="请输入昵称" required="">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">你的邮箱 </span>
+      <input type="text" class="form-control" name="email" placeholder="请输入邮箱" required="">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">设置密码 </span>
+      <input type="password" class="form-control" name="password" placeholder="请输入密码" required="">
+    </div>
+    </br>
+    <input class="btn btn-lg btn-primary btn-block" type="submit" value="注册"/>
+  </form>
 </div>
 {% end %}

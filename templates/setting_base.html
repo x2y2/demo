@@ -1,32 +1,30 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="container">
-      <div class="aside">
-        <ul id="aside-ul" class="aside-ul">
-          <a href="/setting/basic" onfocus="this.blur();">
-            <li id="aside-list" class="aside-list">
-              <div class="setting-icon"></div>
-              <span> 基础设置</span>
-            </li>
-          </a>
-          <a href="/setting/profile" onfocus="this.blur();">
-            <li id="aside-list" class="aside-list">
-              <div class="setting-icon"></div>
-              <span> 个人资料</span>
-            </li>
-          </a>
-          <a href="/setting/account_manage" onfocus="this.blur();">
-            <li id="aside-list" class="aside-list">
-              <div class="setting-icon"></div>
-              <span> 账号管理</span>
-            </li>
-          </a>
-        </ul>
-      </div>
+<div class="container">
+  <div class="aside">
+    <ul id="aside-ul" class="aside-ul">
+      <a href="/setting/basic" onfocus="this.blur();">
+        <li id="aside-list" class="aside-list">
+          <div class="setting-icon"></div>
+          <span> 基础设置</span>
+        </li>
+      </a>
+      <a href="/setting/profile" onfocus="this.blur();">
+        <li id="aside-list" class="aside-list">
+          <div class="setting-icon"></div>
+          <span> 个人资料</span>
+        </li>
+      </a>
+      <a href="/setting/account_manage" onfocus="this.blur();">
+        <li id="aside-list" class="aside-list">
+          <div class="setting-icon"></div>
+          <span> 账号管理</span>
+        </li>
+      </a>
+    </ul>
   </div>
-  <div class="container">
-    <div class="col-md-8 left-top">
-      {% block setting_content%} {% end %}
-    </div>
+  <div class="left-top">
+    {% block setting_content%} {% end %}
   </div>
+</div>
 {% end %}
