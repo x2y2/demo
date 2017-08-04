@@ -81,24 +81,24 @@
   </div>
   <div class="container">
     <div class="col-md-6 left-top" style="margin-top: 10px;">
-      <ul class="trigger-menu list-inline">
-        <li class="">
-          <a href="/users/{{author_id}}?order_by=created_at" style="font-size: 15px;color: gray;font-weight: bold;">文章</a>
-        </li>
-        <li class="active">
-          <a href="/users/{{author_id}}" style="font-size: 15px;color: gray;font-weight: bold;">动态</a>
+      <ul id="menu-list" class="trigger-menu list-inline">
+        <li>
+          <a href="/users/{{author_id}}?order_by=created_at" onfocus="this.blur()">文章</a>
         </li>
         <li>
-          <a href="/users/{{author_id}}?order_by=commented_at" style="font-size: 15px;color: gray;font-weight: bold;">最新评论</a>
+          <a href="/users/{{author_id}}" onfocus="this.blur()">动态</a>
         </li>
         <li>
-          <a href="/users/{{author_id}}?order_by=top" style="font-size: 15px;color: gray;font-weight: bold;">热门</a>
+          <a href="/users/{{author_id}}?order_by=commented_at" onfocus="this.blur()">最新评论</a>
         </li>
         <li>
-          <a href="/users/{{author_id}}/following" style="font-size: 15px;color: gray;font-weight: bold;">关注用户</a>
+          <a href="/users/{{author_id}}?order_by=top" onfocus="this.blur()">热门</a>
         </li>
         <li>
-          <a href="/users/{{author_id}}/followers" style="font-size: 15px;color: gray;font-weight: bold;">粉丝</a>
+          <a href="/users/{{author_id}}/following" onfocus="this.blur()">关注用户</a>
+        </li>
+        <li>
+          <a href="/users/{{author_id}}/followers" onfocus="this.blur()">粉丝</a>
         </li>
       </ul>
       {% block user_content %} {% end %}

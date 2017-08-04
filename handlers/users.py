@@ -225,14 +225,6 @@ class FollowHandler(BaseHandler):
     #该用户的关注数
     following_count = self.db.query("SELECT count(to_user_id) count FROM relation WHERE from_user_id=%s",user_id)[0]['count']
     #关注用户的关注数
-    #following_u_counts = self.db.query('''SELECT from_user_id,count(from_user_id) count
-    #                                   FROM relation 
-    #                                   WHERE from_user_id in (
-    #                                        SELECT u.uid 
-    #                                        FROM relation r,user u 
-    #                                        WHERE u.uid=r.to_user_id  
-    #                                        AND r.from_user_id=%s) 
-    #                                   GROUP BY from_user_id''',user_id)
     following_u_counts = self.db.query('''SELECT t.uid,r.to_user_id  
                                           FROM (SELECT r.from_user_id,u.uid 
                                                 FROM relation r,user u  
@@ -264,17 +256,20 @@ class FollowHandler(BaseHandler):
       dic_follower[follower_u_count['to_user_id']] = follower_u_count['count']
 
     #关注用户的文章数
-    articles_u_counts = self.db.query('''SELECT user_uid, count(user_uid) count
-                                        FROM articles 
-                                        WHERE user_uid in (
-                                              SELECT u.uid 
-                                              FROM relation r,user u 
-                                              WHERE u.uid=r.to_user_id 
-                                              AND r.from_user_id=%s) 
-                                              GROUP BY user_uid''',user_id)
+    articles_u_counts = self.db.query('''SELECT t.uid,a.aid 
+                                         FROM (SELECT r.from_user_id,u.uid 
+                                               FROM relation r,user u 
+                                               WHERE u.uid=r.to_user_id 
+                                               AND r.from_user_id=%s) as t 
+                                         LEFT JOIN articles a 
+                                         ON a.user_uid=t.uid''',user_id)
     dic_articles = {}
     for articles_u_count in articles_u_counts:
-      dic_articles[articles_u_count['user_uid']] = articles_u_count['count']
+      dic_articles[articles_u_count['uid']] = 0
+
+    for articles_u_count in articles_u_counts:
+      if articles_u_count['aid'] is not None:
+        dic_articles[articles_u_count['uid']] += 1
 
     self.render('following.html',
                  f_infos=f_infos,
