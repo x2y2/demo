@@ -408,6 +408,48 @@ class FollowersHandler(BaseHandler):
     following_count = self.db.query("SELECT count(to_user_id) count FROM relation WHERE from_user_id=%s",user_id)[0]['count']
     #该用户粉丝数
     follower_count = self.db.query("SELECT count(from_user_id) count FROM relation WHERE to_user_id=%s",user_id)[0]['count']
+    #粉丝的关注用户数
+    follower_u_counts = self.db.query('''SELECT from_user_id,count(from_user_id) count 
+                                        FROM relation 
+                                        WHERE from_user_id IN
+                                           (SELECT from_user_id 
+                                            FROM relation 
+                                            WHERE to_user_id=%s) 
+                                        GROUP BY from_user_id''',user_id)
+    dic_follower = {}
+    for follower_u_count in follower_u_counts:
+      dic_follower[follower_u_count['from_user_id']] = follower_u_count['count']
+
+    #粉丝的粉丝数
+    follower_f_counts = self.db.query('''SELECT t.from_user_id tfrom,r.from_user_id rfrom 
+                                        FROM  (SELECT from_user_id,to_user_id 
+                                               FROM relation 
+                                               WHERE to_user_id=%s) as t  
+                                        LEFT JOIN relation r 
+                                        ON t.from_user_id=r.to_user_id''',user_id)
+    dic_follower_f = {}
+    for follower_f_count in follower_f_counts:
+      dic_follower_f[follower_f_count['tfrom']] = 0
+
+    for follower_f_count in follower_f_counts:
+      if follower_f_count['rfrom'] is not None:
+        dic_follower_f[follower_f_count['tfrom']] += 1
+
+    #粉丝的文章数
+    follower_article_counts = self.db.query('''SELECT t.from_user_id,a.aid 
+                                              FROM (SELECT from_user_id,to_user_id 
+                                                    FROM relation 
+                                                    WHERE to_user_id=%s) as t 
+                                              LEFT JOIN articles a 
+                                              ON t.from_user_id=a.user_uid''',user_id)
+    dic_follower_a = {}
+    for follower_article_count in follower_article_counts:
+      dic_follower_a[follower_article_count['from_user_id']] = 0
+
+    for follower_article_count in follower_article_counts:
+      if follower_article_count['aid'] is not None:
+        dic_follower_a[follower_article_count['from_user_id']] += 1
+
     self.render('followers.html',
                  f_infos=f_infos,
                  count_article=count_article,
@@ -420,7 +462,10 @@ class FollowersHandler(BaseHandler):
                  follower=follower,
                  common_id=common_id,
                  following_count=following_count,
-                 follower_count=follower_count)
+                 follower_count=follower_count,
+                 dic_follower=dic_follower,
+                 dic_follower_f=dic_follower_f,
+                 dic_follower_a=dic_follower_a)
 
   def post(self):
     url = self.get_argument("url",default="")

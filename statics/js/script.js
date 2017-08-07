@@ -120,6 +120,9 @@ $(function(){
       return false;
     });
   });
+
+  $("[data-toggle='tooltip']").tooltip();
+
   //文章评论按钮隐藏
   $("#under-comment").hide();
   $("#new-comment").click(function(){
@@ -302,6 +305,25 @@ $(function(){
         $(this).addClass("active");
       }
     });
+  });
+
+  //鼠标滑过导航栏下拉菜单展开
+  var timer;
+  $(".user").mouseover(function(){
+    clearTimeout(timer);
+    $(".dropdown-menu").show();
+  });
+  $(".user").mouseout(function(){
+    timer = setTimeout(function(){
+      $(".dropdown-menu").hide();
+    },100);
+  });
+  $(".dropdown-menu").mouseover(function(){
+    clearTimeout(timer);
+    $(".dropdown-menu").show();
+  });
+  $(".dropdown-menu").mouseout(function(){
+    $(".dropdown-menu").hide();
   });
 /**end**/
 });

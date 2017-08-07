@@ -32,7 +32,7 @@
         {% if login_user is not None %}
         <div class="user">
           <div class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" style="text-decoration: none;cursor: pointer;">
+            <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">
               <!--显示登录用户的头像-->
               {% if login_user_pic is not None %}
               <img src="{{static_url("upload/img/" + login_user_pic)}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
@@ -42,10 +42,10 @@
               <b class="caret" style="margin-top: -9px;"></b>
             </a>
             <ul class="dropdown-menu">
-              <li>
+              <li >
                 <a href="/users/{{login_user_id}}"><span class="glyphicon glyphicon-user" style="height: 30px;">  我的主页</span></a>
               </li>
-              <li>
+              <li >
                <a href="/setting/basic"><span class="glyphicon glyphicon-wrench" style="height: 30px;">  设置</span></a>
               </li>
               <li>
@@ -112,13 +112,13 @@
     <script src="{{static_url("js/script.js")}}"></script>
     <!--返回到顶部-->
     <div class="side-tool">
-      <ul style="list-style-type: none;">
-        <li>
+      <ul>
+        <li data-toggle="tooltip" data-placement="left" data-container="body" title="回到顶部" style="">
           <div id="scrolltop" class="function-button">
             <span class="glyphicon glyphicon-chevron-up" style="padding-top: 16px;"></span>
           </div>
         </li>
-        <li>
+        <li data-toggle="tooltip" data-placement="left" data-container="body" title="返回首页" style="">
           <a href="/" style="text-decoration: none;color: black;">
           <div class="function-button">
             <span class="glyphicon glyphicon-home" style="padding-top: 16px;"></span>
