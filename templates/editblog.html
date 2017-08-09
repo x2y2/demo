@@ -1,18 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-8 left-top">
-      <a id="blog_id" style="display: none;"><span>{{blog_id}}</span></a>
-      <input type="text" id="blog_title" style="font-weight: bold;" class="form-control" value={{blog_title}}>
-      </br>
-      <textarea id="blog_content" data-provide="markdown" rows="25" >{{blog_content}}</textarea>
-      <hr/>
-      <div role="button" class="btn btn-info" id="update_blog" style="float: right;">
-        <span class="glyphicon glyphicon-save">更新</span>
-      </div>
-      <div role="button" class="btn btn-info" id="edit_delete_blog" style="float: right;">
-        <span class="glyphicon glyphicon-trash">删除</span>
+  <div class="left-top" style="margin-top: 80px;">
+    <h4 id="blog_id" style="display: none;">{{blog_id}}</h4>
+    <input type="text" id="blog_title" style="font-weight: bold;" class="form-control" value={{blog_title}}>
+    <div style="margin-top: 10px;">
+      <textarea id="blog_content" data-provide="markdown" rows="25">{{blog_content}}</textarea>
+    </div>
+    <div role="button" class="btn btn-success" id="update_blog" style="float: right;margin-top: 10px;">
+      <span class="glyphicon glyphicon-save">更新</span>
+    </div>
+    <!--触发模态框-->
+    <div role="button" class="btn btn-success"  data-toggle="modal" data-target="#myModal" style="margin-left: 550px;margin-top: 10px;">
+      <span class="glyphicon glyphicon-save">删除</span>
+    </div>
+    <!--删除模态框-->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:300px;">
+        <div class="modal-content">
+          <div class="modal-body" style="text-align:center">确认删除？</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onfocus="blur()">否</button>
+            <button type="button" id="edit_delete_blog" class="btn btn-success" onfocus="blur()">是</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

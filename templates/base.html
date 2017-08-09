@@ -7,10 +7,6 @@
     <link href="{{static_url("css/bootstrap.min.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/bootstrap-markdown.min.css")}}" rel="stylesheet"></style>
     <link href="{{static_url("css/style.css")}}" rel="stylesheet"></style>
-    <link href="{{static_url("css/icon.css")}}" rel="stylesheet"></style>
-    <link href="{{static_url("css/easyui.css")}}" rel="stylesheet"></style>
-    <link href="{{static_url("css/color.css")}}" rel="stylesheet"></style>
-    <link href="{{static_url("css/demo.css")}}" rel="stylesheet"></style>
     <!--<link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">-->
     <!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap-markdown/2.10.0/css/bootstrap-markdown.min.css">-->
     <!--<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
@@ -21,12 +17,12 @@
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="width-limit">
-        <a class="logo" style="text-decoration: none;"" href="/">
+        <a class="logo" href="/" onfocus="blur()">
           <img src="{{static_url("img/logo.png")}}" style="width: 100%;height: 40px;margin-top: -15px;">
         </a>
         {% if login_user is None %}
-          <a class="sign_up" href="/sign_up" style="text-decoration: none;color: red;">注册</a>
-          <a class="login" href="/login" style="text-decoration: none;color: white;">登录</a>
+          <a class="sign_up" href="/sign_up" style="color: red;" onfocus="blur()">注册</a>
+          <a class="login" href="/login" style="color: white;" onfocus="blur()">登录</a>
         {% end %}
         <!--如果用户已登录，显示下拉列表菜单-->
         {% if login_user is not None %}
@@ -61,11 +57,11 @@
 
         {% if login_user is None %}
           <div  style="margin-right: 20px;margin-top: 15px; font-size: 16px;float: right;">
-             <a href="/login" class="glyphicon glyphicon-edit" style="text-decoration: none;color: red;">写文章</a>
+             <a href="/login" class="glyphicon glyphicon-edit" style="text-decoration: none;color: red;" onfocus="blur()">写文章</a>
           </div>
         {% else %}
           <div  style="margin-right: 20px;margin-top: 16px; font-size: 16px;float: right;">
-             <a href="/blog/new/info" class="glyphicon glyphicon-edit" style="text-decoration: none;color: red;">写文章</a>
+             <a href="/blog/new/info" class="glyphicon glyphicon-edit" style="text-decoration: none;color: red;" onfocus="blur()">写文章</a>
           </div>
         {% end %}
 
@@ -73,12 +69,12 @@
           <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav" style="margin-left: 200px;">
               <li>
-                <a href="/" style="font-size: 20px;color: white;">
+                <a href="/" style="font-size: 20px;color: white;" onfocus="blur()">
                   <span>首页</span>
                 </a>
               </li>
               <li>
-                <a href="/" style="font-size: 20px;color: white;">
+                <a href="/" style="font-size: 20px;color: white;" onfocus="blur()">
                   <span>关注</span>
                 </a>
               </li>
@@ -103,23 +99,16 @@
     <div style="background-color: #ededed;height: 200px;width: 100%;left: 0px;bottom: 0px;flex: 1;">
     </div>
     -->
-    <script src="{{static_url("js/jquery.min.js")}}"></script>
-    <script src="{{static_url("js/bootstrap-markdown.js")}}"></script>
-    <script src="{{static_url("js/bootstrap-markdown.min.js")}}"></script>
-    <script src="{{static_url("js/markdown.min.js")}}"></script>
-    <script src="{{static_url("js/bootstrap.min.js")}}"></script>
-    <script src="{{static_url("js/jquery.easyui.min.js")}}"></script>
-    <script src="{{static_url("js/script.js")}}"></script>
     <!--返回到顶部-->
     <div class="side-tool">
       <ul>
-        <li data-toggle="tooltip" data-placement="left" data-container="body" title="回到顶部" style="">
+        <li data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="回到顶部">
           <div id="scrolltop" class="function-button">
             <span class="glyphicon glyphicon-chevron-up" style="padding-top: 16px;"></span>
           </div>
         </li>
-        <li data-toggle="tooltip" data-placement="left" data-container="body" title="返回首页" style="">
-          <a href="/" style="text-decoration: none;color: black;">
+        <li  data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="返回首页">
+          <a href="/" style="color: black;" onfocus="blur()">
           <div class="function-button">
             <span class="glyphicon glyphicon-home" style="padding-top: 16px;"></span>
           </div>
@@ -127,5 +116,11 @@
         </li>
       </ul>
     </div>
+    <script src="{{static_url("js/jquery.min.js")}}"></script>
+    <script src="{{static_url("js/bootstrap.min.js")}}"></script>
+    <script src="{{static_url("js/bootstrap-markdown.js")}}"></script>
+    <script src="{{static_url("js/bootstrap-markdown.min.js")}}"></script>
+    <script src="{{static_url("js/markdown.min.js")}}"></script>
+    <script src="{{static_url("js/script.js")}}"></script>
   </body>
 </html>

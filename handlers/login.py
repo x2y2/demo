@@ -16,11 +16,11 @@ class LoginHandler(BaseHandler):
     email = ''
     username = ''
     account = self.get_body_argument('account')
+    password = self.get_body_argument("password")
+    password = base64.b64encode(password)
+    cbox_remember = self.get_body_argument("cbox_remember",default="on")
     if '@' in account:
       email = account
-      password = self.get_body_argument("password")
-      password = base64.b64encode(password)
-      cbox_remember = self.get_body_argument("cbox_remember",default="on")
       if not self._checkemail_action(email):
         self.redirect("/sign_up?error=not_exists&user={0}".format(email))
       else:
@@ -36,9 +36,6 @@ class LoginHandler(BaseHandler):
           self.redirect('/')
     else:
       username = account
-      password = self.get_body_argument("password")
-      password = base64.b64encode(password)
-      cbox_remember = self.get_body_argument("cbox_remember",default="on")
       if not self._checkname_action(username):
         self.redirect("/sign_up?error=not_exists&user={0}".format(username))
       else:

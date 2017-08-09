@@ -42,7 +42,7 @@
               <!--未登录的用户跳转到登录界面-->
               {% if login_user is None%}
                 <div>
-                  <a href="/login" class="add-follow btn glyphicon glyphicon-plus" >关注</a>
+                  <a href="/login" class="add-follow btn glyphicon glyphicon-plus" style="color: white;">关注</a>
                 </div>
               {% else %}
                 <!--不关注自己-->
@@ -50,7 +50,7 @@
                   <div></div>
                 {% else %}
                   <div id="follower-following">
-                    <a class="add-follow btn glyphicon glyphicon-plus">关注</a>
+                    <a class="add-follow btn glyphicon glyphicon-plus" style="color: white;">关注</a>
                   </div>
                   <div id="follower-followed" class="followed btn" style="display: none;">
                     <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注</a>
@@ -62,8 +62,8 @@
               <div id="follower-followed" class="followed btn">
                 <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注</a>
               </div>
-              <div id="follower-following" style="display: none;">
-                <a class="add-follow btn glyphicon glyphicon-plus" >关注</a>
+              <div id="follower-following" class="add-follow" style="display: none;">
+                <span class="btn glyphicon glyphicon-plus">关注</span>
               </div>
               <!--
               <div class="followed btn" style="display: none;">

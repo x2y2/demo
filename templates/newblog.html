@@ -1,15 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-8 left-top">
-      <input type="text" id="blog_title" name="blog_title" class="form-control" placeholder="文章标题"　required>
-      </br>
+  <div class="left-top" style="margin-top: 80px;">
+    <input type="text" id="blog_title" name="blog_title" class="form-control" placeholder="文章标题"　required>
+    <div style="margin-top: 10px;">
       <textarea id="blog_content" name="blog_content" data-provide="markdown" rows="25" placeholder="文章正文"></textarea>
-      <hr/>
-      <div role="button" class="btn btn-info" id="add_blog" style="float: right">
-        <span class="glyphicon glyphicon-save">保存</span>
-      </div>
+    </div>
+    <div role="button" class="btn btn-info" id="add_blog" style="float: right;margin-top: 10px;">
+      <span class="glyphicon glyphicon-save">保存</span>
     </div>
   </div>
 </div>

@@ -8,13 +8,7 @@ import json
 
 class UsersHandler(BaseHandler):
   def get(self):
-    uid = self.id
-    #if uid is None: 
-    #  author_name = self.current_user
-    #  count_article = self.db.query('''SELECT COUNT(*) count FROM articles WHERE  (select uid from user where username=%s)''',self.current_user)[0]['count']
-    #else:
-    author_name = self.db.query("select username from user where uid=%s",uid)[0]['username']
-    count_article = self.db.query("SELECT COUNT(*) count FROM articles WHERE  user_uid=%s",uid)[0]['count']
+    uid = author_id = self.id
     #登录用户信息
     if self.current_user:
       login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
@@ -26,42 +20,52 @@ class UsersHandler(BaseHandler):
       login_user_id = None
       login_user = None
     #作者信息
-    #if uid is None:
-    #  author_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
-    #else:
-    author_info = self.db.query("SELECT pic FROM user WHERE uid=%s",uid)
-    author_pic = author_info[0]['pic']
-    author_id = uid
-    
-    #是否已经关注
-    user_id = self.id
+    author_name = self.db.query("select username from user where uid=%s",uid)[0]['username']
+    author_pic = self.db.query("SELECT pic FROM user WHERE uid=%s",uid)[0]['pic']
+    #作者的文章数
+    count_article = self.db.query("SELECT COUNT(*) count FROM articles WHERE  user_uid=%s",uid)[0]['count']
+    #登录用户是否已经关注过该作者
     if self.current_user:
       current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
-      id = self.db.query("select id from relation where from_user_id=%s and to_user_id=%s and type='2'",current_user_id,user_id)
+      id = self.db.query("select id from relation where from_user_id=%s and to_user_id=%s and type='2'",current_user_id,author_id)
       if len(id) == 0:
         follower = False
       else:
         follower = True
     else:
       follower = False
-    #该用户的关注用户数
-    following_count = self.db.query("select count(to_user_id) count from relation where from_user_id=%s;",user_id)[0]['count']
-    #该用户粉丝数
-    follower_count = self.db.query("select count(from_user_id) count from relation where to_user_id=%s;",user_id)[0]['count']
-
+    #作者的关注用户数
+    if self.redis.exists('following_count_' + author_id):
+      following_count = self.redis.get('following_count_' + author_id)
+    else:
+      following_count = self.db.query('''SELECT count(to_user_id) count 
+                                         FROM relation 
+                                         WHERE from_user_id=%s''',author_id)[0]['count']
+      self.redis.set('following_count_' + author_id,following_count)
+    #作者的粉丝数
+    if self.redis.exists('follower_count_' + author_id):
+      follower_count = self.redis.get('follower_count_' + author_id)
+    else:
+      follower_count = self.db.query('''SELECT count(from_user_id) count 
+                                        FROM relation 
+                                        WHERE to_user_id=%s''',author_id)[0]['count']
+      self.redis.set('follower_count_' + author_id,follower_count)
     #获取URL参数
     string = self.get_argument("order_by",default="")
     action = "_%s" % string
     if hasattr(self,action):
       getattr(self,action)(count_article,uid,author_name,author_pic,author_id,
-                           login_user_pic,login_user_id,login_user,follower,follower_count,following_count)
+                           login_user_pic,login_user_id,login_user,
+                           follower,follower_count,following_count)
     else:
       self.user_info(count_article,author_name,author_pic,author_id,
-                     login_user_pic,login_user_id,login_user,follower,follower_count,following_count)
+                     login_user_pic,login_user_id,login_user,
+                     follower,follower_count,following_count)
 
   #用户动态信息
   def user_info(self,count_article,author_name,author_pic,author_id,
-                login_user_pic,login_user_id,login_user,follower,follower_count,following_count):  
+                login_user_pic,login_user_id,login_user,
+                follower,follower_count,following_count):  
     self.render("user_info.html",
                  author_name=author_name,
                  login_user=self.current_user,
@@ -75,7 +79,8 @@ class UsersHandler(BaseHandler):
                  following_count=following_count)
   #文章
   def _created_at(self,count_article,uid,author_name,author_pic,author_id,
-                  login_user_pic,login_user_id,login_user,follower,follower_count,following_count):
+                  login_user_pic,login_user_id,login_user,
+                  follower,follower_count,following_count):
     m_infos = self.db.query('''SELECT u.uid,u.pic,u.username,a.aid,a.title,a.content,a.created_at,a.comment_count,a.read_count 
                                FROM articles a,user u 
                                WHERE a.user_uid=u.uid 
@@ -83,25 +88,26 @@ class UsersHandler(BaseHandler):
                                ORDER BY created_at
                                DESC
                             ''',
-                            uid
+                            suid
                             )
 
     self.render("users.html",
-                 author_name=author_name,
-                 author_pic=author_pic,
-                 author_id=author_id,
-                 m_infos=m_infos,
-                 uid=uid,
-                 count_article=count_article,
-                 login_user_pic=login_user_pic,
-                 login_user_id=login_user_id,
-                 login_user=login_user,
-                 follower=follower,
-                 follower_count=follower_count,
-                 following_count=following_count)
+                 author_name=self.author_name,
+                 author_pic=self.author_pic,
+                 author_id=self.author_id,
+                 m_infos=self.m_infos,
+                 uid=self.uid,
+                 count_article=self.count_article,
+                 login_user_pic=self.login_user_pic,
+                 login_user_id=self.login_user_id,
+                 login_user=self.login_user,
+                 follower=self.follower,
+                 follower_count=self.follower_count,
+                 following_count=self.following_count)
   #按最新评论排序显示文章
   def _commented_at(self,count_article,uid,author_name,author_pic,author_id,
-                    login_user_pic,login_user_id,login_user,follower,follower_count,following_count):
+                    login_user_pic,login_user_id,login_user,
+                    follower,follower_count,following_count):
     comment_infos = self.db.query('''SELECT a.aid,a.user_uid uid,u.username,u.pic,a.title,a.created_at,a.comment_count,a.read_count 
                                      FROM comments c,articles a,user u
                                      WHERE c.article_aid=a.aid 
@@ -126,7 +132,8 @@ class UsersHandler(BaseHandler):
 
   #显示热门文章
   def _top(self,count_article,uid,author_name,author_pic,author_id,
-           login_user_pic,login_user_id,login_user,follower,follower_count,following_count):
+           login_user_pic,login_user_id,login_user,
+           follower,follower_count,following_count):
     hot_infos = self.db.query('''SELECT a.aid,a.user_uid uid,u.username,u.pic,a.title,a.created_at,a.comment_count,a.read_count 
                                  FROM comments c,articles a,user u
                                  WHERE c.article_aid=a.aid 
@@ -148,14 +155,11 @@ class UsersHandler(BaseHandler):
                follower_count=follower_count,
                following_count=following_count)
 
+#关注用户类
 class FollowHandler(BaseHandler):
   def get(self):
     uid = self.id
     #作者姓名
-    #if uid is None: 
-    #  author_name = self.current_user
-    #  count_article = self.db.query('''SELECT COUNT(*) count FROM articles WHERE  user_name=%s''',self.current_user)[0]['count']
-    #else:
     author_name = self.db.query("select username from user where uid=%s",uid)[0]['username']
     count_article = self.db.query("SELECT COUNT(*) count FROM articles WHERE  user_uid=%s",uid)[0]['count']
     #登录用户信息
@@ -169,19 +173,19 @@ class FollowHandler(BaseHandler):
       login_user_id = None
       login_user = None
     #作者信息
-    #if uid is None:
-    #  author_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
-    #else:
     author_info = self.db.query("SELECT pic FROM user WHERE uid=%s",uid)
     author_pic = author_info[0]['pic']
     author_id = uid
-    
     
     #是否已经关注
     user_id = self.id
     if self.current_user:
       current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
-      id = self.db.query("select id from relation where from_user_id=%s and to_user_id=%s and type='2'",current_user_id,user_id)
+      id = self.db.query('''SELECT id 
+                            FROM relation 
+                            WHERE from_user_id=%s 
+                            AND to_user_id=%s 
+                            AND type=\'2\'''',current_user_id,user_id)
       if len(id) == 0:
         follower = False
       else:
@@ -217,13 +221,17 @@ class FollowHandler(BaseHandler):
 
   def _following(self,count_article,uid,author_name,author_pic,author_id,login_user_pic,login_user_id,login_user,follower,common_id):
     user_id = self.id
-    #获取用户信息
+    #获取作者关注的用户信息
     f_infos = self.db.query('''SELECT r.from_user_id,u.uid,u.username,u.pic 
                                FROM relation r,user u  
                                WHERE u.uid=r.to_user_id 
                                AND r.from_user_id=%s''',user_id)
     #该用户的关注数
-    following_count = self.db.query("SELECT count(to_user_id) count FROM relation WHERE from_user_id=%s",user_id)[0]['count']
+    if self.redis.exists('following_count_' + user_id):
+      following_count = self.redis.get('following_count_' + user_id)
+    else:
+      following_count = self.db.query("SELECT count(to_user_id) count FROM relation WHERE from_user_id=%s",user_id)[0]['count']
+      self.redis.set('following_count_' + user_id,following_count)
     #关注用户的关注数
     following_u_counts = self.db.query('''SELECT t.uid,r.to_user_id  
                                           FROM (SELECT r.from_user_id,u.uid 
@@ -241,7 +249,11 @@ class FollowHandler(BaseHandler):
         dic_following[following_u_count['uid']] += 1
 
     #该用户粉丝数
-    follower_count = self.db.query("SELECT count(from_user_id) count FROM relation WHERE to_user_id=%s",user_id)[0]['count']
+    if self.redis.exists('follower_count_' + user_id):
+      follower_count = self.redis.get('follower_count_' + user_id)
+    else:
+      follower_count = self.db.query("SELECT count(from_user_id) count FROM relation WHERE to_user_id=%s",user_id)[0]['count']
+      self.redis.set('follower_count_' + user_id,follower_count)
     #关注用户的粉丝数
     follower_u_counts = self.db.query('''SELECT to_user_id,count(to_user_id) count 
                                          FROM relation 
@@ -308,6 +320,7 @@ class FollowHandler(BaseHandler):
     user_id = self.id
     try:
       self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
+      self.redis.incr('following_count_' + current_user_id)
       self.json('success','/users/' + user_id)
     except Exception as e:
       self.json('error',e)
@@ -318,6 +331,7 @@ class FollowHandler(BaseHandler):
     user_id = self.get_argument("user_id",default="")
     try:
       self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
+      self.redis.incr('following_count_' + current_user_id)
       self.json('success','/users/' + self.id)
     except Exception as e:
       self.json('error',e)
@@ -328,6 +342,7 @@ class FollowHandler(BaseHandler):
     user_id = self.id
     try:
       self.db.execute("DELETE FROM relation WHERE from_user_id=%s AND to_user_id=%s AND type='2'",current_user_id,user_id)
+      self.redis.decr('following_count_'+ current_user_id)
       self.json('success','/users/' + self.id)
     except Exception as e:
       self.json('error',e)
@@ -338,6 +353,7 @@ class FollowHandler(BaseHandler):
     user_id = self.get_argument("user_id",default="")
     try:
       self.db.execute("DELETE FROM relation WHERE from_user_id=%s AND to_user_id=%s AND type='2'",current_user_id,user_id)
+      self.redis.decr('following_count_' + current_user_id)
       self.json('success','/users/' + self.id)
     except Exception as e:
       self.json('error',e)
@@ -399,15 +415,23 @@ class FollowersHandler(BaseHandler):
   
   def _followers(self,count_article,uid,author_name,author_pic,author_id,login_user_pic,login_user_id,login_user,follower,common_id):
     user_id = self.id
-    #获取用户信息
+    #获取作者的关注用户信息
     f_infos = self.db.query('''SELECT r.to_user_id,u.uid,u.username,u.pic 
                                FROM relation r,user u  
                                WHERE u.uid=r.from_user_id 
                                AND r.to_user_id=%s''',user_id)
     #该用户的关注数
-    following_count = self.db.query("SELECT count(to_user_id) count FROM relation WHERE from_user_id=%s",user_id)[0]['count']
+    if self.redis.exists('following_count_' + user_id):
+      following_count = self.redis.get('following_count_' + user_id)
+    else:
+      following_count = self.db.query("SELECT count(to_user_id) count FROM relation WHERE from_user_id=%s",user_id)[0]['count']
+      self.redis.set('following_count_' + user_id,following_count)
     #该用户粉丝数
-    follower_count = self.db.query("SELECT count(from_user_id) count FROM relation WHERE to_user_id=%s",user_id)[0]['count']
+    if self.redis.exists('follower_count_' + user_id):
+      follower_count = self.redis.get('follower_count_' + user_id)
+    else:
+      follower_count = self.db.query("SELECT count(from_user_id) count FROM relation WHERE to_user_id=%s",user_id)[0]['count']
+      self.redis.set('follower_count_' + user_id,follower_count)
     #粉丝的关注用户数
     follower_u_counts = self.db.query('''SELECT from_user_id,count(from_user_id) count 
                                         FROM relation 
@@ -485,6 +509,7 @@ class FollowersHandler(BaseHandler):
     user_id = self.get_argument("user_id",default="")
     try:
       self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
+      self.redis.incr('following_count_' + current_user_id)
       self.json('success','关注成功')
     except Exception as e:
       self.write(json.dumps({'error',e}))
@@ -495,6 +520,7 @@ class FollowersHandler(BaseHandler):
     user_id = self.get_argument("user_id",default="")
     try:
       self.db.execute("DELETE FROM relation WHERE from_user_id=%s AND to_user_id=%s AND type='2'",current_user_id,user_id)
+      self.redis.decr('following_count_' + current_user_id)
       self.json('success','取消成功')
     except Exception as e:
       self.json('error',e)

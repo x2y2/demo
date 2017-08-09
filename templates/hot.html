@@ -10,8 +10,8 @@
         <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 25px;height: 25px;">
         {% end %}
       </a>
-      <a href="/users/{{hot_info['uid']}}?order_by=top" style="text-decoration:none;color: black;font-size: 15px; margin-left: 10px;">{{hot_info['username']}}</a>
-      <a style="text-decoration:none;color: gray;">{{hot_info['created_at']}}</a>
+      <a href="/users/{{hot_info['uid']}}?order_by=top" style="color: black;font-size: 15px; margin-left: 10px;">{{hot_info['username']}}</a>
+      <a style="color: gray;">{{hot_info['created_at']}}</a>
       <div style="margin-top: 10px;">
         <p><a style="font-size:18px; font-weight:bold;color: black;" href="/blog/{{hot_info['aid']}}"><span>{{hot_info['title']}}</span></a></p>
       </div>

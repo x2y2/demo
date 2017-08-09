@@ -71,32 +71,29 @@ $(function(){
       }
     });
   }); 
+ 
   //删除文章
   $("#edit_delete_blog").click(function(){
-    $.messager.confirm("操作提示",'确认删除吗?',function(data) {
-      var blog_id = $("#blog_id").text();
-      if (data) {
-        $.ajax({
-          type: "POST",
-          url: "/blog/edit/delete_blog",
-          data: {
-            "blog_id": blog_id
-          },
-          success: function(data) {
-            if(data['status'] == 'fail') {
-               alert(data['info']);
-            }
-            else {
-              //alert(data['info'])
-              window.location.href = "/users/" + data['info'];
-            }
-          },
-          error: function(data) {
-            alert(data['info']);
-          }
-        });
+    var blog_id = $("#blog_id").text();
+    $.ajax({
+      type: "POST",
+      url: "/blog/edit/delete_blog",
+      data: {
+        "blog_id": blog_id
+      },
+      success: function(data) {
+        if(data['status'] == 'fail') {
+           alert(data['info']);
+        }
+        else {
+          //alert(data['info'])
+          window.location.href = "/users/" + data['info'];
+        }
+      },
+      error: function(data) {
+        alert(data['info']);
       }
-    }); 
+    });
   });
   //头像上传自动提交
   $('#upload-pic').change(function(){
@@ -120,8 +117,8 @@ $(function(){
       return false;
     });
   });
-
-  $("[data-toggle='tooltip']").tooltip();
+  //鼠标滑过显示提示框
+  $("[data-toggle='tooltip']").tooltip().css({'backgroundColor':'black','borderColor':'black'});
 
   //文章评论按钮隐藏
   $("#under-comment").hide();

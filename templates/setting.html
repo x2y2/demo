@@ -1,6 +1,6 @@
 {% extends "setting_base.html" %}
 {% block setting_content%}
-<div>
+<div style="margin-top: 70px;">
   {% if login_user_pic is not None %}
   <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
   {% else %}

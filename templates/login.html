@@ -1,6 +1,7 @@
 {% extends "main.html" %}
 {% block content %}
-<form role="form"　name="loginForm" action="/login" method="POST">
+<form role="form"　name="loginForm" action="/login" method="post">
+  {% raw xsrf_form_html() %}
   <div class="input-group">
     <span class="input-group-addon">登录账号 </span>
     <input type="text" class="form-control" name="account" placeholder="请输入你的邮箱或用户名" required>
@@ -9,10 +10,11 @@
     <span class="input-group-addon">登录密码 </span>
     <input type="password" class="form-control" name="password" placeholder="请输入密码" required>
   </div>
-  <br>
-  <div>
-    <label><input type="checkbox" name="cbox_remeber">记住我</input></label>
+  <div style="margin-top: 10px;">
+    <input type="checkbox" name="cbox_remeber">记住我</input>
   </div>
-  <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录"/>
+  <div style="margin-top: 10px;">
+    <input class="btn btn-lg btn-primary btn-block" type="submit" value="登录"/>
+  </div>
 </form>
 {% end %}
