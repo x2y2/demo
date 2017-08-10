@@ -68,7 +68,7 @@ class BlogContentHandler(BaseHandler):
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
-    if self.current_user is not None:
+    if self.current_user:
       login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
       login_user_pic = login_user_info[0]['pic']
       login_user_id = login_user_info[0]['uid']
@@ -99,6 +99,7 @@ class NewBlogHandler(BaseHandler):
     blog_title = self.get_argument("blog_title",default="")
     blog_content = self.get_argument("blog_content",default="")
     user_name = self.current_user
+    user_id = self.db.query("SELECT uid FROM user WHERE username=%s",user_name)[0]['uid']
     created_at = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
     str = ''.join([created_at,user_name])
     str_md5 = hashlib.md5(str).hexdigest()
@@ -112,15 +113,14 @@ class NewBlogHandler(BaseHandler):
                            created_at
                            )
                            VALUES
-                           (%s,
-                           (SELECT uid FROM user WHERE username=%s),
-                           %s,%s,%s
+                           (%s,%s,%s,%s,%s
                            )''',
                            blog_id,
-                           user_name,
+                           user_id,
                            blog_title,
                            blog_content,
                            created_at)
+      self.redis.incr('article_count_' + user_id)
       self.json("success",blog_id)
     except Exception as e:
       self.json('error',str(e))
@@ -183,6 +183,7 @@ class EditBlogHandler(BaseHandler):
     try:
       self.db.execute("delete from articles where aid=%s",blog_id)
       uid = self.db.query("select uid from user where username=%s",self.current_user)[0]['uid']
+      self.redis.decr('article_count_' + uid)
       self.json("success",uid)
     except Exception as e:
       self.json("error",str(e))

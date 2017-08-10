@@ -9,8 +9,8 @@ from handlers.blog import BlogContentHandler
 from handlers.blog import NewBlogHandler
 from handlers.blog import EditBlogHandler
 from handlers.blog import CommentBlogHandler
-from handlers.users import UsersHandler
-from handlers.users import FollowHandler
+from handlers.users import ArticlesHandler
+from handlers.users import FollowingHandler
 from handlers.users import FollowersHandler
 from handlers.setting import SettingHandler
 from handlers.contactus import ContactusHandler
@@ -24,9 +24,9 @@ url += [(r'/blog/[0-9a-z]+',BlogContentHandler)]
 url += [(r'/blog/new/(\w+)',NewBlogHandler)]
 url += [(r'/blog/edit/(\w+)',EditBlogHandler)]
 url += [(r'/blog/[0-9a-z]+/comment',CommentBlogHandler)]
-url += [(r'/users/[0-9a-z]{16}',UsersHandler)]
-url += [(r'/users/[0-9a-z]{16}/following[a-z_]{0,}',FollowHandler)]
-url += [(r'/users/[0-9a-z]{16}/following',FollowHandler)]
+url += [(r'/users/[0-9a-z]{16}',ArticlesHandler)]
+url += [(r'/users/[0-9a-z]{16}/following[a-z_]{0,}',FollowingHandler)]
+url += [(r'/users/[0-9a-z]{16}/following',FollowingHandler)]
 url += [(r'/users/[0-9a-z]{16}/followers',FollowersHandler)]
 url += [(r'/users/[0-9a-z]{16}/follower[a-z_]{0,}',FollowersHandler)]
 url += [(r'/setting/\w+',SettingHandler)]

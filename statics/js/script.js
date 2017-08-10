@@ -138,7 +138,7 @@ $(function(){
   //将作者添加到关注列表
   $("#follower").click(function(){
     var path = window.location.pathname.substring(0,23);
-    var url = path + '/' + 'following';
+    var url = path + '/' + 'following_add';
     $.ajax({
       type: "post",
       url: url,

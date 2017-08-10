@@ -7,15 +7,15 @@
     <div class="author">
       <div class="blog-avatar">
         {% if b_infos[0]['pic'] is None %}
-         <a href="/users/{{b_infos[0]['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 60px;height: 60px;"></a>
+         <a href="/users/{{b_infos[0]['uid']}}" onfocus="blur()"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 60px;height: 60px;"></a>
         {% else %}
-        <a href="/users/{{b_infos[0]['uid']}}"><img src="{{static_url("upload/img/" + b_infos[0]['pic'])}}" class="img-circle" style="width: 60px;height: 60px;"></a>
+        <a href="/users/{{b_infos[0]['uid']}}" onfocus="blur()"><img src="{{static_url("upload/img/" + b_infos[0]['pic'])}}" class="img-circle" style="width: 60px;height: 60px;"></a>
         {% end %}
       </div>
       <div class="info">
         <span class="tag">作者</span>
         <span class="name">
-          <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;">{{b_infos[0]['username']}}</a>
+          <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;" onfocus="blur()">{{b_infos[0]['username']}}</a>
         </span>
       </div>
       <div class="blog-info">

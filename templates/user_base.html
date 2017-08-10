@@ -2,7 +2,7 @@
 {% block content %}
 <div class="users-header">
   <div class="main-top">
-    <a href="/users/{{author_id}}" class="avatar">
+    <a href="/users/{{author_id}}" class="avatar" onfocus="blur()">
       <!--显示作者头像-->
       {% if author_pic is not None %}
       <img src="{{static_url("upload/img/" + author_pic)}}"  class="img-circle" style="width: 80px;height: 80px;">
@@ -13,23 +13,23 @@
   </div>
   <!--显示作者名称-->
   <div class="title">
-    <a href="/users/{{author_id}}" style="color: black;">{{author_name}}</a>
+    <a href="/users/{{author_id}}" style="color: black;" onfocus="blur()">{{author_name}}</a>
   </div>
   <div class="info">
     <ul class="list-inline">
       <li>
         <div class="meta-block">
-          <a href="/users/{{author_id}}/following" style="color: gray;"><p>{{following_count}}</p>关注</a>
+          <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()"><p>{{following_count}}</p>关注</a>
         </div>
       </li>
       <li>
         <div class="meta-block">
-          <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;"><p>{{count_article}}</p>文章</a>
+          <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()"><p>{{count_article}}</p>文章</a>
         </div>
       </li>
       <li>
         <div class="meta-block" style="border-right-style: none;">
-          <a href="/users/{{author_id}}/followers" style="color: gray;"><p>{{follower_count}}</p>粉丝</a>
+          <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()"><p>{{follower_count}}</p>粉丝</a>
         </div>
     </ul>
     <!--添加关注和发简讯-->
