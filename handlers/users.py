@@ -9,9 +9,13 @@ import json
 
 class ArticlesHandler(UserBaseHandler):
   def get(self):
+    if self.login_user_info:
+      login_user_id = self.login_user_info[0]['uid']
+      login_user_pic = self.login_user_info[0]['pic']
+    else:
+      login_user_id = self.login_user_info
+      login_user_pic = self.login_user_info
     login_user = self.current_user
-    login_user_id = self.login_user_info[0]['uid']
-    login_user_pic = self.login_user_info[0]['pic']
     author_id = self.id
     author_name = self.author_info[0]['username']
     author_pic = self.author_info[0]['pic']
@@ -125,9 +129,13 @@ class ArticlesHandler(UserBaseHandler):
 #关注用户
 class FollowingHandler(UserBaseHandler):
   def get(self):
+    if self.login_user_info:
+      login_user_id = self.login_user_info[0]['uid']
+      login_user_pic = self.login_user_info[0]['pic']
+    else:
+      login_user_id = self.login_user_info
+      login_user_pic = self.login_user_info
     login_user = self.current_user
-    login_user_id = self.login_user_info[0]['uid']
-    login_user_pic = self.login_user_info[0]['pic']
     author_id = self.id
     author_name = self.author_info[0]['username']
     author_pic = self.author_info[0]['pic']
@@ -246,13 +254,15 @@ class FollowingHandler(UserBaseHandler):
   def _following_u_add_action(self):
     current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
     user_id = self.get_argument("user_id",default="")
-    try:
-      self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
-      self.redis.incr('following_count_' + current_user_id)
-      self.redis.incr('follower_count_' + user_id)
-      self.json('success','/users/' + self.id)
-    except Exception as e:
-      self.json('error',e)
+    id = self.db.query("SELECT id FROM relation WHERE from_user_id=%s and to_user_id=%s and type='2'",current_user_id,user_id)
+    if not id:
+      try:
+        self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,user_id)
+        self.redis.incr('following_count_' + current_user_id)
+        self.redis.incr('follower_count_' + user_id)
+        self.json('success','/users/' + self.id)
+      except Exception as e:
+        self.json('error',e)
 
   #取消关注作者
   def _following_remove_action(self):
@@ -280,9 +290,13 @@ class FollowingHandler(UserBaseHandler):
 
 class FollowersHandler(UserBaseHandler):
   def get(self):
+    if self.login_user_info:
+      login_user_id = self.login_user_info[0]['uid']
+      login_user_pic = self.login_user_info[0]['pic']
+    else:
+      login_user_id = self.login_user_info
+      login_user_pic = self.login_user_info
     login_user = self.current_user
-    login_user_id = self.login_user_info[0]['uid']
-    login_user_pic = self.login_user_info[0]['pic']
     author_id = self.id
     author_name = self.author_info[0]['username']
     author_pic = self.author_info[0]['pic']
@@ -334,7 +348,7 @@ class FollowersHandler(UserBaseHandler):
       dic_follower_f[follower_f_count['tfrom']] = 0
 
     for follower_f_count in follower_f_counts:
-      if follower_f_count['rfrom'] is not None:
+      if follower_f_count['rfrom']:
         dic_follower_f[follower_f_count['tfrom']] += 1
 
     #粉丝的文章数

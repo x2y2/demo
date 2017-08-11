@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/wangpei/venv/bin/python
 #coding=utf8
 
 from handlers.index import IndexHandler

@@ -1,7 +1,12 @@
 import tornado.web
 import urlparse
+from sessions.session import Session
 
 class BaseHandler(tornado.web.RequestHandler):
+  def __init__(self,*argc,**argkw):
+    super(BaseHandler,self).__init__(*argc,**argkw)
+    self.session = Session(self.application.session_manager,self)
+
   @property
   def db(self):
     return self.application.db
@@ -11,7 +16,8 @@ class BaseHandler(tornado.web.RequestHandler):
     return self.application.redis
 
   def get_current_user(self):
-    return self.get_secure_cookie("username")
+    #return self.get_secure_cookie("username")
+    return self.session.get("username")
 
   def json(self,status,info):
     self.write({

@@ -30,9 +30,13 @@ class LoginHandler(BaseHandler):
           ret = self.db.query("SELECT username FROM user WHERE email=%s",email)
           username = ret[0]['username']
           if cbox_remember == "on":
-            self.set_secure_cookie("username",username,expires_days=30)
+            #self.set_secure_cookie("username",username,expires_days=30)
+            self.session['username'] = username
+            self.session.save()
           else:
-            self.set_secure_cookie("username",username,expires_days=1)
+            #self.set_secure_cookie("username",username,expires_days=1)
+            self.session['username'] = username
+            self.session.save()
           self.redirect('/')
     else:
       username = account
@@ -43,9 +47,13 @@ class LoginHandler(BaseHandler):
           self.redirect("/login?error=passwd_error")
         else:
           if cbox_remember == "on":
-            self.set_secure_cookie("username",username,expires_days=30)
+            #self.set_secure_cookie("username",username,expires_days=30)
+            self.session['username'] = username
+            self.session.save()
           else:
-            self.set_secure_cookie("username",username,expires_days=1)
+            #self.set_secure_cookie("username",username,expires_days=1)
+            self.session['username'] = username
+            self.session.save()
           self.redirect('/')
 
   def _checkemail_action(self,email):

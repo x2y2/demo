@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/wangpei/venv/bin/python
 #encoding=utf8
 
 
