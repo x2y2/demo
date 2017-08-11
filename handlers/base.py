@@ -1,3 +1,5 @@
+#coding=utf8
+
 import tornado.web
 import urlparse
 from sessions.session import Session

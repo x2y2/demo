@@ -27,7 +27,7 @@ class Session(SessionData):
     self.hmac_key = current_session.hmac_key
 
   def save(self):   
-    self.session_manager.set(self.request_handler, self)  
+    self.session_manager.set(self.request_handler,self)  
 
 class SessionManager(object):   
   def __init__(self,session_secret,store_options, session_timeout):  
@@ -46,10 +46,10 @@ class SessionManager(object):
  
   def _fetch(self, session_id):   
     try:   
-      session_data = raw_data = self._redis.get(session_id)   
-      if raw_data != None:   
-        self._redis.setex(session_id, self.session_timeout, raw_data)   
-        session_data = ujson.loads(raw_data)   
+      session_data = self._redis.get(session_id)   
+      if session_data:   
+        self._redis.setex(session_id, self.session_timeout, session_data)   
+        session_data = ujson.loads(session_data)   
       if type(session_data) == type({}):   
         return session_data   
       else:   
@@ -78,9 +78,9 @@ class SessionManager(object):
       session_data = self._fetch(session_id)   
       for key, data in session_data.iteritems():   
         session[key] = data   
-    return session 
+    return session
 
-  def set(self, request_handler, session):   
+  def set(self,request_handler,session):   
     request_handler.set_secure_cookie("session_id", session.session_id)   
     request_handler.set_secure_cookie("verification", session.hmac_key)   
     session_data = ujson.dumps(dict(session.items()))   
