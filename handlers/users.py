@@ -6,6 +6,7 @@ from user_main import UserBaseHandler
 import hashlib
 import urlparse
 import json
+import ujson
 
 class ArticlesHandler(UserBaseHandler):
   def get(self):
@@ -178,7 +179,7 @@ class FollowingHandler(UserBaseHandler):
     for following_u_count in following_u_counts:
       if following_u_count['to_user_id']:
         dic_following[following_u_count['uid']] += 1
-   
+    
     #关注用户的粉丝数
     follower_u_counts = self.db.query('''SELECT to_user_id,count(to_user_id) count 
                                          FROM relation 

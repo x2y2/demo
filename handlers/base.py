@@ -5,8 +5,8 @@ import urlparse
 from sessions.session import Session
 
 class BaseHandler(tornado.web.RequestHandler):
-  def __init__(self,*argc,**argkw):
-    super(BaseHandler,self).__init__(*argc,**argkw)
+  def __init__(self,*args,**kwargs):
+    super(BaseHandler,self).__init__(*args,**kwargs)
     self.session = Session(self.application.session_manager,self)
 
   @property

@@ -135,7 +135,7 @@ $(function(){
   $("#q").blur(function(){
     $("#q").animate({"width":200},400);
   });
-  //将作者添加到关注列表
+  //从用户页面添加关注
   $("#follower").click(function(){
     var path = window.location.pathname.substring(0,23);
     var url = path + '/' + 'following_add';
@@ -159,7 +159,8 @@ $(function(){
       },
     });    
   });
-  //取消关注作者
+  
+  //从用户页面取消
   $("#followed").click(function(){
     var path = window.location.pathname.substring(0,23);
     var url = path + '/' + 'following_remove';
@@ -183,7 +184,57 @@ $(function(){
       },
     });    
   });
-
+  //从文章页面添加关注
+  $("#blog-follower").click(function(){
+    var path = window.location.pathname.substring(0,23);
+    var url = path + '/' + 'following_add';
+    var author_id = $("#blog-author-id").text();
+    $.ajax({
+      type: "post",
+      url: url,
+      cache: false,
+      data: {"url": url,"author_id": author_id},
+      success: function(data) {
+        if (data['status'] == 'success') {
+          $("#blog-follower").hide();
+          $("#blog-followed").show();
+          //alert(data['info'])
+        }
+        else if (data['status'] == '/login'){
+          alert(data['info']);
+          //window.location.href = data['info'];
+        }
+      },
+      error: function(data) {
+        alert(data['info']);
+      },
+    });    
+  });
+  //从文章页面取消关注
+  $("#blog-followed").click(function(){
+    var path = window.location.pathname.substring(0,23);
+    var url = path + '/' + 'following_remove';
+    var author_id = $("#blog-author-id").text();
+    $.ajax({
+      type: "post",
+      url: url,
+      cache: false,
+      data: {"url": url,"author_id": author_id},
+      success: function(data) {
+        if (data['status'] == 'success') {
+          $("#blog-follower").show();
+          $("#blog-followed").hide();
+        //alert(data['info']);
+        }
+        else if (data['status'] == '/login'){
+          alert(data['info']);
+        }
+      },
+      error: function(data) {
+        alert(data['info']);
+      },
+    });    
+  });
   $("#following > li").each(function(){
     //从关注页面添加，取消关注用户
     $(this).find("#following-follower").click(function(){

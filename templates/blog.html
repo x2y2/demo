@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-  <div style="margin-left: 250px;margin-top: 80px;width: 700px;">
+  <div class="row" style="padding-left: 210px;padding-right: 210px; padding-top: 80px;width: 100%;">
     <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['aid']}}</h4>
     <p class="blog_title">{{b_infos[0]['title']}}</p>
     <div class="author">
@@ -13,12 +13,47 @@
         {% end %}
       </div>
       <div class="info">
-        <span class="tag">作者</span>
-        <span class="name">
-          <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;" onfocus="blur()">{{b_infos[0]['username']}}</a>
-        </span>
+        <div>
+          <span class="tag">作者</span>
+          <h4 id="blog-author-id" style="display: none;">{{b_infos[0]['uid']}}</h4>
+          <span class="name">
+            <a href="/users/{{b_infos[0]['uid']}}" style="text-decoration: none;color: black;" onfocus="blur()">{{b_infos[0]['username']}}</a>
+          </span>
+        </div>
+        <!--添加关注-->
+        {% if login_user is not None%}
+          {% if login_user != b_infos[0]['username'] %}
+              {% if followed == False %}
+              <div id="blog-follower" style="margin-left: 100px; margin-top: -25px;">
+                <a  class="blog-add-follow btn glyphicon glyphicon-plus" style="color: white;">关注
+                </a>
+              </div>
+              <div id="blog-followed" style="display: none; margin-left: 100px; margin-top: -25px;">
+                <a class="blog-followed btn glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+                </a>
+              </div>
+              {% else %}
+              <div id="blog-followed" style="margin-left: 100px; margin-top: -25px;">
+                <a class="blog-followed btn glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+                </a>
+              </div>
+              <div id="blog-follower" style="display: none; margin-left: 100px; margin-top: -25px;">
+                <a  class="blog-add-follow btn glyphicon glyphicon-plus" style="color: white;">关注
+                </a>
+              </div>
+              {% end %}
+          {% else %}
+            <div></div>
+          {% end %}
+        {% else %}
+            <div style="margin-left: 100px; margin-top: -25px;">
+              <a  href="/login" class="blog-add-follow btn glyphicon glyphicon-plus" style="color: white;" onfocus="blur()">关注
+              </a>
+            </div>
+        {% end %}
       </div>
-      <div class="blog-info">
+      
+      <div class="blog-info" style="margin-top: 10px;">
         <ul class="list-inline">
           <li>
             <div class="blog-meta-block">
@@ -45,26 +80,30 @@
           {% end%}
       </div>
     </div>
-    <div style="font-size: 18px;">
+    <div style="font-size: 18px;margin-bottom: 20px;">
      {% raw c_infos_html %}
     </div>
-    <hr>
+    
     <!--评论框 -->
     <div>
       {% if login_user is not None %}
         <form role="form"　name="comment-form" action="/blog/{{b_infos[0]['aid']}}/comment" method="POST">
           <input name="article_aid" style="display: none;" value="{{b_infos[0]['aid']}}" />
-          {% if login_user_pic is not None %}
-            <a>
-              <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 30px;height: 30px;">
-            </a>
-          {% else %}
-            <a>
-              <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;">
-            </a>
-          {% end %}
           <div>
-            <textarea id="new-comment" name="new-comment" class="textarea" placeholder="写下你的评论"></textarea>
+            <div style="float: right;">
+              <textarea id="new-comment" name="new-comment" class="textarea" placeholder="写下你的评论"></textarea>
+            </div>
+            <div>
+            {% if login_user_pic is not None %}
+              <a>
+                <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 30px;height: 30px;">
+              </a>
+            {% else %}
+              <a>
+                <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;">
+              </a>
+            {% end %}
+            </div>
           </div>
           <div id="under-comment" style="float: right;margin-top: 10px;">
             <a class="btn" id="cancel-comment" style="font-size: 16px;text-decoration: none;color: gray;">取消</a>
@@ -74,19 +113,21 @@
       {% else %}
         <!--登录后评论-->
         <form>
-          <a>
-            <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;">
-          </a>
-          <div class="sign-container" style="margin-top: 0px;padding-left: 260px;">
+          <div class="sign-container" style="margin-top: 0px;padding-left: 280px;">
             <a  class="btn btn-login" href="/login">登录</a>
             <span style="font-size: 14px;">后发表评论</span>
+          </div>
+          <div>
+            <a>
+              <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;">
+            </a>
           </div>
         </form>
       {% end %}
     </div>
     <!--评论展示-->
     {% if b_infos[0]['comment_count'] != 0 %}
-    <div style="margin-top: 120px;">
+    <div style="margin-top: 100px;">
       <div>
         <span style="font-size: 18px;font-weight: bold;">{{b_infos[0]['comment_count']}}条评论</span>
         <div style="float: right;color: gray;">

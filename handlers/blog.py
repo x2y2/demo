@@ -2,18 +2,20 @@
 #coding=utf8
 
 from base import BaseHandler
+from user_main import UserBaseHandler
 import sys
 import datetime
 import hashlib
 import markdown2
 import HTMLParser
 import json
+import ujson
 
 
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-class BlogContentHandler(BaseHandler):
+class BlogContentHandler(UserBaseHandler):
   def get(self):
     #登录用户信息
     if self.current_user is not None:
@@ -25,6 +27,7 @@ class BlogContentHandler(BaseHandler):
       login_user_pic = None
       login_user_id = None
       login_user = None
+    
     bid = self.id
     #记录阅读次数
     self.db.execute("update articles set read_count=read_count + 1 where aid=%s",bid)
@@ -57,14 +60,57 @@ class BlogContentHandler(BaseHandler):
                                      AND c.article_aid=%s 
                                      ORDER BY comment_time 
                                      DESC''',bid)
-
+    #是否已经关注过
+    author_id = b_infos[0]['uid']
+    followed = False
+    if self.current_user:
+      current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
+      id = self.db.query("SELECT id FROM relation WHERE from_user_id=%s AND to_user_id=%s AND type='2'",current_user_id,author_id)
+      if len(id) == 0:
+        followed = False
+      else:
+        followed = True
+    
     self.render("blog.html",
                 b_infos=b_infos,
                 c_infos_html= html,
                 login_user=login_user,
                 login_user_id=login_user_id,
                 login_user_pic=login_user_pic,
-                comment_infos=comment_infos)
+                comment_infos=comment_infos,
+                followed = followed)
+
+  def post(self,*args,**kwargs):
+    author_id = self.get_argument("author_id",default="")
+    current_user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
+    url = self.get_argument("url",default="")
+    string = url.split('/')[-1]
+    action = "_%s_action" % string
+    if self.current_user:
+      if hasattr(self,action):
+        getattr(self,action)(author_id,current_user_id)
+    else:
+      self.json('login','/login')
+
+
+  def _following_add_action(self,author_id,current_user_id):
+    try:
+      self.db.execute('''INSERT INTO relation(from_user_id,to_user_id,type) VALUES(%s,%s,'2')''',current_user_id,author_id)
+      self.redis.incr('following_count_' + current_user_id)
+      self.redis.incr('follower_count_' + author_id)
+      self.json('success','/blog/' + self.id)
+    except Exception as e:
+      self.write(json.dumps({'error',e}))
+
+  #取消关注作者
+  def _following_remove_action(self,author_id,current_user_id):
+    try:
+      self.db.execute("DELETE FROM relation WHERE from_user_id=%s AND to_user_id=%s AND type='2'",current_user_id,author_id)
+      self.redis.decr('following_count_'+ current_user_id)
+      self.redis.decr('follower_count_'+ author_id)
+      self.json('success','/blog/' + self.id)
+    except Exception as e:
+      self.json('error',e)
 
 class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
