@@ -18,14 +18,16 @@
       <div style="margin-top: 50px;margin-left: 50px;font-size: 50px;font-style: bold;">
         <a style="color: red;" href="/" onfocus="blur()">随笔</a>
       </div>
-      <div class="login-sign">
-        <div class="login-sign-title">
-          <a href="/login" onfocus="blur()">登录</a>
-          <a href="/sign_up" onfocus="blur()">注册</a>
+      <div class="container" style="text-align: center;">
+        <div class="login-sign">
+          <div class="login-sign-title">
+            <a href="/login" onfocus="blur()">登录</a>
+            <a href="/sign_up" onfocus="blur()">注册</a>
+          </div>
+          <content>
+            {% block content %} {% end %}
+          </content>
         </div>
-        <content>
-          {% block content %} {% end %}
-        </content>
       </div>
     </div>
     <script src="{{static_url("js/jquery.min.js")}}"></script>

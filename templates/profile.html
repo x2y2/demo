@@ -1,6 +1,89 @@
 {% extends "setting_base.html" %}
 {% block setting_content%}
-<div>
-  profile
+<h4 id='login_user_id' style="display: none;">{{login_user_id}}</h4>
+<div class="container" style="padding-left: 80px;margin-top: 80px;">
+  <div class="col-xs-8">
+    <table class="table" rules="rows">
+      <tbody>
+        <tr>
+          <td>
+            <div style="margin-top: 20px;margin-bottom: 20px;">
+              <span style="font-size: 15px;color: gray;color: gray;margin-top: 20px;margin-bottom: 20px;">性别</span>
+            </div>
+          </td>
+          <td>
+            <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
+              <input type="radio" name="optionsradio" value="male">男</input>
+              <input type="radio" name="optionsradio" value="female" style="margin-left: 20px;">女</input>
+              <input type="radio" name="optionsradio" checked="true" value="secret" style="margin-left: 20px;">保密</input>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div style="margin-top: 20px;margin-bottom: 20px;">
+              <span style="font-size: 15px;color: gray;margin-top: 20px;margin-bottom: 20px;">个人简介</span>
+            </div>
+          </td>
+          <td>
+            <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
+              <textarea class="textarea" style="margin-bottom: 20px;"></textarea>
+            </div>
+          </td>
+        </tr>
+        <tr >
+          <td style="height: 80px;line-height: 80px;">
+            <div style="margin-top: 20px;margin-bottom: 20px;">
+              <span style="font-size: 15px;color: gray;">微信二维码</span>
+            </div>
+          </td>
+          <td id="webchat_pic" style="height: 80px;line-height: 80px;">
+          <div>
+            <div style="float:right;font-size: 14px;color: gray;">
+              <span>上传后在个人主页显示图标</span> 
+            </div>
+            {% if not webchat_pic %}
+              <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
+                <form role="form" name="webchat-upload-pic" id="webchat-pic-form" action="/setting/profile/webchat_upload" enctype="multipart/form-data" method="post">
+                <div style="padding-top: 25px;">
+                  <div class="webchat-pic">
+                    <span style="color: green;">
+                      <input type="file" name="webchat-upload-pic" id="webchat-upload-pic" class="upload-pic" unselectable="on" />更改图片
+                    </span>
+                  </div>
+                </div>
+                </form>
+              </div>
+              <img style="display: none;">
+            {% else %}
+              <div>
+                <div style="float: left;">
+                  <img src="{{static_url("upload/webchat/" + webchat_pic)}}" class="img" style="width: 80px;height: 80px;vertical-align: middle;">
+                </div>
+                <div id="webchat_pic_delete" style="float:right; cursor: pointer;margin-right: 65px;display: none;">
+                    <span style="color: gray">删除</span>
+                </div>
+                <div style="color: gray;margin-top: 20px;margin-bottom: 20px;margin-left: 100px;">
+                  <form role="form" name="webchat-upload-pic" id="webchat-pic-form" action="/setting/profile/webchat_upload" enctype="multipart/form-data" method="post">
+                    <div style="padding-top: 25px;">
+                      <div class="webchat-pic">
+                        <span>
+                          <input type="file" name="webchat-upload-pic" id="webchat-upload-pic" class="upload-pic" unselectable="on" />更改图片
+                        </span>
+                      </div>
+                    </div>
+                  </form>
+                </div>  
+              </div>
+            {% end %}
+          </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top: 30px;">
+      <button class="btn  btn-success" onfocus="blur()" type="submit">保存</button>
+    </div>
+  </div>
 </div>
 {% end %}

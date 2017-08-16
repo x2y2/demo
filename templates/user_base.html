@@ -110,17 +110,29 @@
           <tr>
             <td>
               <div style="color: gray;margin-bottom: 20px;">
-                <span >个人介绍</span><span class="glyphicon glyphicon-edit" style="float: right;cursor: pointer;">编辑</span>
+                <span >个人介绍</span>
+                <span id="personal-intr-edit" class="glyphicon glyphicon-edit" style="float: right;cursor: pointer;">编辑</span>
+              </div>
+              <div id="personal-intr" style="display: none;">
+                <textarea class="personal-textarea"></textarea>
+              </div>
+              <div id="personal-intr-control" style="margin-top: 10px;margin-bottom: 20px;display: none;">
+                <div class="personal-message">
+                  <span>保存</span>
+                </div>
+                <div id="personal-intr-cancle" style="height: 30px;line-height: 30px;color: gray;cursor: pointer;">
+                  <span style="margin-left: 10px;">取消</span>
+                </div>
               </div>
             </td>
           </tr>
           <tr>
             <td>
               <div style="margin-top:20px; margin-bottom: 20px;">
-                <a href="" onfocus="blur()" style="color: gray;">我关注的专题/文集</a>
+                <a href="#" onfocus="blur()" style="color: gray;">我关注的专题/文集</a>
               </div>
               <div style="margin-top: 20px; margin-bottom: 20px;">
-                <a href="" class="glyphicon glyphicon-heart-empty" onfocus="blur()" style="color: gray;"> 我喜欢的文章</a>
+                <a href="#" class="glyphicon glyphicon-heart-empty" onfocus="blur()" style="color: gray;"> 我喜欢的文章</a>
               </div>
             </td>
           </tr>

@@ -33,6 +33,7 @@ url += [(r'/users/[0-9a-z]{16}/followers',FollowersHandler)]
 url += [(r'/users/[0-9a-z]{16}/follower[a-z_]{0,}',FollowersHandler)]
 url += [(r'/setting/\w+',SettingHandler)]
 url += [(r'/setting/basic/\w+',SettingHandler)]
-url += [(r'/setting/accouont?\w+',SettingHandler)]
+url += [(r'/setting/profile/\w+',SettingHandler)]
+url += [(r'/setting/account?\w+',SettingHandler)]
 url += [(r'/contactus',ContactusHandler)]
 

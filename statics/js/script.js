@@ -99,6 +99,10 @@ $(function(){
   $('#upload-pic').change(function(){
     $('#upload-pic-form').submit();
   });
+  //微信二维码上传自动提交
+  $('#webchat-upload-pic').change(function(){
+    $('#webchat-pic-form').submit();
+  });
   /**返回到顶部**/
   $("#scrolltop").hide(); //首先将#scrolltop隐藏
   $(function() {
@@ -373,6 +377,51 @@ $(function(){
   $(".dropdown-menu").mouseout(function(){
     $(".dropdown-menu").hide();
   });
+  //个人简介
+  $("#personal-intr").hide();
+  $("#personal-intr-control").hide();
+  $("#personal-intr-edit").click(function(){
+    $("#personal-intr").show();
+    $("#personal-intr-control").show();
+  });
+  $('#personal-intr-cancle').click(function(){
+    $("#personal-intr").hide();
+    $("#personal-intr-control").hide();
+  });
+  //显示微信二维码删除按钮
+  $("#webchat_pic").mouseover(function(){
+    $("#webchat_pic_delete").show();
+  });
+  $("#webchat_pic").mouseout(function(){
+    $("#webchat_pic_delete").hide();
+  });
+  //删除微信二维码
+  $("#webchat_pic_delete").click(function(){
+    var login_user_id = $("#login_user_id").text();
+    var path = window.location.pathname
+    var url = path + '/webchat_delete'
+    $.ajax({
+      type: "post",
+      url: url,
+      cache: false,
+      data: {"url": url,"login_user_id": login_user_id},
+      success: function(data) {
+        window.location.href = path;
+      },
+      error: function(data){
+        alert(data['info']);
+      },
+    });
+  });
+
+  var radio = document.getElementsByName("optionsradio");
+  for (i = 0 ;i<radio.length; i++) {
+    if (radio[i].checked){
+      alert(radio[i].value);
+    }
+  }
+
+
 /**end**/
 });
 

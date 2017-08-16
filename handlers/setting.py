@@ -19,7 +19,7 @@ class SettingHandler(BaseHandler):
       login_user_id = None
       login_user = None
 
-    action = "_%s_action" % self.id
+    action = "_%s_action" % self.arg
     if hasattr(self,action):
       getattr(self,action)(login_user,login_user_id,login_user_pic)
 
@@ -31,10 +31,21 @@ class SettingHandler(BaseHandler):
                  login_user_pic=login_user_pic)
 
   def _profile_action(self,login_user,login_user_id,login_user_pic):
+    user_info = self.db.query('''SELECT webchat_code 
+                                  FROM user_info 
+                                  WHERE user_uid 
+                                  IN (SELECT uid 
+                                      FROM user 
+                                      WHERE username=%s)''',self.current_user)
+    if user_info:
+      webchat_pic = user_info[0]['webchat_code']
+    else:
+      webchat_pic = None
     self.render("profile.html",
                  login_user=login_user,
                  login_user_id=login_user_id,
-                 login_user_pic=login_user_pic)
+                 login_user_pic=login_user_pic,
+                 webchat_pic=webchat_pic)
   
   def _account_manage_action(self,login_user,login_user_id,login_user_pic):
     self.render("account_manage.html",
@@ -142,3 +153,27 @@ class SettingHandler(BaseHandler):
             self.db.execute("UPDATE user SET password=%s WHERE username=%s",new_password64,self.current_user)
             self.redirect("/setting/account_manage")
    
+  def _webchat_upload_action(self):
+    if self.request.files:
+      upload_path = "/home/wangpei/demo/statics/upload/webchat/"
+      file_metas = self.request.files['webchat-upload-pic']
+      for meta in file_metas:
+        filename = meta['filename']
+        str = ''.join([self.current_user,filename])
+        str_md5 = hashlib.md5(str).hexdigest()
+        img_name = str_md5[0:16]+'.jpg'
+        filepath = os.path.join(upload_path,img_name)
+        with open (filepath,'wb') as up:
+          up.write(meta['body'])
+        self.db.execute('''UPDATE user_info SET webchat_code=%s WHERE user_uid in (SELECT uid FROM user where username=%s)''',img_name,self.current_user)
+      self.redirect('/setting/profile')
+
+  def _webchat_delete_action(self):
+    login_user_id = self.get_argument('login_user_id',default="")
+    try:
+      self.db.execute('''UPDATE user_info SET webchat_code=%s WHERE user_uid=%s''','',login_user_id)
+      self.json('success','ok')
+    except Exception as e:
+      self.json('error',e)
+
+
