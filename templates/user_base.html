@@ -16,24 +16,58 @@
         </div>
         <!--显示作者名称-->
         <div class="title">
-          <a href="/users/{{author_id}}" style="color: black;" onfocus="blur()">{{author_name}}</a>
+          <a href="/users/{{author_id}}" style="text-decoration: none; color: black;" onfocus="blur()">{{author_name}}</a>
+          {% if gender == '1' %}
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-xingbienan"></use>
+            </svg>
+          {% elif gender == '0' %}
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-Female"></use>
+            </svg>
+          {% else %}
+            <div style="display: none;"></div>
+          {% end %} 
         </div>
         <div class="info">
           <ul class="list-inline">
             <li>
               <div class="meta-block">
-                <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()"><p>{{following_count}}</p>关注</a>
+                <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()">
+                  <p>{{following_count}}</p>关注
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-asmkticon0207"></use>
+                  </svg>
+                </a>
               </div>
             </li>
             <li>
               <div class="meta-block">
-                <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()"><p>{{count_article}}</p>文章</a>
+                <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()">
+                  <p>{{count_article}}</p>文章
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-asmkticon0207"></use>
+                  </svg>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="meta-block">
+                <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()">
+                  <p>{{follower_count}}</p>粉丝
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-asmkticon0207"></use>
+                  </svg>
+                </a>
               </div>
             </li>
             <li>
               <div class="meta-block" style="border-right-style: none;">
-                <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()"><p>{{follower_count}}</p>粉丝</a>
+                <a style="color: gray;" onfocus="blur()">
+                  <p>0</p>收获喜欢
+                </a>
               </div>
+            </li>
           </ul>
           <!--添加关注和发简讯-->
           {% if login_user != author_name %}
@@ -42,26 +76,46 @@
                 {% if follower == False %}
                     {% if login_user is None%}
                     <div>
-                      <a href="/login" class="add-follow btn glyphicon glyphicon-plus">关注
+                      <a href="/login" class="add-follow btn">
+                      <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-jia"></use>
+                      </svg>
+                      关注
                       </a>
                     </div>
                     {% else %}
                     <div id="follower">
-                      <a  class="add-follow btn glyphicon glyphicon-plus">关注
+                      <a  class="add-follow btn ">
+                      <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-jia"></use>
+                      </svg>
+                      关注
                       </a>
                     </div>
                     <div class="followed btn" id="followed" style="display: none;">
-                      <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+                      <a  style="color: #c8c8d0;">
+                      <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-ok"></use>
+                      </svg>
+                      已关注
                       </a>
                     </div>
                     {% end %}
                 {% else %}
                     <div class="followed btn" id="followed">
-                      <a class="glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+                      <a style="color: #c8c8d0;">
+                      <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-ok"></use>
+                      </svg>
+                      已关注
                       </a>
                     </div>
                     <div id="follower" style="display: none;">
-                      <a  class="add-follow btn glyphicon glyphicon-plus">关注
+                      <a  class="add-follow btn ">
+                      <svg class="icon" aria-hidden="true">
+                        <use xlink:href="#icon-jia"></use>
+                      </svg>
+                      关注
                       </a>
                     </div>
                     <!--
@@ -111,10 +165,26 @@
             <td>
               <div style="color: gray;margin-bottom: 20px;">
                 <span >个人介绍</span>
-                <span id="personal-intr-edit" class="glyphicon glyphicon-edit" style="float: right;cursor: pointer;">编辑</span>
+                <div id="personal-intr-edit" style="float: right;cursor: pointer;">
+                  {% if login_user == author_name %}
+                    <svg class="icon" aria-hidden="true">
+                      <use xlink:href="#icon-5"></use>
+                    </svg>
+                    <span>编辑</span>
+                  {% else %}
+                    <span></span>
+                  {% end %}
+                </div>
+              </div>
+              <div id="personal_profile" style="font-size: 14px;">
+                {% if personal_profile %}
+                <span>{%raw personal_profile %}</span>
+                {% else %}
+                <span></span>
+                {% end %}
               </div>
               <div id="personal-intr" style="display: none;">
-                <textarea class="personal-textarea"></textarea>
+                <textarea class="personal-textarea">{{ personal_profile }}</textarea>
               </div>
               <div id="personal-intr-control" style="margin-top: 10px;margin-bottom: 20px;display: none;">
                 <div class="personal-message">
@@ -124,16 +194,35 @@
                   <span style="margin-left: 10px;">取消</span>
                 </div>
               </div>
+              <div>
+                {% if webchat_code %}
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-weixin1"></use>
+                </svg>
+                {% else %}
+                <div style="display: none;"></div>
+                {% end %}
+              </div>
             </td>
           </tr>
           <tr>
             <td>
-              <div style="margin-top:20px; margin-bottom: 20px;">
-                <a href="#" onfocus="blur()" style="color: gray;">我关注的专题/文集</a>
-              </div>
-              <div style="margin-top: 20px; margin-bottom: 20px;">
-                <a href="#" class="glyphicon glyphicon-heart-empty" onfocus="blur()" style="color: gray;"> 我喜欢的文章</a>
-              </div>
+              <a href="#" onfocus="blur()" style="color: gray;">
+                <div style="margin-top:20px; margin-bottom: 20px;">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-zhuanti"></use>
+                  </svg>
+                  <span>我关注的专题/文集</span>
+                </div>
+              </a>
+              <a href="#" onfocus="blur()" style="color: gray;">
+                <div style="margin-top: 20px; margin-bottom: 20px;">
+                  <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-xihuan"></use>
+                  </svg>
+                  <span>我喜欢的文章</span>
+                </div>
+              </a>
             </td>
           </tr>
           <tr>
@@ -146,7 +235,11 @@
           <tr>
             <td>
               <div style="color: gray;margin-top: 20px; margin-bottom: 20px;">
-                <span>加入黑名单</span>
+              {% if login_user == author_name %}
+                <a></a>
+              {% else %}
+                <a href="#" style="color: gray;" onfocus="blur()">加入黑名单</a>
+              {% end %}
               </div>
             </td>
           </tr>

@@ -31,21 +31,28 @@ class SettingHandler(BaseHandler):
                  login_user_pic=login_user_pic)
 
   def _profile_action(self,login_user,login_user_id,login_user_pic):
-    user_info = self.db.query('''SELECT webchat_code 
+    user_info = self.db.query('''SELECT gender,webchat_code,personal_profile 
                                   FROM user_info 
                                   WHERE user_uid 
                                   IN (SELECT uid 
                                       FROM user 
                                       WHERE username=%s)''',self.current_user)
     if user_info:
+      gender = user_info[0]['gender']
       webchat_pic = user_info[0]['webchat_code']
+      personal_profile = user_info[0]['personal_profile']
     else:
+      gender = None
       webchat_pic = None
+      personal_profile = None
+
     self.render("profile.html",
                  login_user=login_user,
                  login_user_id=login_user_id,
                  login_user_pic=login_user_pic,
-                 webchat_pic=webchat_pic)
+                 gender =  gender,
+                 webchat_pic=webchat_pic,
+                 personal_profile=personal_profile)
   
   def _account_manage_action(self,login_user,login_user_id,login_user_pic):
     self.render("account_manage.html",
@@ -165,7 +172,18 @@ class SettingHandler(BaseHandler):
         filepath = os.path.join(upload_path,img_name)
         with open (filepath,'wb') as up:
           up.write(meta['body'])
-        self.db.execute('''UPDATE user_info SET webchat_code=%s WHERE user_uid in (SELECT uid FROM user where username=%s)''',img_name,self.current_user)
+        if self._check_id():
+          self.db.execute('''UPDATE user_info 
+                             SET webchat_code=%s 
+                             WHERE user_uid 
+                             IN (SELECT uid 
+                                  FROM user 
+                                  WHERE username=%s)''',img_name,self.current_user)
+        else:
+          self.db.execute('''INSERT INTO user_info (user_uid,gender,personal_profile,webchat_code) 
+                             VALUES ((SELECT uid 
+                                      FROM user 
+                                      WHERE username=%s),'','',%s)''',self.current_user,img_name)
       self.redirect('/setting/profile')
 
   def _webchat_delete_action(self):
@@ -175,5 +193,40 @@ class SettingHandler(BaseHandler):
       self.json('success','ok')
     except Exception as e:
       self.json('error',e)
+
+  def _personal_profile_action(self):
+    login_user_id = self.get_argument('login_user_id',default="")
+    gender_value = self.get_argument('gender',default="")
+    if gender_value == 'male':
+      gender = int(1)
+    elif gender_value == 'female':
+      gender = int(0)
+    else:
+      gender = int(2)
+    personal_profile = self.get_argument('personal_profile',default="")
+    try:
+      if self._check_id():
+        self.db.execute('''UPDATE user_info SET gender=%s,personal_profile=%s WHERE user_uid=%s''',gender,personal_profile,login_user_id)
+      else:
+        self.db.execute('''INSERT INTO user_info (user_uid,gender,personal_profile,webchat_code) 
+                           VALUES (%s,%s,%s,'')''',login_user_id,gender,personal_profile)
+      self.json('success','ok')
+    except Exception as e:
+      self.json('error',e)
+
+
+  def _check_id(self):
+    id = self.db.query('''SELECT id 
+                          FROM user_info 
+                          WHERE user_uid 
+                          IN (SELECT uid 
+                              FROM user 
+                              WHERE username=%s)''',self.current_user)[0]['id']
+    if id:
+      return True
+    else:
+      return False
+
+
 
 

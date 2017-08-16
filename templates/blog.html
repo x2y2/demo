@@ -25,20 +25,36 @@
           {% if login_user != b_infos[0]['username'] %}
               {% if followed == False %}
               <div id="blog-follower" style="margin-left: 100px; margin-top: -25px;">
-                <a  class="blog-add-follow btn glyphicon glyphicon-plus" style="color: white;">关注
+                <a  class="blog-add-follow btn" style="color: white;">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-jia"></use>
+                </svg>
+                关注
                 </a>
               </div>
-              <div id="blog-followed" style="display: none; margin-left: 100px; margin-top: -25px;">
-                <a class="blog-followed btn glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+              <div id="blog-followed" style="display: none; margin-left: 100px; margin-top: -25px;color: gray;">
+                <a class="blog-followed btn" style="color: #c8c8d0;">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-ok"></use>
+                </svg>
+                已关注
                 </a>
               </div>
               {% else %}
-              <div id="blog-followed" style="margin-left: 100px; margin-top: -25px;">
-                <a class="blog-followed btn glyphicon glyphicon-ok" style="color: #c8c8d0;">已关注
+              <div id="blog-followed" style="margin-left: 100px; margin-top: -25px;color: gray;">
+                <a class="blog-followed btn" style="color: #c8c8d0;">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-ok"></use>
+                </svg>
+                已关注
                 </a>
               </div>
               <div id="blog-follower" style="display: none; margin-left: 100px; margin-top: -25px;">
-                <a  class="blog-add-follow btn glyphicon glyphicon-plus" style="color: white;">关注
+                <a  class="blog-add-follow btn" style="color: white;">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-jia"></use>
+                </svg>
+                关注
                 </a>
               </div>
               {% end %}
@@ -47,7 +63,11 @@
           {% end %}
         {% else %}
             <div style="margin-left: 100px; margin-top: -25px;">
-              <a  href="/login" class="blog-add-follow btn glyphicon glyphicon-plus" style="color: white;" onfocus="blur()">关注
+              <a  href="/login" class="blog-add-follow btn" style="color: white;" onfocus="blur()">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-jia"></use>
+              </svg>
+              关注
               </a>
             </div>
         {% end %}
@@ -167,5 +187,45 @@
       </div>
     {% end %}
   </div>
+  <div class="side-tool">
+      <ul>
+        <li  data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="返回首页">
+          <a href="/" style="color: black;" onfocus="blur()">
+          <div class="function-button" style="padding-top: 16px;">
+            <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-shouye"></use>
+            </svg>
+          </div>
+          </a>
+        </li>
+        <li  data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="收藏文章">
+          <a href="#" style="color: black;" onfocus="blur()">
+          <div class="function-button" style="padding-top: 16px;">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shoucang"></use>
+            </svg>
+          </div>
+          </a>
+        </li>
+        <li  data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="分享文章">
+          <a href="#" style="color: black;" onfocus="blur()">
+          <div class="function-button" style="padding-top: 16px;">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-fenxiang"></use>
+            </svg>
+          </div>
+          </a>
+        </li>
+        <li  data-placement="left" data-toggle="tooltip" data-container="body" data-original-title="刷新">
+          <a href="" style="color: black;" onfocus="blur()">
+          <div class="function-button" style="padding-top: 16px;">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shuaxin"></use>
+            </svg>
+          </div>
+          </a>
+        </li>
+      </ul>
+    </div>
 </div>
 {% end %}

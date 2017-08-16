@@ -6,6 +6,7 @@ from user_main import UserBaseHandler
 import hashlib
 import urlparse
 import json
+import HTMLParser
 import ujson
 
 class ArticlesHandler(UserBaseHandler):
@@ -24,6 +25,15 @@ class ArticlesHandler(UserBaseHandler):
     follower_count = self.follower_count
     following_count = self.following_count
     follower = self.followed
+    if self.personal_info:
+      gender = self.personal_info[0]['gender']
+      personal_profile = self.personal_info[0]['personal_profile']
+      #html_parser = HTMLParser.HTMLParser()
+      #personal_profile = html_parser.unescape(personal_profile)
+      webchat_code = self.personal_info[0]['webchat_code']
+    else:
+      gender = personal_profile = webchat_code = None
+
     #根据URL选择执行方法
     url = self.get_argument("order_by",default="")
     action = "_%s" % url
@@ -31,16 +41,19 @@ class ArticlesHandler(UserBaseHandler):
       getattr(self,action)(count_article,
                            author_name,author_pic,author_id,
                            login_user_pic,login_user_id,login_user,
-                           follower,follower_count,following_count)
+                           follower,follower_count,following_count,
+                           gender,personal_profile,webchat_code)
     else:
       self.user_info(count_article,author_name,author_pic,author_id,
                      login_user_pic,login_user_id,login_user,
-                     follower,follower_count,following_count)
+                     follower,follower_count,following_count,
+                     gender,personal_profile,webchat_code)
 
   #用户动态信息
   def user_info(self,count_article,author_name,author_pic,author_id,
                 login_user_pic,login_user_id,login_user,
-                follower,follower_count,following_count):  
+                follower,follower_count,following_count,
+                gender,personal_profile,webchat_code):  
     self.render("user_info.html",
                  author_name=author_name,
                  login_user=self.current_user,
@@ -51,11 +64,15 @@ class ArticlesHandler(UserBaseHandler):
                  count_article=count_article,
                  follower=follower,
                  follower_count=follower_count,
-                 following_count=following_count)
+                 following_count=following_count,
+                 gender=gender,
+                 personal_profile=personal_profile,
+                 webchat_code=webchat_code)
   #按发布时间展示文章
   def _created_at(self,count_article,author_name,author_pic,author_id,
                   login_user_pic,login_user_id,login_user,
-                  follower,follower_count,following_count):
+                  follower,follower_count,following_count,
+                  gender,personal_profile,webchat_code):
     m_infos = self.db.query('''SELECT u.uid,u.pic,u.username,a.aid,a.title,a.content,a.created_at,a.comment_count,a.read_count 
                                FROM articles a,user u 
                                WHERE a.user_uid=u.uid 
@@ -75,11 +92,15 @@ class ArticlesHandler(UserBaseHandler):
                  login_user=login_user,
                  follower=follower,
                  follower_count=follower_count,
-                 following_count=following_count)
+                 following_count=following_count,
+                 gender=gender,
+                 personal_profile=personal_profile,
+                 webchat_code=webchat_code)
   #按最新评论显示文章
   def _commented_at(self,count_article,author_name,author_pic,author_id,
                     login_user_pic,login_user_id,login_user,
-                    follower,follower_count,following_count):
+                    follower,follower_count,following_count,
+                    gender,personal_profile,webchat_code):
     comment_infos = self.db.query('''SELECT a.aid,a.user_uid uid,u.username,u.pic,a.title,a.created_at,a.comment_count,a.read_count 
                                      FROM comments c,articles a,user u
                                      WHERE c.article_aid=a.aid 
@@ -100,12 +121,16 @@ class ArticlesHandler(UserBaseHandler):
                  comment_infos=comment_infos,
                  follower=follower,
                  follower_count=follower_count,
-                 following_count=following_count)
+                 following_count=following_count,
+                 gender=gender,
+                 personal_profile=personal_profile,
+                 webchat_code=webchat_code)
 
   #显示热门文章
   def _top(self,count_article,author_name,author_pic,author_id,
            login_user_pic,login_user_id,login_user,
-           follower,follower_count,following_count):
+           follower,follower_count,following_count,
+           gender,personal_profile,webchat_code):
     hot_infos = self.db.query('''SELECT a.aid,a.user_uid uid,u.username,u.pic,a.title,a.created_at,a.comment_count,a.read_count 
                                  FROM comments c,articles a,user u
                                  WHERE c.article_aid=a.aid 
@@ -125,7 +150,31 @@ class ArticlesHandler(UserBaseHandler):
                hot_infos=hot_infos,
                follower=follower,
                follower_count=follower_count,
-               following_count=following_count)
+               following_count=following_count,
+               gender=gender,
+               personal_profile=personal_profile,
+               webchat_code=webchat_code)
+
+  def post(self,*args,**kwargs):
+    action = self.arg
+    action = "_%s_action" % action
+    if hasattr(self,action):
+      getattr(self,action)()
+    else:
+      self.json("fail","no action")
+
+  def _personal_profile_save_action(self):
+    personal_profile = self.get_argument('personal_profile',default='')
+    try:
+      self.db.execute('''UPDATE user_info 
+                        SET personal_profile=%s 
+                        WHERE user_uid 
+                        IN (SELECT uid 
+                            FROM user 
+                            WHERE username=%s)''',personal_profile,self.current_user)
+      self.json('success','ok')
+    except Exception as e:
+      self.json('error',e)
 
 #关注用户
 class FollowingHandler(UserBaseHandler):
@@ -145,6 +194,12 @@ class FollowingHandler(UserBaseHandler):
     following_count = self.following_count
     follower = self.followed
     common_id = self.common_id
+    if self.personal_info:
+      gender = self.personal_info[0]['gender']
+      personal_profile = self.personal_info[0]['personal_profile']
+      webchat_code = self.personal_info[0]['webchat_code']
+    else:
+      gender = personal_profile = webchat_code = None
     #根据URI选择执行方法
     url = self.arg
     action = "_%s" % url
@@ -152,13 +207,15 @@ class FollowingHandler(UserBaseHandler):
       getattr(self,action)(count_article,
                            author_name,author_pic,author_id,
                            login_user_pic,login_user_id,login_user,
-                           follower,following_count,follower_count,common_id)
+                           follower,following_count,follower_count,common_id,
+                           gender,personal_profile,webchat_code)
     else:
       pass
 
   def _following(self,count_article,author_name,author_pic,author_id,
                  login_user_pic,login_user_id,login_user,
-                 follower,following_count,follower_count,common_id):
+                 follower,following_count,follower_count,common_id,
+                 gender,personal_profile,webchat_code):
     #获取作者关注的用户信息
     f_infos = self.db.query('''SELECT r.from_user_id,u.uid,u.username,u.pic 
                                FROM relation r,user u  
@@ -223,7 +280,10 @@ class FollowingHandler(UserBaseHandler):
                  following_count=following_count,
                  dic_following = dic_following,
                  dic_follower = dic_follower,
-                 dic_articles=dic_articles)
+                 dic_articles=dic_articles,
+                 gender=gender,
+                 personal_profile=personal_profile,
+                 webchat_code=webchat_code)
 
 
   def post(self):
@@ -306,6 +366,12 @@ class FollowersHandler(UserBaseHandler):
     following_count = self.following_count
     follower = self.followed
     common_id = self.common_id
+    if self.personal_info:
+      gender = self.personal_info[0]['gender']
+      personal_profile = self.personal_info[0]['personal_profile']
+      webchat_code = self.personal_info[0]['webchat_code']
+    else:
+      gender = personal_profile = webchat_code = None
     #根据URI最后的关键字选择执行方法
     string = self.arg
     action = "_%s" % string
@@ -313,13 +379,15 @@ class FollowersHandler(UserBaseHandler):
       getattr(self,action)(count_article,
                            author_name,author_pic,author_id,
                            login_user_pic,login_user_id,login_user,
-                           follower,following_count,follower_count,common_id)
+                           follower,following_count,follower_count,common_id,
+                           gender,personal_profile,webchat_code)
     else:
       pass
   
   def _followers(self,count_article,author_name,author_pic,author_id,
                  login_user_pic,login_user_id,login_user,
-                 follower,following_count,follower_count,common_id):
+                 follower,following_count,follower_count,common_id,
+                 gender,personal_profile,webchat_code):
     #获取作者的关注用户信息
     f_infos = self.db.query('''SELECT r.to_user_id,u.uid,u.username,u.pic 
                                FROM relation r,user u  
@@ -382,7 +450,10 @@ class FollowersHandler(UserBaseHandler):
                  follower_count=follower_count,
                  dic_follower=dic_follower,
                  dic_follower_f=dic_follower_f,
-                 dic_follower_a=dic_follower_a)
+                 dic_follower_a=dic_follower_a,
+                 gender=gender,
+                 personal_profile=personal_profile,
+                 webchat_code=webchat_code)
 
   def post(self):
     url = self.get_argument("url",default="")

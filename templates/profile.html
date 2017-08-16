@@ -13,9 +13,19 @@
           </td>
           <td>
             <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
-              <input type="radio" name="optionsradio" value="male">男</input>
-              <input type="radio" name="optionsradio" value="female" style="margin-left: 20px;">女</input>
-              <input type="radio" name="optionsradio" checked="true" value="secret" style="margin-left: 20px;">保密</input>
+              {% if gender == '1' %}
+                <input type="radio" name="optionsradio" value="male" checked="true">男</input>
+                <input type="radio" name="optionsradio" value="female" style="margin-left: 20px;">女</input>
+                <input type="radio" name="optionsradio" value="secret"  style="margin-left: 20px;">保密</input>
+              {% elif gender == '0' %}
+                <input type="radio" name="optionsradio" value="male">男</input>
+                <input type="radio" name="optionsradio" value="female" checked="true" style="margin-left: 20px;">女</input>
+                <input type="radio" name="optionsradio" value="secret" style="margin-left: 20px;">保密</input>
+              {% else %}
+                <input type="radio" name="optionsradio" value="male">男</input>
+                <input type="radio" name="optionsradio" value="female" style="margin-left: 20px;">女</input>
+                <input type="radio" name="optionsradio" value="secret" checked="true" style="margin-left: 20px;">保密</input>
+              {% end %}
             </div>
           </td>
         </tr>
@@ -27,7 +37,11 @@
           </td>
           <td>
             <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
-              <textarea class="textarea" style="margin-bottom: 20px;"></textarea>
+              {% if personal_profile %}
+                <textarea class="textarea" style="margin-bottom: 20px;">{{personal_profile}}</textarea>
+              {% else %}
+                <textarea class="textarea" style="margin-bottom: 20px;"></textarea>
+              {% end %}
             </div>
           </td>
         </tr>
@@ -38,50 +52,46 @@
             </div>
           </td>
           <td id="webchat_pic" style="height: 80px;line-height: 80px;">
-          <div>
-            <div style="float:right;font-size: 14px;color: gray;">
-              <span>上传后在个人主页显示图标</span> 
-            </div>
-            {% if not webchat_pic %}
-              <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
+            <div>
+              <div style="float:right;font-size: 14px;color: gray;">
+                <span>上传后在个人主页显示图标</span> 
+              </div>
+              {% if not webchat_pic %}
+              <div style="color: gray;margin-top: 20px;margin-bottom: 20px;padding-top: 25px;padding-bottom: 25px;">
                 <form role="form" name="webchat-upload-pic" id="webchat-pic-form" action="/setting/profile/webchat_upload" enctype="multipart/form-data" method="post">
-                <div style="padding-top: 25px;">
                   <div class="webchat-pic">
                     <span style="color: green;">
                       <input type="file" name="webchat-upload-pic" id="webchat-upload-pic" class="upload-pic" unselectable="on" />更改图片
                     </span>
                   </div>
-                </div>
                 </form>
               </div>
               <img style="display: none;">
-            {% else %}
+              {% else %}
               <div>
                 <div style="float: left;">
-                  <img src="{{static_url("upload/webchat/" + webchat_pic)}}" class="img" style="width: 80px;height: 80px;vertical-align: middle;">
+                  <img src="{{static_url("upload/webchat/" + webchat_pic)}}" class="img" style="width: 80px;height: 80px;">
                 </div>
                 <div id="webchat_pic_delete" style="float:right; cursor: pointer;margin-right: 65px;display: none;">
-                    <span style="color: gray">删除</span>
+                  <span style="color: gray">删除</span>
                 </div>
-                <div style="color: gray;margin-top: 20px;margin-bottom: 20px;margin-left: 100px;">
+                <div style="color: gray;margin-top: 20px;margin-bottom: 20px;margin-left: 100px;width: 100px;height: 90px;padding-top: 25px;padding-bottom: 25px;">
                   <form role="form" name="webchat-upload-pic" id="webchat-pic-form" action="/setting/profile/webchat_upload" enctype="multipart/form-data" method="post">
-                    <div style="padding-top: 25px;">
-                      <div class="webchat-pic">
-                        <span>
-                          <input type="file" name="webchat-upload-pic" id="webchat-upload-pic" class="upload-pic" unselectable="on" />更改图片
-                        </span>
-                      </div>
+                    <div class="webchat-pic">
+                      <span>
+                        <input type="file" name="webchat-upload-pic" id="webchat-upload-pic" class="upload-pic" unselectable="on" />更改图片
+                      </span>
                     </div>
                   </form>
-                </div>  
+                </div> 
               </div>
-            {% end %}
-          </div>
+            {% end %} 
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
-    <div style="margin-top: 30px;">
+    <div id="personal_profile_save" style="margin-top: 30px;">
       <button class="btn  btn-success" onfocus="blur()" type="submit">保存</button>
     </div>
   </div>

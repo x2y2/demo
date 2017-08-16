@@ -50,9 +50,9 @@ class BlogContentHandler(UserBaseHandler):
                             ''',bid
                             )
     c_infos = b_infos[0]['content']
-    c_infos_html = markdown2.markdown(c_infos)
-    html_parser = HTMLParser.HTMLParser()
-    html = html_parser.unescape(c_infos_html)
+    html = markdown2.markdown(c_infos)
+    #html_parser = HTMLParser.HTMLParser()
+    #html = html_parser.unescape(c_infos_html)
     #评论信息
     comment_infos = self.db.query('''SELECT u.uid,u.username,u.pic,c.comment_time,c.comment_content,c.comment_floor 
                                      FROM comments c,user u 

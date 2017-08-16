@@ -381,12 +381,14 @@ $(function(){
   $("#personal-intr").hide();
   $("#personal-intr-control").hide();
   $("#personal-intr-edit").click(function(){
+    $("#personal_profile").hide();
     $("#personal-intr").show();
     $("#personal-intr-control").show();
   });
   $('#personal-intr-cancle').click(function(){
     $("#personal-intr").hide();
     $("#personal-intr-control").hide();
+    $("#personal_profile").show();
   });
   //显示微信二维码删除按钮
   $("#webchat_pic").mouseover(function(){
@@ -398,8 +400,8 @@ $(function(){
   //删除微信二维码
   $("#webchat_pic_delete").click(function(){
     var login_user_id = $("#login_user_id").text();
-    var path = window.location.pathname
-    var url = path + '/webchat_delete'
+    var path = window.location.pathname;
+    var url = path + '/webchat_delete';
     $.ajax({
       type: "post",
       url: url,
@@ -413,14 +415,55 @@ $(function(){
       },
     });
   });
-
-  var radio = document.getElementsByName("optionsradio");
-  for (i = 0 ;i<radio.length; i++) {
-    if (radio[i].checked){
-      alert(radio[i].value);
+  //个人资料提交
+  $("#personal_profile_save").click(function(){
+    var radio = document.getElementsByName("optionsradio");
+    for (i = 0 ;i<radio.length; i++) {
+      if (radio[i].checked){
+        gender = radio[i].value;
+      }
     }
-  }
-
+    var personal_profile = $(".textarea").val();
+    var login_user_id = $("#login_user_id").text();
+    var path = window.location.pathname;
+    var url = path + '/personal_profile';
+    $.ajax({
+    type: "post",
+    url: url,
+    cache: false,
+    data: {"url": url,
+           "login_user_id": login_user_id,
+           "personal_profile": personal_profile,
+           "gender": gender
+          },
+    success: function(data) {
+      //alert(data['info']);
+      window.location.href = path;
+    },
+    error: function(data){
+      alert(data['info']);
+    },
+    });
+  });
+  
+  $(".personal-message").click(function(){
+    var personal_profile = $(".personal-textarea").val().replace(/\n/g,"<br/>").replace(/\s/g,"&nbsp;");
+    var path = window.location.pathname;
+    var url = path + '/personal_profile_save';
+    $.ajax({
+      type: "post",
+      url: url,
+      cache: false,
+      data: {"url": url,"personal_profile": personal_profile},
+      success: function(data) {
+      //alert(data['info']);
+      window.location.href = path;
+      },
+      error: function(data){
+        alert(data['info']);
+      },
+    });
+  });
 
 /**end**/
 });

@@ -88,3 +88,11 @@ class UserBaseHandler(BaseHandler):
       for c_follower_id in common_follower_id:
         common_id.append(c_follower_id['to_user_id'])
     return common_id
+
+  @property
+  def personal_info(self):
+    personal_info = self.db.query('''SELECT gender,personal_profile,webchat_code FROM user_info WHERE user_uid=%s''',self.id)
+    if personal_info:
+      return personal_info
+    else:
+      return False
