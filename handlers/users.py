@@ -28,8 +28,6 @@ class ArticlesHandler(UserBaseHandler):
     if self.personal_info:
       gender = self.personal_info[0]['gender']
       personal_profile = self.personal_info[0]['personal_profile']
-      #html_parser = HTMLParser.HTMLParser()
-      #personal_profile = html_parser.unescape(personal_profile)
       webchat_code = self.personal_info[0]['webchat_code']
     else:
       gender = personal_profile = webchat_code = None

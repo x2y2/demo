@@ -56,7 +56,7 @@
               <div style="float:right;font-size: 14px;color: gray;">
                 <span>上传后在个人主页显示图标</span> 
               </div>
-              {% if not webchat_pic %}
+              {% if not webchat_code %}
               <div style="color: gray;margin-top: 20px;margin-bottom: 20px;padding-top: 25px;padding-bottom: 25px;">
                 <form role="form" name="webchat-upload-pic" id="webchat-pic-form" action="/setting/profile/webchat_upload" enctype="multipart/form-data" method="post">
                   <div class="webchat-pic">
@@ -70,7 +70,7 @@
               {% else %}
               <div>
                 <div style="float: left;">
-                  <img src="{{static_url("upload/webchat/" + webchat_pic)}}" class="img" style="width: 80px;height: 80px;">
+                  <img src="{{static_url("upload/webchat/" + webchat_code)}}" class="img" style="width: 80px;height: 80px;">
                 </div>
                 <div id="webchat_pic_delete" style="float:right; cursor: pointer;margin-right: 65px;display: none;">
                   <span style="color: gray">删除</span>

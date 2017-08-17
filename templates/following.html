@@ -42,12 +42,12 @@
               <!--未登录的用户跳转到登录界面-->
               {% if login_user is None%}
                 <div>
-                  <a href="/login" style="text-decoration: none;" class="add-follow btn">
+                  <span href="/login" style="text-decoration: none;" class="add-follow btn">
                   <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-jia"></use>
                   </svg>
                   关注
-                  </a>
+                  </span>
                 </div>
               {% else %}
                 <!--不关注自己-->
@@ -55,20 +55,18 @@
                   <div></div>
                 {%else%}
                   <div id="following-follower">
-                    <a  class="add-follow btn" >
+                    <span class="add-follow btn" style="color: white;">
                     <svg class="icon" aria-hidden="true">
                       <use xlink:href="#icon-jia"></use>
                     </svg>
                     关注
-                    </a>
+                    </span>
                   </div>
                   <div class="followed btn" id="following-followed" style="display: none;">
-                    <a  style="color: #c8c8d0;">
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-ok"></use>
-                    </svg>
+                    <span style="color: #c8c8d0;">
+                    <i class="icon iconfont icon-ok"></i>
                     已关注
-                    </a>
+                    </span>
                   </div>
                   <!--<div class="followed btn" id="following-cancel-follow" style="display: none;">
                     <a  class="glyphicon glyphicon-remove" style="color: #c8c8d0;">取消关注
@@ -79,20 +77,18 @@
           {% else %}
               <!--共同的关注用户显示已关注-->
               <div class="followed btn" id="following-followed">
-                <a style="color: #c8c8d0;">
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-ok"></use>
-                </svg>
+                <span style="color: #c8c8d0;">
+                <i class="icon iconfont icon-ok"></i>
                 已关注
-                </a>
+                </span>
               </div>
               <div id="following-follower" style="display: none;">
-                <a  class="add-follow btn" style="color: white;">
+                <span class="add-follow btn">
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icon-jia"></use>
                 </svg>
                 关注
-                </a>
+                </span>
               </div>
           {% end %} 
       </div>

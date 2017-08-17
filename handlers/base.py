@@ -42,3 +42,16 @@ class BaseHandler(tornado.web.RequestHandler):
     path = ret.path
     arg = path.split('/')[-1]
     return arg
+
+  @property
+  def personal_info(self):
+    personal_info = self.db.query('''SELECT gender,webchat_code,personal_profile 
+                                  FROM user_info 
+                                  WHERE user_uid 
+                                  IN (SELECT uid 
+                                      FROM user 
+                                      WHERE username=%s)''',self.current_user)
+    if personal_info:
+      return personal_info
+    else:
+      return False

@@ -69,69 +69,59 @@
               </div>
             </li>
           </ul>
-          <!--添加关注和发简讯-->
-          {% if login_user != author_name %}
-            <div style="float: right; margin-top: -70px;">
-              <div>
-                {% if follower == False %}
-                    {% if login_user is None%}
-                    <div>
-                      <a href="/login" class="add-follow btn">
-                      <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-jia"></use>
-                      </svg>
-                      关注
-                      </a>
-                    </div>
-                    {% else %}
-                    <div id="follower">
-                      <a  class="add-follow btn ">
-                      <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-jia"></use>
-                      </svg>
-                      关注
-                      </a>
-                    </div>
-                    <div class="followed btn" id="followed" style="display: none;">
-                      <a  style="color: #c8c8d0;">
-                      <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-ok"></use>
-                      </svg>
-                      已关注
-                      </a>
-                    </div>
-                    {% end %}
-                {% else %}
-                    <div class="followed btn" id="followed">
-                      <a style="color: #c8c8d0;">
-                      <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-ok"></use>
-                      </svg>
-                      已关注
-                      </a>
-                    </div>
-                    <div id="follower" style="display: none;">
-                      <a  class="add-follow btn ">
-                      <svg class="icon" aria-hidden="true">
-                        <use xlink:href="#icon-jia"></use>
-                      </svg>
-                      关注
-                      </a>
-                    </div>
-                    <!--
-                    <div class="followed btn" id="cancel-follow" style="display: none;">
-                      <a  class="glyphicon glyphicon-remove" style="text-decoration: none;color: #c8c8d0;">取消关注
-                      </a>
-                    </div>
-                    -->
-                {% end %}
-              </div>
-              <div class="send-message btn">
-                <a id="send-message" style="color: #42c02c;">发简信</a>
-              </div>
-            </div>
-          {% end %}
         </div>
+      </div>
+      <!--添加关注和发简讯-->
+      <div style="float: right; margin-top: -70px;">
+        {% if login_user is None%}
+        <div>
+          <span href="/login" class="add-follow btn">
+          <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-jia"></use>
+          </svg>
+          关注
+          </span>
+        </div>
+        {% else %}
+          {% if login_user != author_name %}
+            {% if follower == False %}
+              <div id="follower">
+                <span class="add-follow btn" style="color: white;">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-jia"></use>
+                </svg>
+                关注
+                </span>
+              </div>
+              <div id="followed" style="display: none;">
+                <span class="followed btn" style="color: #c8c8d0;">
+                <i class="icon iconfont icon-ok"></i>
+                已关注
+                </span>
+              </div>
+            {% else %}  
+              <div id="followed">
+                <span class="followed btn" style="color: #c8c8d0;">
+                <i class="icon iconfont icon-ok"></i>
+                已关注
+                </span>
+              </div>
+              <div id="follower" style="display: none;">
+                <span  class="add-follow btn">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-jia"></use>
+                </svg>
+                关注
+                </span>
+              </div>
+            {% end %} 
+            <div class="send-message btn">
+              <a id="send-message" style="color: #42c02c;">发简信</a>
+            </div>
+          {% else %}
+             <div></div>
+          {% end %}
+        {% end %}
       </div>
       <div class="users-body">
         <ul id="menu-list" class="trigger-menu list-inline">
@@ -196,9 +186,13 @@
               </div>
               <div>
                 {% if webchat_code %}
-                <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-weixin1"></use>
-                </svg>
+                <div style="margin-top: 10px;cursor: pointer;width: 40px;" id="webchat-pic" data-placement="bottom" data-toggle="popover" data-html="true" data-content="
+                  <div>
+                    <img src='{{static_url('upload/webchat/' + webchat_code)}}' style='width: 150px;height: 180px;'/>
+                  </div>
+                  " data-original-title="" title="">
+                  <i class="weixin-icon iconfont icon-weixin1"></i>
+                </div>
                 {% else %}
                 <div style="display: none;"></div>
                 {% end %}

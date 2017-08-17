@@ -31,27 +31,18 @@ class SettingHandler(BaseHandler):
                  login_user_pic=login_user_pic)
 
   def _profile_action(self,login_user,login_user_id,login_user_pic):
-    user_info = self.db.query('''SELECT gender,webchat_code,personal_profile 
-                                  FROM user_info 
-                                  WHERE user_uid 
-                                  IN (SELECT uid 
-                                      FROM user 
-                                      WHERE username=%s)''',self.current_user)
-    if user_info:
-      gender = user_info[0]['gender']
-      webchat_pic = user_info[0]['webchat_code']
-      personal_profile = user_info[0]['personal_profile']
+    if self.personal_info:
+      gender = self.personal_info[0]['gender']
+      webchat_code = self.personal_info[0]['webchat_code']
+      personal_profile = self.personal_info[0]['personal_profile']
     else:
-      gender = None
-      webchat_pic = None
-      personal_profile = None
-
+      gender = webchat_code = personal_profile =None
     self.render("profile.html",
                  login_user=login_user,
                  login_user_id=login_user_id,
                  login_user_pic=login_user_pic,
                  gender =  gender,
-                 webchat_pic=webchat_pic,
+                 webchat_code=webchat_code,
                  personal_profile=personal_profile)
   
   def _account_manage_action(self,login_user,login_user_id,login_user_pic):
@@ -184,7 +175,7 @@ class SettingHandler(BaseHandler):
                              VALUES ((SELECT uid 
                                       FROM user 
                                       WHERE username=%s),'','',%s)''',self.current_user,img_name)
-      self.redirect('/setting/profile')
+      self.redirect('/setting/profile#')
 
   def _webchat_delete_action(self):
     login_user_id = self.get_argument('login_user_id',default="")

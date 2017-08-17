@@ -4,6 +4,7 @@
   <div class="row" style="padding-left: 210px;padding-right: 210px; padding-top: 80px;width: 100%;">
     <h4 id="blog_content_id" style="display: none;">{{b_infos[0]['aid']}}</h4>
     <p class="blog_title">{{b_infos[0]['title']}}</p>
+    <!--作者信息-->
     <div class="author">
       <div class="blog-avatar">
         {% if b_infos[0]['pic'] is None %}
@@ -72,40 +73,28 @@
             </div>
         {% end %}
       </div>
-      
       <div class="blog-info" style="margin-top: 10px;">
         <ul class="list-inline">
-          <li>
-            <div class="blog-meta-block">
-              <a  style="color: gray;">{{b_infos[0]['created_at']}}</a>
-            </div>
-          </li>
-          <li>
-            <div class="blog-meta-block">
-              <a  style="color: gray;">阅读 {{b_infos[0]['read_count']}}</a>
-            </div>
-          </li>
-          <li>
-            <div class="blog-meta-block">
-              <a  style="color: gray;">评论 {{b_infos[0]['comment_count']}}</a>
-            </div>
-          </li>
-          </ul>
-          {% if login_user == b_infos[0]['username']%}
-          <a href="/blog/edit/info?id={{b_infos[0]['aid']}}" style="color: gray;" onfocus="blur()">
-            <div class="blog-edit">
-              <span>编辑文章</span>
-            </div>
-          </a>
-          {% end%}
+          <li><span style="color: gray;">{{b_infos[0]['created_at']}}</span></li>
+          <li><span style="color: gray;">阅读 {{b_infos[0]['read_count']}}</span></li>
+          <li><span style="color: gray;">评论 {{b_infos[0]['comment_count']}}</span></li>
+          <li><span style="color: gray;">喜欢 0</span></li>
+        </ul>
+        {% if login_user == b_infos[0]['username']%}
+        <a href="/blog/edit/info?id={{b_infos[0]['aid']}}" style="color: gray;" onfocus="blur()">
+          <div class="blog-edit">
+            <span>编辑文章</span>
+          </div>
+        </a>
+        {% end%}
       </div>
     </div>
+    <!--正文-->
     <div style="font-size: 18px;margin-bottom: 20px;">
      {% raw c_infos_html %}
     </div>
-    
-    <!--评论框 -->
-    <div>
+    <!--评论-->
+    <div style="margin-bottom: 20px;">
       {% if login_user is not None %}
         <form role="form"　name="comment-form" action="/blog/{{b_infos[0]['aid']}}/comment" method="POST">
           <input name="article_aid" style="display: none;" value="{{b_infos[0]['aid']}}" />
@@ -125,8 +114,8 @@
             {% end %}
             </div>
           </div>
-          <div id="under-comment" style="float: right;margin-top: 10px;">
-            <a class="btn" id="cancel-comment" style="font-size: 16px;text-decoration: none;color: gray;">取消</a>
+          <div id="under-comment" style="float: right;margin-top: 10px;display: none;">
+            <a id="cancel-comment" style="font-size: 16px;color: gray;cursor: pointer;">取消</a>
             <input class="btn btn-success" type="submit" value="发送"/>
           </div>
         </form>
@@ -148,44 +137,56 @@
       {% end %}
     </div>
     <!--评论展示-->
-    {% if b_infos[0]['comment_count'] != 0 %}
-    <div style="margin-top: 110px;">
-      <div>
-        <span style="font-size: 18px;font-weight: bold;">{{b_infos[0]['comment_count']}}条评论</span>
-        <div style="float: right;color: gray;">
-          <span>按时间正序</span>
-          <span>按时间倒序</span>
+    <div>
+      {% if b_infos[0]['comment_count'] != 0 %}
+      <div style="margin-top: 110px;">
+        <div>
+          <span style="font-size: 18px;font-weight: bold;">{{b_infos[0]['comment_count']}}条评论</span>
+          <div style="float: right;color: gray;">
+            <span>按时间正序</span>
+            <span>按时间倒序</span>
+          </div>
         </div>
       </div>
+      {% end %}
+      {% for comment_info in comment_infos %}
+        <div class="comment">
+          <div class="blog-avatar" style="margin-top: 20px;">
+            {% if comment_info['pic'] is None %}
+             <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;"></a>
+            {% else %}
+            <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("upload/img/" + comment_info['pic'])}}" class="img-circle" style="width: 30px;height: 30px;"></a>
+            {% end %}
+          </div>
+          <div style="margin-top: 20px;">
+            <span>
+              <a href="/users/{{comment_info['uid']}}" style="text-decoration: none;color: black;">{{comment_info['username']}}</a>
+            </span>
+            <p>
+              <span style="color: gray;">{{comment_info['comment_floor']}}楼  </span>
+              <span style="color: gray;">{{comment_info['comment_time']}}</span>
+            </p>
+            <div style="font-size: 16px;">
+              {{comment_info['comment_content']}}
+            </div>
+            <div style="margin-top: 10px;color: gray;font-size: 14px;">
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-zan"></use>
+                </svg>
+                赞
+              </span>
+              <span>
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-huifu"></use>
+                </svg>
+                回复
+              </span>
+            </div>
+          </div>
+        </div>
+      {% end %}
     </div>
-    {% end %}
-    {% for comment_info in comment_infos %}
-      <div class="comment">
-        <div class="blog-avatar" style="margin-top: 20px;">
-          {% if comment_info['pic'] is None %}
-           <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;"></a>
-          {% else %}
-          <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("upload/img/" + comment_info['pic'])}}" class="img-circle" style="width: 30px;height: 30px;"></a>
-          {% end %}
-        </div>
-        <div style="margin-top: 20px;">
-          <span>
-            <a href="/users/{{comment_info['uid']}}" style="text-decoration: none;color: black;">{{comment_info['username']}}</a>
-          </span>
-          <p>
-            <span style="color: gray;">{{comment_info['comment_floor']}}楼  </span>
-            <span style="color: gray;">{{comment_info['comment_time']}}</span>
-          </p>
-          <div style="font-size: 16px;">
-            {{comment_info['comment_content']}}
-          </div>
-          <div style="margin-top: 10px;color: gray;font-size: 14px;">
-            <span class="glyphicon glyphicon-thumbs-up">赞</span>
-            <span class="glyphicon glyphicon-comment">回复</span>
-          </div>
-        </div>
-      </div>
-    {% end %}
   </div>
   <div class="side-tool">
       <ul>
