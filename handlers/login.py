@@ -4,21 +4,35 @@
 import tornado.escape
 import tornado.web
 from base import BaseHandler
+from wtforms.fields.core import UnboundField
+from forms.form import LoginForm
 import base64
 import re
 
     
-class LoginHandler(BaseHandler):
+class LoginHandler(BaseHandler,LoginForm):
+  '''
+  def __getattribute__(self,item):
+    ret = object.__getattribute__(self,item)
+    if isinstance(ret,UnboundField):
+      obj = object.__getattribute__(self,'form')
+      return getattr(obj,item).data
+    return ret
+  '''
   def get(self):
     self.render("login.html")
 
+
   def post(self):
-    email = ''
-    username = ''
-    account = self.get_body_argument('account')
-    password = self.get_body_argument("password")
+    #self.form = LoginForm(self)
+    #account = self.account
+    #password = self.password
+    form = LoginForm(self.request.arguments)
+    account = form.data['account']
+    password = form.data['password']
     password = base64.b64encode(password)
     cbox_remember = self.get_body_argument("cbox_remember",default="on")
+    
     if '@' in account:
       email = account
       if not self._checkemail_action(email):
@@ -55,7 +69,7 @@ class LoginHandler(BaseHandler):
             self.session['username'] = username
             self.session.save()
           self.redirect('/')
-
+     
   def _checkemail_action(self,email):
     id = self.db.query("SELECT id FROM user WHERE email=%s",email)
     if len(id) == 0:

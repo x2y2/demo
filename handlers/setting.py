@@ -2,6 +2,7 @@
 #coding=utf-8
 
 from base import BaseHandler
+from forms.form import BasicsettingForm
 import os
 import hashlib
 import base64
@@ -52,6 +53,7 @@ class SettingHandler(BaseHandler):
                  login_user_pic=login_user_pic)
 
   def post(self,*args,**kwargs):
+    self.form = BasicsettingForm(self.request.arguments)
     action = self.arg
     action = "_%s_action" % action
     if hasattr(self,action):
@@ -75,14 +77,16 @@ class SettingHandler(BaseHandler):
       self.redirect('/setting/basic')
 
   def _info_action(self):
-    username = self.get_body_argument('setting-nickname',default="")
-    email = self.get_body_argument('setting-email',default="")
+    #username = self.get_body_argument('nickname',default="")
+    #email = self.get_body_argument('email',default="")
+    username = self.form.data['nickname']
+    email = self.form.data['email']
     uid = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)
     user_id = uid[0]['uid']
     cur_email = self.db.query("SELECT email FROM user WHERE username=%s",self.current_user)
     cur_email = cur_email[0]['email']
     
-
+    #if self.form.validate():
     if username == self.current_user:
       if email == "" or email == cur_email:
         self.redirect('/setting/basic')
@@ -112,6 +116,8 @@ class SettingHandler(BaseHandler):
             self.session.save()
             self.db.execute("UPDATE user SET email=%s WHERE uid=%s",email,user_id)
             self.redirect('/setting/basic')
+    #else:
+    #  self.redirect('/setting/basic')
 
 
   def _checkname_action(self,username):

@@ -1,6 +1,5 @@
-#!/home/wangpei/venv/bin/python
+#!/usr/bin/env python
 #encoding=utf8
-
 
 import tornado.ioloop
 import tornado.httpserver

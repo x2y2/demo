@@ -5,10 +5,13 @@ $(function(){
   $("#add_blog").click(function(){
     var blog_title = $("#blog_title").val();
     var blog_content = $("#blog_content").val();
-    if(blog_title == "")
-    {
+    if(blog_title == ""){
       alert("标题不能为空！");
       return;
+    }
+    else if (blog_title.length > 50){
+        alert("标题太长");
+        return;
     }
     else if(blog_content == "") 
     {
@@ -44,6 +47,10 @@ $(function(){
     {
       alert("标题不能为空！");
       return;
+    }
+    else if (blog_title.length > 50){
+        alert("标题太长");
+        return;
     }
     else if(blog_content == "") 
     {
@@ -445,11 +452,13 @@ $(function(){
     },
     });
   });
-  
+  //个人主页的个人介绍提交
   $(".personal-message").click(function(){
     var personal_profile = $(".personal-textarea").val().replace(/\n/g,"<br/>").replace(/\s/g,"&nbsp;");
-    var path = window.location.pathname;
-    var url = path + '/personal_profile_save';
+    var href = window.location.href;
+    var reg = new RegExp("/users/[0-9a-z]{16}");
+    var pathname = href.match(reg);
+    var url = pathname + '/personal_profile_save';
     $.ajax({
       type: "post",
       url: url,
@@ -457,7 +466,7 @@ $(function(){
       data: {"url": url,"personal_profile": personal_profile},
       success: function(data) {
       //alert(data['info']);
-      window.location.href = path;
+      window.location.href = href;
       },
       error: function(data){
         alert(data['info']);

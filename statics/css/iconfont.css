@@ -15,6 +15,63 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ok-iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  color: #c8c8d0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.zan-iconfont {
+  font-family:"iconfont" !important;
+  font-size:20px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.huifu-iconfont {
+  font-family:"iconfont" !important;
+  font-size:20px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+.xihuan-iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  color: red;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.asmkticon0207-iconfont {
+  font-family:"iconfont" !important;
+  font-size:10px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.nan-iconfont {
+  font-family:"iconfont" !important;
+  font-size:18px;
+  color: blue;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.female-iconfont {
+  font-family:"iconfont" !important;
+  font-size:18px;
+  color: red;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .weixin-icon {
   font-family:"iconfont" !important;
   font-size:20px;

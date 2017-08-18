@@ -18,13 +18,9 @@
         <div class="title">
           <a href="/users/{{author_id}}" style="text-decoration: none; color: black;" onfocus="blur()">{{author_name}}</a>
           {% if gender == '1' %}
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-xingbienan"></use>
-            </svg>
+            <i class="nan-iconfont icon-xingbienan"></i>
           {% elif gender == '0' %}
-            <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-Female"></use>
-            </svg>
+             <i class="female-iconfont icon-Female"></i>
           {% else %}
             <div style="display: none;"></div>
           {% end %} 
@@ -35,9 +31,7 @@
               <div class="meta-block">
                 <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()">
                   <p>{{following_count}}</p>关注
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-asmkticon0207"></use>
-                  </svg>
+                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
                 </a>
               </div>
             </li>
@@ -45,9 +39,7 @@
               <div class="meta-block">
                 <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()">
                   <p>{{count_article}}</p>文章
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-asmkticon0207"></use>
-                  </svg>
+                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
                 </a>
               </div>
             </li>
@@ -55,9 +47,7 @@
               <div class="meta-block">
                 <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()">
                   <p>{{follower_count}}</p>粉丝
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-asmkticon0207"></use>
-                  </svg>
+                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
                 </a>
               </div>
             </li>
@@ -75,12 +65,12 @@
       <div style="float: right; margin-top: -70px;">
         {% if login_user is None%}
         <div>
-          <span href="/login" class="add-follow btn">
+          <a href="/login" class="add-follow btn" style="color: white;">
           <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-jia"></use>
           </svg>
           关注
-          </span>
+          </a>
         </div>
         {% else %}
           {% if login_user != author_name %}
@@ -106,7 +96,7 @@
                 已关注
                 </span>
               </div>
-              <div id="follower" style="display: none;">
+              <div id="follower" style="display: none;color: white;">
                 <span  class="add-follow btn">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#icon-jia"></use>
@@ -157,9 +147,7 @@
                 <span >个人介绍</span>
                 <div id="personal-intr-edit" style="float: right;cursor: pointer;">
                   {% if login_user == author_name %}
-                    <svg class="icon" aria-hidden="true">
-                      <use xlink:href="#icon-5"></use>
-                    </svg>
+                    <i class="icon iconfont icon-5"></i>
                     <span>编辑</span>
                   {% else %}
                     <span></span>
@@ -186,7 +174,7 @@
               </div>
               <div>
                 {% if webchat_code %}
-                <div style="margin-top: 10px;cursor: pointer;width: 40px;" id="webchat-pic" data-placement="bottom" data-toggle="popover" data-html="true" data-content="
+                <div style="margin-top: 10px;padding-left: 5px;padding-right: 5px; cursor: pointer;width: 35px;" id="webchat-pic" data-placement="bottom" data-toggle="popover" data-html="true" data-content="
                   <div>
                     <img src='{{static_url('upload/webchat/' + webchat_code)}}' style='width: 150px;height: 180px;'/>
                   </div>
@@ -203,17 +191,13 @@
             <td>
               <a href="#" onfocus="blur()" style="color: gray;">
                 <div style="margin-top:20px; margin-bottom: 20px;">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-zhuanti"></use>
-                  </svg>
+                  <i class="icon iconfont icon-zhuanti"></i>
                   <span>我关注的专题/文集</span>
                 </div>
               </a>
               <a href="#" onfocus="blur()" style="color: gray;">
                 <div style="margin-top: 20px; margin-bottom: 20px;">
-                  <svg class="icon" aria-hidden="true">
-                    <use xlink:href="#icon-xihuan"></use>
-                  </svg>
+                  <i class="xihuan-iconfont icon-xihuan"></i>
                   <span>我喜欢的文章</span>
                 </div>
               </a>
