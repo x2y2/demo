@@ -90,7 +90,7 @@ class BlogContentHandler(UserBaseHandler):
       if hasattr(self,action):
         getattr(self,action)(author_id,current_user_id)
     else:
-      self.json('login','/login')
+      self.redirect('/login')
 
 
   def _following_add_action(self,author_id,current_user_id):

@@ -54,5 +54,4 @@ class App(tornado.web.Application):
                                      db=options.redis_db)
 
     self.session_manager = SessionManager(settings["session_secret"],
-                                          settings['store_options'],
-                                          settings["session_timeout"])
+                                          settings['store_options'])

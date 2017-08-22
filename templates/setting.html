@@ -1,43 +1,72 @@
 {% extends "setting_base.html" %}
 {% block setting_content%}
-<div style="margin-top: 70px;">
-  {% if login_user_pic is not None %}
-  <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
-  {% else %}
-  <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;margin-left: 100px;margin-top: 20px;">
-  {% end %}
-  <!--上传头像表单-->
-  <form role="form" name="upload-pic" id="upload-pic-form" action="/setting/basic/upload" enctype="multipart/form-data" method="post">
-    <div class="change-pic">
-      <a style="text-decoration: none;color: green;">
-        <input type="file" name="upload-pic" id="upload-pic" class="upload-pic" unselectable="on" />更改头像
-      </a>
-    </div>
-  </form>  
+<div class="container" style="padding-left: 80px;margin-top: 80px;">
+<div class="col-xs-8">
+<table class="table" frame="void">
+  <tbody>
+    <tr>
+      <td style="width: 200px;">
+        <div>
+          {% if login_user_pic %}
+          <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 80px;height: 80px;">
+          {% else %}
+          <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;">
+          {% end %}
+        </div>
+      </td>
+      <td>
+        <div style="padding-top: 25px;padding-left: 0px;">
+          <!--上传头像表单-->
+          <form role="form" name="upload-pic" id="upload-pic-form" action="/setting/basic/upload" enctype="multipart/form-data" method="post">
+          <div class="change-pic">
+            <a style="text-decoration: none;color: green;">
+              <input type="file" name="upload-pic" id="upload-pic" class="upload-pic" unselectable="on" />更改头像
+            </a>
+          </div>
+          </form> 
+        </div>
+      </td>
+    </tr>
+    <tr>
+    <!--用户基本资料表单-->
+    <form id="settingbasicForm">
+      <table class="table" rules="rows">
+        <tbody>
+          <tr>
+            <td style="width: 200px;">
+              <div style="margin-top: 20px;margin-bottom: 20px;">
+                <span class="setting-basic-text">昵称</span>
+              </div>
+            </td>
+            <td>
+              <div style="margin-top: 20px;margin-bottom: 20px;">
+                <input type="text" name="nickname" id="setting_basic_username" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称" value="{{login_user}}" maxlength="10" required="">
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div style="margin-top: 20px;margin-bottom: 20px;">
+                <span class="setting-basic-text">电子邮件</span>
+              </div>
+            </td>
+            <td>
+              <div style="margin-top: 20px;margin-bottom: 20px;">
+                <div class="send-email">
+                 <a href="#" style="text-decoration: none;color: green;" onfocus="blur()">发送</a>
+                </div>
+                <input type="text" name="email" id="setting_basic_email" class="setting-basic-input" style="width: 300px;" placeholder="请输入你的常用邮箱">
+              </div>
+            </td>
+          </tr> 
+        </tbody> 
+      </table>
+      <button id="setting_basic_submit" class="btn  btn-success" type="button" onfocus="blur()">保存</button>
+    </form>
+    </tr>
+  </tbody>
+</table>
+<div class="alert"></div>
 </div>
-<!--用户基本资料表单-->
-<form role="form"　name="setting-form" action="/setting/basic/info" method="POST">
-  <div>
-    <ul style="list-style-type: none;margin: 0px;padding: 0px;">
-      <li class="setting-basic" style="margin-left: 100px;margin-top: 80px;">
-        <div>
-         <span class="setting-basic-text">昵称</span>
-          <input type="text" name="nickname" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称" value="{{login_user}}">
-        </div>
-      </li>
-      <li class="setting-basic" style="margin-left: 100px;margin-top: 20px;">
-        <div>
-         <span class="setting-basic-text">电子邮件</span>
-         <input type="text" name="email" class="setting-basic-input" style="width: 300px;" placeholder="请输入你的常用邮箱">
-         <div class="send-email">
-           <a target="_blank" href="" style="text-decoration: none;color: green;">发送</a>
-         </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div style="margin-top: 30px;margin-left: 100px;">
-    <button class="btn  btn-success" type="submit">保存</button>
-  </div>
-</form>
+</div>
 {% end %}

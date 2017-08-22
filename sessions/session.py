@@ -27,12 +27,12 @@ class Session(SessionData):
     self.hmac_key = current_session.hmac_key
 
   def save(self):   
-    self.session_manager.set(self.request_handler,self)  
+    self.session_manager.set(self.request_handler,self) 
+
 
 class SessionManager(object):   
-  def __init__(self,session_secret,store_options, session_timeout):  
-    self.secret = session_secret   
-    self.session_timeout = session_timeout
+  def __init__(self,session_secret,store_options):  
+    self.secret = session_secret
     try:   
       if store_options['redis_pass']:   
         self._redis = redis.StrictRedis(host=store_options['redis_host'], 
@@ -46,9 +46,10 @@ class SessionManager(object):
  
   def _fetch(self, session_id):   
     try:   
-      session_data = self._redis.get(session_id)   
+      session_data = self._redis.get(session_id) 
       if session_data:   
-        self._redis.setex(session_id, self.session_timeout, session_data)   
+        session_timeout =  ujson.loads(session_data)['timeout']
+        self._redis.setex(session_id, session_timeout, session_data) 
         session_data = ujson.loads(session_data)   
       if type(session_data) == type({}):   
         return session_data   
@@ -57,7 +58,7 @@ class SessionManager(object):
     except IOError:   
       return {}   
 
-  def get(self, request_handler = None):   
+  def get(self,request_handler = None):   
     if (request_handler == None):   
       session_id = None   
       hmac_key = None   
@@ -84,7 +85,8 @@ class SessionManager(object):
     request_handler.set_secure_cookie("session_id", session.session_id)   
     request_handler.set_secure_cookie("verification", session.hmac_key)   
     session_data = ujson.dumps(dict(session.items()))   
-    self._redis.setex(session.session_id, self.session_timeout, session_data)  
+    #self._redis.setex(session.session_id, self.session_timeout, session_data)  
+    self._redis.setex(session.session_id, session['timeout'], session_data)
 
   def _generate_id(self):   
     new_id = hashlib.sha256(self.secret + str(uuid.uuid4()))   

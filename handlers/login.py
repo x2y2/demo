@@ -28,47 +28,54 @@ class LoginHandler(BaseHandler,LoginForm):
     #account = self.account
     #password = self.password
     form = LoginForm(self.request.arguments)
-    account = form.data['account']
-    password = form.data['password']
-    password = base64.b64encode(password)
-    cbox_remember = self.get_body_argument("cbox_remember",default="on")
-    
-    if '@' in account:
-      email = account
-      if not self._checkemail_action(email):
-        self.redirect("/sign_up?error=not_exists&user={0}".format(email))
-      else:
-        if not self._checkpasswd_action(email,password):
-          self.redirect("/login?error=passwd_error")
+    account = form.account.data
+    password = form.password.data
+    if password:
+      password = base64.b64encode(password)
+    cbox_remember = form.remeberme.data
+    if form.validate():
+      if '@' in account:
+        email = account
+        if not self._checkemail_action(email):
+          self.json('noexists','用户不存在')
         else:
-          ret = self.db.query("SELECT username FROM user WHERE email=%s",email)
-          username = ret[0]['username']
-          if cbox_remember == "on":
-            #self.set_secure_cookie("username",username,expires_days=30)
-            self.session['username'] = username
-            self.session.save()
+          if not self._checkpasswd_action(email,password):
+            self.json('errorpassword','密码错误')
           else:
-            #self.set_secure_cookie("username",username,expires_days=1)
-            self.session['username'] = username
-            self.session.save()
-          self.redirect('/')
+            ret = self.db.query("SELECT username FROM user WHERE email=%s",email)
+            username = ret[0]['username']
+            if cbox_remember:
+              self.session['username'] = username
+              self.session['timeout'] = 2592000
+              self.session.save()
+            else:
+              self.session['username'] = username
+              self.session['timeout'] = 60
+              self.session.save()
+            self.redirect('/')
+      else:
+        username = account
+        if not self._checkname_action(username):
+          self.json('noexists','用户不存在')
+        else:
+          if not self._checkpasswd_action(username,password):
+            self.json('errorpassword','密码错误')
+          else:
+            if cbox_remember:
+              #self.set_secure_cookie("username",username,xpires_days=30)
+              self.session['username'] = username
+              self.session['timeout'] = 2592000
+              self.session.save()
+            else:
+              self.session['username'] = username
+              self.session['timeout'] = 3600
+              self.session.save()
+            self.json('success','/')
     else:
-      username = account
-      if not self._checkname_action(username):
-        self.redirect("/sign_up?error=not_exists&user={0}".format(username))
-      else:
-        if not self._checkpasswd_action(username,password):
-          self.redirect("/login?error=passwd_error")
-        else:
-          if cbox_remember == "on":
-            #self.set_secure_cookie("username",username,expires_days=30)
-            self.session['username'] = username
-            self.session.save()
-          else:
-            #self.set_secure_cookie("username",username,expires_days=1)
-            self.session['username'] = username
-            self.session.save()
-          self.redirect('/')
+      if not account:
+        self.json('nouser','用户名不能为空')
+      elif not password:
+        self.json('nopassword','密码不能为空')
      
   def _checkemail_action(self,email):
     id = self.db.query("SELECT id FROM user WHERE email=%s",email)

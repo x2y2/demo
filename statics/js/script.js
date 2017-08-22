@@ -1,21 +1,87 @@
 
 $(function(){
 /**begin**/
+
+  //用户登录
+  $("#login_submit").click(function(){
+    $.ajax({
+      type: 'post',
+      url: '/login',
+      data: $('#loginForm').serialize(),
+      success: function(data) {
+         if (data['status'] == 'noexists') {
+           $('.alert').html(data['info']).addClass('alert-danger').show();
+         }
+         else if (data['status'] == 'errorpassword') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'nouser') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'nopassword') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'success') {
+           window.location.href = "/";
+         }
+      },
+      error: function(data) {
+         $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+      }
+    });
+  });
+
+  //用户注册
+  $("#signup_submit").click(function(){
+    $.ajax({
+      type: 'post',
+      url: '/sign_up',
+      data: $('#signupForm').serialize(),
+      success: function(data) {
+         if (data['status'] == 'userexists') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'emailexists') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'nouser') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'nopassword') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'noemail') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'emailformat') {
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+         }
+         else if (data['status'] == 'success') {
+           window.location.href = data['info'];
+         }
+      },
+      error: function(data) {
+         $('.alert').html('err').addClass('alert-danger').show().delay(1500).fadeOut();
+      }
+    });
+  });
+
+
   //添加新文章
   $("#add_blog").click(function(){
     var blog_title = $("#blog_title").val();
     var blog_content = $("#blog_content").val();
     if(blog_title == ""){
-      alert("标题不能为空！");
+      $('.alert').html('标题不能为空！').addClass('alert-danger').show().delay(1500).fadeOut();
       return;
     }
     else if (blog_title.length > 50){
-        alert("标题太长");
+        $('.alert').html('标题不能太长！').addClass('alert-warning').show().delay(1500).fadeOut();
         return;
     }
     else if(blog_content == "") 
     {
-      alert("正文不能为空");
+      $('.alert').html('正文不能为空！').addClass('alert-warning').show().delay(1500).fadeOut();
       return;
     }
     $.ajax({
@@ -26,11 +92,11 @@ $(function(){
         "blog_content": blog_content
       },
       success: function(data) {
-        if(data['status'] == 'fail') {
-          alert("新增失败" + data['info']);
+        if(data['status'] == 'success') {
+          window.location.href = "/blog/" + data['info'];
         }
         else {
-          window.location.href = "/blog/" + data['info'];
+          $('.alert').html('添加失败').addClass('alert-warning').show().delay(1500).fadeOut();
         }
       },
       error: function(data) {
@@ -66,11 +132,11 @@ $(function(){
         "blog_content": blog_content
       },
       success: function(data) {
-        if(data['status'] == 'fail') {
-          alert("提交失败" + data['info']);
+        if(data['status'] == 'success') {
+          window.location.href = "/blog/" + blog_id;
         }
         else {
-          window.location.href = "/blog/" + blog_id;
+          $('.alert').html('更新失败').addClass('alert-warning').show().delay(1500).fadeOut();
         }
       },
       error: function() {
@@ -89,12 +155,11 @@ $(function(){
         "blog_id": blog_id
       },
       success: function(data) {
-        if(data['status'] == 'fail') {
-           alert(data['info']);
+        if(data['status'] == 'success') {
+          window.location.href = "/users/" + data['info'];
         }
         else {
-          //alert(data['info'])
-          window.location.href = "/users/" + data['info'];
+          $('.alert').html('删除失败').addClass('alert-warning').show().delay(1500).fadeOut();
         }
       },
       error: function(data) {
@@ -384,6 +449,69 @@ $(function(){
   $(".dropdown-menu").mouseout(function(){
     $(".dropdown-menu").hide();
   });
+
+  //基础设置
+  $("#setting_basic_submit").click(function(){
+    $.ajax({
+      type: 'post',
+      url: '/setting/basic/info',
+      data: $('#settingbasicForm').serialize(),
+      success: function(data) {
+        if (data['status'] == 'success') {
+          $('.alert').html(data['info']).addClass('alert-success').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'emailexists') {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'userexists') {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'nouser') {
+          //alert(data['info'])
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+      },
+      error: function(data) {
+        $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+      }
+    });
+  });
+
+  //账号管理
+  $("#account_manage_submit").click(function(){
+    $.ajax({
+      type: 'post',
+      url: '/setting/basic/account',
+      data: $('#accountmanageForm').serialize(),
+      success: function(data) {
+        if (data['status'] == 'success') {
+          $('.alert').html(data['info']).addClass('alert-info').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'errpassword') {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'samepassword') {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'errconfirm') {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else if (data['status'] == 'nopassword') {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+        else {
+          $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+        }
+      },
+      error: function(data) {
+        $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
+      }
+    });
+  });
+
   //个人简介
   $("#personal-intr").hide();
   $("#personal-intr-control").hide();
@@ -444,8 +572,8 @@ $(function(){
            "gender": gender
           },
     success: function(data) {
-      //alert(data['info']);
-      window.location.href = path;
+      //window.location.href = path;
+      $('.alert').html('更新成功').addClass('alert-success').show().delay(1500).fadeOut();
     },
     error: function(data){
       alert(data['info']);
@@ -492,6 +620,54 @@ $(function(){
       }
       },100);
     });
+
+
+    /**
+     * 弹出式提示框，默认1.2秒自动消失
+     * @param message 提示信息
+     * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+     * @param time 消失时间
+     
+    function prompt(message, style, time)
+    {
+        style = (style === undefined) ? 'alert-success' : style;
+        time = (time === undefined) ? 1200 : time;
+        $('<div>')
+            .appendTo('body')
+            .addClass('alert ' + style)
+            .html(message)
+            .show()
+            .delay(time)
+            .fadeOut();
+    };
+
+    // 成功提示
+    var success_prompt = function(message, time)
+    {
+        prompt(message, 'alert-success', time);
+    };
+
+    // 失败提示
+    var fail_prompt = function(message, time)
+    {
+        prompt(message, 'alert-danger', time);
+    };
+
+    // 提醒
+    var warning_prompt = function(message, time)
+    {
+        prompt(message, 'alert-warning', time);
+    };
+
+    // 信息提示
+    var info_prompt = function(message, time)
+    {
+        prompt(message, 'alert-info', time);
+    };
+  
+    $('.alert').html('操作成功').addClass('alert-success').show().delay(1500).fadeOut();
+    **/
+    
 /**end**/
 });
 

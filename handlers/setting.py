@@ -3,6 +3,7 @@
 
 from base import BaseHandler
 from forms.form import BasicsettingForm
+from forms.form import ChangepasswordForm
 import os
 import hashlib
 import base64
@@ -53,7 +54,6 @@ class SettingHandler(BaseHandler):
                  login_user_pic=login_user_pic)
 
   def post(self,*args,**kwargs):
-    self.form = BasicsettingForm(self.request.arguments)
     action = self.arg
     action = "_%s_action" % action
     if hasattr(self,action):
@@ -77,85 +77,92 @@ class SettingHandler(BaseHandler):
       self.redirect('/setting/basic')
 
   def _info_action(self):
-    #username = self.get_body_argument('nickname',default="")
-    #email = self.get_body_argument('email',default="")
-    username = self.form.data['nickname']
-    email = self.form.data['email']
-    uid = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)
-    user_id = uid[0]['uid']
-    cur_email = self.db.query("SELECT email FROM user WHERE username=%s",self.current_user)
-    cur_email = cur_email[0]['email']
+    form = BasicsettingForm(self.request.arguments)
+    username = form.nickname.data
+    email = form.email.data
+    user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
+    cur_email = self.db.query("SELECT email FROM user WHERE username=%s",self.current_user)[0]['email']
     
-    #if self.form.validate():
-    if username == self.current_user:
-      if email == "" or email == cur_email:
-        self.redirect('/setting/basic')
-      else:
-        if not self._checkemail_action(email) or '@' not in email:
-          self.redirect("/sign_up?error=exists&email={0}".format(email))
-        else:
-          self.db.execute("UPDATE user SET email=%s WHERE uid=%s",email,user_id)
-          self.redirect('/setting/basic')
-    else:
-      if not self._checkname_action(username) or username == "":
-        self.redirect("/sign_up?error=exists&user={0}".format(username))
-      else:
+    if form.validate():
+      if username == self.current_user:
         if email == "" or email == cur_email:
-          self.db.execute("UPDATE user SET username=%s WHERE uid=%s",username,user_id)
-          #self.set_secure_cookie("username",username)
-          self.session['username'] = username
-          self.session.save()
-          self.redirect('/setting/basic') 
+          self.json('success','更新成功')
         else:
-          if not self._checkemail_action(email):
-            self.redirect("/sign_up?error=exists&email={0}".format(email))
+          if not self._checkaccount_action(email):
+            self.json('emailexists','邮箱已注册')
           else:
-            self.db.execute("UPDATE user SET username=%s WHERE uid=%s",username,user_id)
-            #self.set_secure_cookie("username",username)
-            self.session['username'] = username
-            self.session.save()
-            self.db.execute("UPDATE user SET email=%s WHERE uid=%s",email,user_id)
-            self.redirect('/setting/basic')
-    #else:
-    #  self.redirect('/setting/basic')
+            try:
+              self.db.execute("UPDATE user SET email=%s WHERE uid=%s",email,user_id)
+              self.json('success','更新成功')
+            except Exception as e:
+              self.write({'message':e})
+      elif username is None:
+        self.json('nouser','用户名不可为空')
+      else:
+        if not self._checkaccount_action(username):
+          self.json('userexists','用户已注册')
+        else:
+          if email == '' or email == cur_email:
+            try:
+              self.db.execute("UPDATE user SET username=%s WHERE uid=%s",username,user_id)
+              self.session['username'] = username
+              self.session.save()
+              self.json('success','更新成功')
+            except Exception as e:
+              self.write({'message':e})
+          else:
+            if not self._checkaccount_action(email):
+              self.json('emailexists','邮箱已注册')
+            else:
+              try:
+                self.db.execute("UPDATE user SET username=%s,email=%s WHERE uid=%s",username,email,user_id)
+                self.session['username'] = username
+                self.session.save()
+                self.json('success','更新成功')
+              except Exception as e:
+                self.write({'message':e})
+    else:
+      if username is None or username == '':
+        self.json('userkong','用户名不可为空')
 
 
-  def _checkname_action(self,username):
-    uid = self.db.query("SELECT uid FROM user WHERE username=%s",username)
+  def _checkaccount_action(self,account):
+    uid = self.db.query("SELECT uid FROM user WHERE (username=%s or email=%s)",account,account)
     if len(uid) == 0:
       return True
     else:
       return False
 
-  def _checkemail_action(self,email):
-    uid = self.db.query("SELECT uid FROM user WHERE email=%s",email)
-    if len(uid) == 0:
-      return True
-    else:
-      return False   
-
   def _account_action(self):
-    origin_password = self.get_body_argument('setting-origin-password',default="")
-    origin_password64 = base64.b64encode(origin_password)
-    new_password1 = self.get_body_argument('setting-new-password1',default="")
-    new_password64 = base64.b64encode(new_password1)
-    new_password2 = self.get_body_argument('setting-new-password2',default="")
+    form = ChangepasswordForm(self.request.arguments)
+    password = form.password.data
+    origin_password64 = base64.b64encode(password)
+    new = form.new.data
+    new_password64 = base64.b64encode(new)
+    confirm = form.confirm.data
     cur_password = self.db.query("SELECT password FROM user WHERE username=%s",self.current_user)
     cur_password = cur_password[0]['password']
-    if origin_password == "" or new_password1 == "" or new_password2 == "":
-      self.redirect("/setting/account_manage?error")
-    else:
+
+    if form.validate():
       if origin_password64 != cur_password:
-        self.redirect("/setting/account_manage?password=wrong")
+        self.json('errpassword','密码错误')
       else:
-        if new_password1 == origin_password:
-           self.redirect("/setting/account_manage?newpassword=originapassword")
+        if new == password:
+           self.json('samepassword','新密码和原始密码相同')
         else:
-          if new_password1 != new_password2:
-            self.redirect("/setting/account_manage?newpassword=notright")
+          if new != confirm:
+            self.json('errconfirm','两次输入的密码不一致')
           else:
-            self.db.execute("UPDATE user SET password=%s WHERE username=%s",new_password64,self.current_user)
-            self.redirect("/setting/account_manage")
+            try:
+              self.db.execute("UPDATE user SET password=%s WHERE username=%s",new_password64,self.current_user)
+              self.json('success','修改密码成功')
+            except Exception as e:
+              self.write({'message':e})
+    else:
+      if password is None or password == '' or new is None or new == '' or confirm is None or confirm == '':
+        self.json('nopassword','密码不能为空')
+      else:
+        self.json('errconfirm','两次输入的密码不一致')
    
   def _webchat_upload_action(self):
     if self.request.files:

@@ -6,7 +6,45 @@ ul {
   list-style-type: none;
 }
 
+.alert {
+    display: none;
+    min-width: 200px;
+    margin-top: -400px;
+    margin-left: -200px;
+    line-height: 15px;
+    z-index: 99999;
+    padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
 
+.alert-success {
+    color: #FFFFFF;
+    text-align: center;
+    background-color: #42c02e;
+    border-color: #42c02e;
+}
+
+.alert-info {
+    color: #FFFFFF;
+    text-align: center;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert-warning {
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.alert-danger {
+    text-align: center;
+    color: #FFFFFF;
+    background-color: #FF8247;
+    border-color: #FF8247;
+}
 
 .icon {
    width: 1em; 
@@ -114,11 +152,11 @@ padding-right: 5%;
 }
 
 .setting-basic {
-  margin-left: 100px; 
-  margin-top: 80px
+  margin-left: 0px; 
+  margin-top: 0px
   padding-top: 20px; 
   padding-bottom: 20px;
-  border-bottom-width: 2px;
+  border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: #eaeaea;
 }
@@ -334,8 +372,8 @@ padding-right: 5%;
 
 .change-pic {
   margin-bottom: 0px;
-  margin-top: -50px;
-  margin-left: 250px;
+  margin-top: 0px;
+  margin-left: 0px;
   /*padding-top: 5px;
   padding-right: 0px;
   padding-bottom: 5px;

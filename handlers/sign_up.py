@@ -5,10 +5,11 @@ import tornado.web
 import hashlib
 from base import BaseHandler
 from wtforms.fields.core import UnboundField
-from wtforms.validators import ValidationError
+from wtforms import ValidationError
 from forms.form import SignupForm
 import datetime
 import base64
+import json
 
     
 class SignUpHandler(BaseHandler,SignupForm):
@@ -25,30 +26,40 @@ class SignUpHandler(BaseHandler,SignupForm):
     self.render("sign_up.html")
 
   def post(self):
-    #self.form = SignupForm(self)
     form = SignupForm(self.request.arguments)
+    email = form.email.data
+    username = form.username.data
+    password = form.password.data
     if form.validate():
-      email = form.data['email']
-      username = form.data['username']
-      password = form.data['password']
       password = base64.b64encode(password)
       register_time = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
       md5 = hashlib.md5(username).hexdigest()
       uid = md5[0:16]
-      if not self._checkusername_action(username,email):
-        self.db.execute('''INSERT INTO user 
-                          (uid,username,password,email,register_time,admin)
-                           VALUES
-                           (%s,%s,%s,%s,%s,'0')''',
-                           uid,username,password,email,register_time)
-        self.redirect("/login")
+      if self._checkaccount_action(username):
+        self.json('userexists','用户已注册')
+      elif self._checkaccount_action(email):
+        self.json('emailexists','邮箱已注册')
       else:
-        self.redirect("/sign_up?error=exists&user={0}&email={1}".format(username,email))
+        try:
+          self.db.execute('''INSERT INTO user 
+                             (uid,username,password,email,register_time,admin)
+                             VALUES(%s,%s,%s,%s,%s,'0')''',
+                             uid,username,password,email,register_time)
+          self.json('success','/login')
+        except Exception as e:
+          self.write({'message':json.dumps(e)})
     else:
-      self.redirect("/sign_up")
+      if not username:
+        self.json('nouser','用户名不能为空')
+      elif not email:
+        self.json('noemail','邮箱不能为空')
+      elif not password:
+        self.json('nopassword','密码不能为空')
+      else:
+        self.json('emailformat','邮箱格式不对')
 
-  def _checkusername_action(self,username,email):
-    user_id = self.db.query("SELECT id FROM user WHERE (username=%s OR email=%s)",username,email)
+  def _checkaccount_action(self,account):
+    user_id = self.db.query("SELECT id FROM user WHERE (username=%s or email=%s)",account,account)
     if len(user_id) == 0:
       return False
     else:

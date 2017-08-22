@@ -25,44 +25,8 @@
             <div style="display: none;"></div>
           {% end %} 
         </div>
-        <div class="info">
-          <ul class="list-inline">
-            <li>
-              <div class="meta-block">
-                <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()">
-                  <p>{{following_count}}</p>关注
-                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
-                </a>
-              </div>
-            </li>
-            <li>
-              <div class="meta-block">
-                <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()">
-                  <p>{{count_article}}</p>文章
-                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
-                </a>
-              </div>
-            </li>
-            <li>
-              <div class="meta-block">
-                <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()">
-                  <p>{{follower_count}}</p>粉丝
-                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
-                </a>
-              </div>
-            </li>
-            <li>
-              <div class="meta-block" style="border-right-style: none;">
-                <a style="color: gray;" onfocus="blur()">
-                  <p>0</p>收获喜欢
-                </a>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <!--添加关注和发简讯-->
-      <div style="float: right; margin-top: -70px;">
+        <!--添加关注和发简讯-->
+        <div style="float: right;margin-top:10px;">
         {% if login_user is None%}
         <div>
           <a href="/login" class="add-follow btn" style="color: white;">
@@ -112,6 +76,42 @@
              <div></div>
           {% end %}
         {% end %}
+      </div>
+        <div class="info">
+          <ul class="list-inline">
+            <li>
+              <div class="meta-block">
+                <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()">
+                  <p>{{following_count}}</p>关注
+                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="meta-block">
+                <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()">
+                  <p>{{count_article}}</p>文章
+                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="meta-block">
+                <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()">
+                  <p>{{follower_count}}</p>粉丝
+                  <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
+                </a>
+              </div>
+            </li>
+            <li>
+              <div class="meta-block" style="border-right-style: none;">
+                <a style="color: gray;" onfocus="blur()">
+                  <p>0</p>收获喜欢
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="users-body">
         <ul id="menu-list" class="trigger-menu list-inline">

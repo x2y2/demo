@@ -8,7 +8,7 @@ from base import BaseHandler
 class IndexHandler(BaseHandler):
   #@tornado.web.authenticated
   def get(self):
-    if self.current_user is not None:
+    if self.current_user:
       login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
       login_user_pic = login_user_info[0]['pic']
       login_user_id = login_user_info[0]['uid']

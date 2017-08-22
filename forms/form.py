@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+#coding:utf-8
 import wtforms
 from wtforms import validators,fields
 from wtforms_tornado import Form 
 from wtforms.fields.core import UnboundField
+from wtforms import ValidationError
 
 class MultiDict(dict):
   def getlist(self,key):
@@ -25,22 +27,24 @@ class BaseForm(Form):
     Form.__init__(self,formdata,obj=obj,prefix=prefix,**kwargs)
  
  #class LoginForm(BaseForm):
- # email = fields.StringField(validators=[validators.Email(), validators.required(), validators.length(min=5, max=64)])
- # account = fields.StringField(validators=[validators.required(),validators.length(min=3,max=10)])
- # password = fields.PasswordField(validators=[validators.required()])
+    pass
 
    
 class LoginForm(Form):
-  email = fields.StringField(validators=[validators.Email(), validators.required(), validators.length(min=5, max=64)])
-  account = fields.StringField(validators=[validators.required(),validators.length(min=3,max=10)])
+  account = fields.StringField(validators=[validators.required()])
   password = fields.PasswordField(validators=[validators.required()])
+  remeberme = fields.BooleanField(validators=[validators.required()])
 
 class SignupForm(Form):
-  email = fields.StringField(validators=[validators.Email(), validators.required(), validators.length(min=5, max=64)])
-  username = fields.StringField(validators=[validators.required(),validators.length(min=3,max=10)])
+  email = fields.StringField(validators=[validators.Email(),validators.required(), validators.length(max=64)])
+  username = fields.StringField(validators=[validators.required(),validators.length(max=10)])
   password = fields.PasswordField(validators=[validators.required()])
 
 class BasicsettingForm(Form):
-  nickname = fields.StringField(validators=[validators.required(),validators.length(min=3,max=10)])
-  email = fields.StringField(validators=[validators.Email(), validators.length(min=5, max=64)])
+  nickname = fields.StringField(validators=[validators.required(),validators.length(max=10)])
+  email = fields.StringField(validators=[validators.length(max=64)])
     
+class ChangepasswordForm(Form):
+  password = fields.PasswordField(validators=[validators.required()])
+  new = fields.PasswordField(validators=[validators.required(),validators.EqualTo('confirm')])
+  confirm = fields.PasswordField(validators=[validators.required()])
