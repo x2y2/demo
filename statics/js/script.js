@@ -665,7 +665,7 @@ $(function(){
     $(".comment").each(function(){
       $(this).find('#comment_upvote').click(function(){
         var state = $(this).closest("li").find("#upvote_state").text();
-        var upvote_count = $(this).closest("li").find("#upvote_count").text()
+        var upvote_count = $(this).closest("li").find("#upvote_count").text();
         var obj = $(this).closest("li").find("#comment_upvote");
         var blog_id = $("#blog_content_id").text();
         var comment_id = $(this).closest('li').find('#comment_id').text();
@@ -681,8 +681,9 @@ $(function(){
                     }, 
               success: function(data){
                 _this.closest("li").find("#upvote_state").get(0).innerHTML = '1';
-                var count =  String(Number(upvote_count) + 1);
-                _this.closest("li").find("#upvote_count").get(0).innerHTML = count;
+                //var count =  upvote_count + 1;
+                upvote_count++;
+                _this.closest("li").find("#upvote_count").get(0).innerHTML = upvote_count; 
                 obj.css('color','red');
               }, 
               error: function(data){
@@ -696,8 +697,14 @@ $(function(){
                 data: {'url': url,'blog_id': blog_id,'comment_id':comment_id}, 
                 success: function(data) {
                   _this.closest("li").find("#upvote_state").get(0).innerHTML = '0';
-                  var count =  String(Number(upvote_count) - 1);
-                  _this.closest("li").find("#upvote_count").get(0).innerHTML = count;
+                  //var count =  upvote_count - 1;
+                  upvote_count--;
+                  if (upvote_count != 0) {
+                _this.closest("li").find("#upvote_count").get(0).innerHTML = upvote_count;
+                } else
+                { 
+                  _this.closest("li").find("#upvote_count").get(0).innerHTML = ''; 
+                }
                   obj.css('color','gray');
                 }, 
                 error:function(data){

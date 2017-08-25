@@ -178,7 +178,11 @@
                   <span>赞</span>
                 {% else %}
                   <i id="comment_upvote" style="cursor: pointer;color: gray;" class="zan-iconfont icon-zan"></i> 
-                  <span id="upvote_count">{{dic_upvote[comment_info['comment_cid']]}}</span>
+                  {% if dic_upvote[comment_info['comment_cid']] == 0 %}
+                    <span id="upvote_count"></span>
+                  {% else %}
+                    <span id="upvote_count">{{dic_upvote[comment_info['comment_cid']]}}</span>
+                  {% end %}
                   <span>赞</span>
                 {% end %}
               {% else %}
