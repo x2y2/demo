@@ -640,33 +640,74 @@ $(function(){
             .delay(time)
             .fadeOut();
     };
-
-    // 成功提示
-    var success_prompt = function(message, time)
-    {
-        prompt(message, 'alert-success', time);
-    };
-
-    // 失败提示
-    var fail_prompt = function(message, time)
-    {
-        prompt(message, 'alert-danger', time);
-    };
-
-    // 提醒
-    var warning_prompt = function(message, time)
-    {
-        prompt(message, 'alert-warning', time);
-    };
-
-    // 信息提示
-    var info_prompt = function(message, time)
-    {
-        prompt(message, 'alert-info', time);
-    };
-  
-    $('.alert').html('操作成功').addClass('alert-success').show().delay(1500).fadeOut();
     **/
+    
+    //设置页脚
+    $(window).bind("load", function() { 
+      var footerHeight = 0;
+      var footerTop = 0;
+      var $footer = $("#footer"); 
+      positionFooter(); //定义positionFooter function 
+      function positionFooter() { //取到div#footer高度 
+        footerHeight = $footer.height(); //div#footer离屏幕顶部的距离 
+        footerTop = ($(window).scrollTop()+$(window).height()-footerHeight)+"px"; 
+          //if ( ($(document.body).height()+footerHeight) < $(window).height()) { 
+          if (document.body.clientHeight < document.documentElement.clientHeight) {
+              $footer.css({ position: "absolute" }).stop().animate({ top: footerTop }); 
+          } else { 
+            $footer.css({ position: "static" }); 
+          } 
+        } 
+
+      });
+    
+    //点赞
+    $(".comment").each(function(){
+      $(this).find('#comment_upvote').click(function(){
+        var state = $(this).closest("li").find("#upvote_state").text();
+        var upvote_count = $(this).closest("li").find("#upvote_count").text()
+        var obj = $(this).closest("li").find("#comment_upvote");
+        var blog_id = $("#blog_content_id").text();
+        var comment_id = $(this).closest('li').find('#comment_id').text();
+        var url = '/blog/' + blog_id + '/add_upvote';
+        var _this = $(this)
+        if (state == '0') {  
+            $.ajax({
+              type: 'post',
+              url: url,
+              data: {"url":url,
+                     "blog_id":blog_id,
+                     "comment_id":comment_id
+                    }, 
+              success: function(data){
+                //_this.closest("li").find("#upvote_state")[0].innerHTML = '1';
+                _this.closest("li").find("#upvote_state").get(0).innerHTML = '1';
+                var count =  String(Number(upvote_count) + 1);
+                _this.closest("li").find("#upvote_count").get(0).innerHTML = count;
+                obj.css('color','red');
+              }, 
+              error: function(data){
+                alert(data['info']);
+              }
+            }); 
+          } else {
+              $.ajax({
+                type: 'post',
+                url: url,
+                data: {'url': url,'blog_id': blog_id,'comment_id':comment_id}, 
+                success: function(data) {
+                  _this.closest("li").find("#upvote_state").get(0).innerHTML = '0';
+                  var count =  String(Number(upvote_count) - 1);
+                  _this.closest("li").find("#upvote_count").get(0).innerHTML = count;
+                  obj.css('color','gray');
+                }, 
+                error:function(data){
+                  alert(data['info']);
+                }
+              });
+          } 
+      });
+    });
     
 /**end**/
 });

@@ -92,7 +92,7 @@
     <!--评论-->
     <div style="margin-bottom: 20px;">
       {% if login_user is not None %}
-        <form role="form"　name="comment-form" action="/blog/{{b_infos[0]['aid']}}/comment" method="POST">
+        <form role="form"　name="comment-form" action="/blog/{{b_infos[0]['aid']}}/add_comment" method="POST">
           <input name="article_aid" style="display: none;" value="{{b_infos[0]['aid']}}" />
           <div>
             <div style="margin-left: 35px;">
@@ -112,7 +112,7 @@
           </div>
           <div id="under-comment" style="float: right;margin-top: 10px;display: none;">
             <a id="cancel-comment" style="font-size: 16px;color: gray;cursor: pointer;">取消</a>
-            <input class="btn btn-success" type="submit" value="发送"/>
+            <input class="btn btn-success" type="submit" onfocus="blur()" value="发送"/>
           </div>
         </form>
       {% else %}
@@ -145,8 +145,11 @@
         </div>
       </div>
       {% end %}
-      {% for comment_info in comment_infos %}
-        <div class="comment">
+      
+      <ul style="margin: 0px;padding: 0px;">
+        {% for comment_info in comment_infos %}
+        <li class="comment">
+          <h4 id="comment_id" style="display: none;">{{comment_info['comment_cid']}}</h4>
           <div class="blog-avatar" style="margin-top: 20px;">
             {% if comment_info['pic'] is None %}
              <a href="/users/{{comment_info['uid']}}"><img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 30px;height: 30px;"></a>
@@ -165,19 +168,30 @@
             <div style="font-size: 16px;">
               {{comment_info['comment_content']}}
             </div>
-            <div style="margin-top: 10px;color: gray;font-size: 14px;">
-              <span>
-                <i class="zan-iconfont icon-zan"></i> 
-                赞
-              </span>
-              <span>
-                <i class="huifu-iconfont icon-huifu"></i>
-                回复
-              </span>
+
+            <h4 id="upvote_state" style="display: none;">{{upvote_state[comment_info['comment_cid']]}}</h4>
+            <div style="margin-top: 10px;font-size: 14px;">
+              {% if login_user %}
+                {% if upvote_state[comment_info['comment_cid']] == '1' %}
+                  <i id="comment_upvote" style="cursor: pointer;color: red" class="zan-iconfont icon-zan"></i>
+                  <span id="upvote_count">{{dic_upvote[comment_info['comment_cid']]}}</span>
+                  <span>赞</span>
+                {% else %}
+                  <i id="comment_upvote" style="cursor: pointer;color: gray;" class="zan-iconfont icon-zan"></i> 
+                  <span id="upvote_count">{{dic_upvote[comment_info['comment_cid']]}}</span>
+                  <span>赞</span>
+                {% end %}
+              {% else %}
+                <a href="/login?nosign-in-zan" style="color: gray;cursor: pointer;"><i class="zan-iconfont icon-zan"></i></a>
+                <span style="color: gray">{{dic_upvote[comment_info['comment_cid']]}}赞</span>
+              {% end %}
+              <i id="blog_reply" style="cursor: pointer;" class="huifu-iconfont icon-huifu"></i>
+              <span>回复</span>
             </div>
           </div>
-        </div>
+      </li>
       {% end %}
+      </ul>
     </div>
   </div>
   <div class="side-tool">

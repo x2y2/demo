@@ -54,12 +54,39 @@ class BlogContentHandler(UserBaseHandler):
     #html_parser = HTMLParser.HTMLParser()
     #html = html_parser.unescape(c_infos_html)
     #评论信息
-    comment_infos = self.db.query('''SELECT u.uid,u.username,u.pic,c.comment_time,c.comment_content,c.comment_floor 
+    comment_infos = self.db.query('''SELECT u.uid,u.username,u.pic,c.comment_cid,c.comment_time,c.comment_content,c.comment_floor 
                                      FROM comments c,user u 
                                      WHERE c.user_uid=u.uid 
                                      AND c.article_aid=%s 
                                      ORDER BY comment_time 
                                      DESC''',bid)
+    #是否已对评论点赞
+    upvote_state = {}
+    for comment_info in comment_infos:
+      upvote_state[comment_info['comment_cid']] = 0
+
+    try:
+      upvote_infos = self.db.query('''SELECT comment_cid,state 
+                                      FROM upvote 
+                                      WHERE article_aid=%s AND user_uid IN 
+                                            (SELECT uid FROM user WHERE username=%s)''',
+                                            bid,self.current_user)
+      for upvote_info in upvote_infos:
+        upvote_state[upvote_info['comment_cid']] = upvote_info['state']
+    except Exception as e:
+      self.write({'message':e})
+    #文章对应评论的点赞数
+    upvote_counts = self.db.query('''SELECT c.article_aid,c.comment_cid,up.upid,up.state
+                                    FROM comments  c left join upvote up on c.comment_cid=up.comment_cid 
+                                    WHERE c.article_aid=%s''',bid)
+    dic_upvote = {}
+    for upvote_count in upvote_counts:
+      dic_upvote[upvote_count['comment_cid']] = 0
+
+    for upvote_count in upvote_counts:
+      if upvote_count['state'] == '1':
+        dic_upvote[upvote_count['comment_cid']] += 1
+
     #是否已经关注过
     author_id = b_infos[0]['uid']
     followed = False
@@ -70,7 +97,7 @@ class BlogContentHandler(UserBaseHandler):
         followed = False
       else:
         followed = True
-    
+
     self.render("blog.html",
                 b_infos=b_infos,
                 c_infos_html= html,
@@ -78,7 +105,9 @@ class BlogContentHandler(UserBaseHandler):
                 login_user_id=login_user_id,
                 login_user_pic=login_user_pic,
                 comment_infos=comment_infos,
-                followed = followed)
+                followed=followed,
+                upvote_state=upvote_state,
+                dic_upvote=dic_upvote)
 
   def post(self,*args,**kwargs):
     author_id = self.get_argument("author_id",default="")
@@ -236,7 +265,14 @@ class EditBlogHandler(BaseHandler):
 
 
 class CommentBlogHandler(BaseHandler):
-  def post(self):
+  def post(self,*args,**kwargs):
+    action = "_%s_action" % self.arg
+    if hasattr(self,action):
+      getattr(self,action)()
+    else:
+      self.json("fail","no action")
+
+  def _add_comment_action(self):
     article_aid = self.get_body_argument('article_aid',default='')
     comment_content = self.get_body_argument('new-comment',default='')
     comment_user = self.current_user
@@ -283,7 +319,48 @@ class CommentBlogHandler(BaseHandler):
     else:
       self.redirect("/blog/" + article_aid)
 
+  def _add_upvote_action(self):
+    user_id = self.db.query("SELECT uid FROM user WHERE username=%s",self.current_user)[0]['uid']
+    article_aid = self.get_argument('blog_id',default='')
+    comment_cid = self.get_argument('comment_id',default='')
+    #生成upvote_id值
+    upvote_user = self.current_user
+    upvote_time = datetime.datetime.now().strftime('%Y-%m-%d\ %H:%M:%S')
+    str = ''.join([upvote_time,upvote_user])
+    str_md5 = hashlib.md5(str).hexdigest()
+    upid = str_md5[0:16]
+    if self._check_upvote(user_id,article_aid,comment_cid) == False:
+      try:
+        self.db.execute('''INSERT INTO upvote (upid,article_aid,user_uid,comment_cid,state) 
+                           VALUES (%s,%s,%s,%s,'1')''',upid,article_aid,user_id,comment_cid)
+        self.json('success',upid)
+      except Exception as e:
+        self.write({'message':e})
+    elif self._check_upvote(user_id,article_aid,comment_cid) == '1':
+      try:
+        self.db.execute('''UPDATE upvote SET state='0' WHERE user_uid=%s AND article_aid=%s AND comment_cid=%s''',
+                           user_id,article_aid,comment_cid)
+        self.json('success',upid)
+      except Exception as e:
+        self.write({'message':e})
+    else:
+      try:
+        self.db.execute('''UPDATE upvote SET state='1' WHERE user_uid=%s AND article_aid=%s AND comment_cid=%s''',
+                           user_id,article_aid,comment_cid)
+        self.json('success',upid)
+      except Exception as e:
+        self.write({'message':e})
 
-
-    
+  def _check_upvote(self,user_id,article_aid,comment_cid):
+    info = self.db.query('''SELECT id,state 
+                          FROM upvote 
+                          WHERE user_uid=%s AND article_aid=%s AND comment_cid=%s''',
+                          user_id,article_aid,comment_cid)
+    if len(info) != 0:
+      if info[0]['state'] == '1':
+        return '1'
+      else:
+        return '0'
+    else:
+      return False
     

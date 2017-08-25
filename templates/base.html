@@ -15,7 +15,9 @@
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">
     <link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">-->
   </head>
+
   <body>
+    <div class="main-content">
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="width-limit">
         <a class="logo" href="/" onfocus="blur()">
@@ -95,22 +97,14 @@
                 </form>
               </li>
             </ul>
-          </div>
-          <header>
-            {% block header %} {% end %}
-          </header>       
+          </div>    
         </div>
       </div>
     </nav>
-     <div class="alert"></div>
+    <div class="alert"></div>
     <content>
       {% block content %} {% end %}
     </content>
-    <!--
-    <div style="background-color: #ededed;height: 200px;width: 100%;left: 0px;bottom: 0px;flex: 1;">
-    </div>
-    -->
-
     <!--返回到顶部-->
     <div class="side-tool">
       <ul>
@@ -123,14 +117,16 @@
         </li>
       </ul>
     </div>
-    <script src="{{static_url("js/jquery.min.js")}}"></script>
-    <script src="{{static_url("js/jquery.validate.js")}}"></script>
-    <script src="{{static_url("js/jquery.form.js")}}"></script>
-    <script src="{{static_url("js/bootstrap.min.js")}}"></script>
-    <script src="{{static_url("js/bootstrap-markdown.js")}}"></script>
-    <script src="{{static_url("js/bootstrap-markdown.min.js")}}"></script>
-    <script src="{{static_url("js/markdown.min.js")}}"></script>
-    <script src="{{static_url("js/script.js")}}"></script>
-    <script src="{{static_url("js/iconfont.js")}}"></script>
+  </div> 
+  
+  <script src="{{static_url("js/jquery.min.js")}}"></script>
+  <script src="{{static_url("js/jquery.validate.js")}}"></script>
+  <script src="{{static_url("js/jquery.form.js")}}"></script>
+  <script src="{{static_url("js/bootstrap.min.js")}}"></script>
+  <script src="{{static_url("js/bootstrap-markdown.js")}}"></script>
+  <script src="{{static_url("js/bootstrap-markdown.min.js")}}"></script>
+  <script src="{{static_url("js/markdown.min.js")}}"></script>
+  <script src="{{static_url("js/script.js")}}"></script>
+  <script src="{{static_url("js/iconfont.js")}}"></script>
   </body>
 </html>

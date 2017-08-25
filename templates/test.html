@@ -1,12 +1,27 @@
+
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title></title>
-  <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 </head>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+  $("#test1").click(function(){
+    document.getElementById("test").innerHTML="bbbb";
+    $("#test")[0].innerHTML='ccc'
+    alert($("#test").text());
+  });
+});
+</script>
 <body>
-aa
-{{article_aid}}
-{{comment_content}}
+<div>
+  <h4 id="test">aaab</h4>
+  <button id="test1">点击</button>
+</div>
 </body>
 </html>
