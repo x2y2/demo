@@ -680,7 +680,6 @@ $(function(){
                      "comment_id":comment_id
                     }, 
               success: function(data){
-                //_this.closest("li").find("#upvote_state")[0].innerHTML = '1';
                 _this.closest("li").find("#upvote_state").get(0).innerHTML = '1';
                 var count =  String(Number(upvote_count) + 1);
                 _this.closest("li").find("#upvote_count").get(0).innerHTML = count;

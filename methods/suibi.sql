@@ -36,7 +36,7 @@ CREATE TABLE `articles` (
   KEY `idx_articles_aid` (`aid`),
   KEY `FK_ARTICLES_USERUID` (`user_uid`),
   CONSTRAINT `FK_ARTICLES_USERUID` FOREIGN KEY (`user_uid`) REFERENCES `user` (`uid`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,9 +59,9 @@ CREATE TABLE `comments` (
   KEY `idx_comment_cid` (`comment_cid`),
   KEY `COMMENTS_FK_AID` (`article_aid`),
   KEY `FK_COMMENTS_UID` (`user_uid`),
-  CONSTRAINT `FK_COMMENTS_UID` FOREIGN KEY (`user_uid`) REFERENCES `user` (`uid`) ON DELETE CASCADE,
-  CONSTRAINT `COMMENTS_FK_AID` FOREIGN KEY (`article_aid`) REFERENCES `articles` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `COMMENTS_FK_AID` FOREIGN KEY (`article_aid`) REFERENCES `articles` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `FK_COMMENTS_UID` FOREIGN KEY (`user_uid`) REFERENCES `user` (`uid`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,25 @@ CREATE TABLE `relation` (
   `to_user_id` varchar(16) NOT NULL,
   `type` int(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=167 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=628 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `upvote`
+--
+
+DROP TABLE IF EXISTS `upvote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `upvote` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `upid` char(16) NOT NULL,
+  `article_aid` char(16) NOT NULL,
+  `user_uid` char(16) NOT NULL,
+  `comment_cid` char(16) NOT NULL,
+  `state` char(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -99,7 +117,24 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   KEY `index_user_uid` (`uid`),
   KEY `idex_user_name` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_info`
+--
+
+DROP TABLE IF EXISTS `user_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_uid` char(16) NOT NULL,
+  `gender` char(1) DEFAULT '2',
+  `personal_profile` text,
+  `webchat_code` varchar(24) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -111,4 +146,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-08-01 10:59:27
+-- Dump completed on 2017-08-25 17:56:21
