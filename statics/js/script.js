@@ -10,7 +10,7 @@ $(function(){
       data: $('#loginForm').serialize(),
       success: function(data) {
          if (data['status'] == 'noexists') {
-           $('.alert').html(data['info']).addClass('alert-danger').show();
+           $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
          }
          else if (data['status'] == 'errorpassword') {
            $('.alert').html(data['info']).addClass('alert-danger').show().delay(1500).fadeOut();
