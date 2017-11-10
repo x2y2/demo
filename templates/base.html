@@ -23,18 +23,18 @@
         <a class="logo" href="/" onfocus="blur()">
           <img src="{{static_url("img/logo.png")}}" style="width: 100%;height: 40px;margin-top: -15px;">
         </a>
-        {% if login_user is None %}
+        {% if user_infos['login_user'] is None %}
           <a class="sign_up" href="/sign_up" style="color: red;" onfocus="blur()">注册</a>
           <a class="login" href="/login" style="color: white;" onfocus="blur()">登录</a>
         {% end %}
         <!--如果用户已登录，显示下拉列表菜单-->
-        {% if login_user is not None %}
+        {% if user_infos['login_user'] is not None %}
         <div class="user">
           <div class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" style="cursor: pointer;">
               <!--显示登录用户的头像-->
-              {% if login_user_pic is not None %}
-              <img src="{{static_url("upload/img/" + login_user_pic)}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
+              {% if user_infos['login_user_pic'] is not None %}
+              <img src="{{static_url("upload/img/" + user_infos['login_user_pic'])}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
               {% else %}
               <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 45px;height: 45px;margin-top: -8px;">
               {% end %}
@@ -42,7 +42,7 @@
             </a>
             <ul class="dropdown-menu">
               <li >
-                <a href="/users/{{login_user_id}}"><span class="glyphicon glyphicon-user" style="height: 30px;">  我的主页</span></a>
+                <a href="/users/{{user_infos['login_user_id']}}"><span class="glyphicon glyphicon-user" style="height: 30px;">  我的主页</span></a>
               </li>
               <li >
                <a href="/setting/basic"><span class="glyphicon glyphicon-wrench" style="height: 30px;">  设置</span></a>
@@ -51,14 +51,14 @@
                 <a href=""><span class="glyphicon glyphicon-phone" style="height: 30px;">  联系我们</span></a>
               </li>
               <li>
-                <a href="/logout"><span class="glyphicon glyphicon-off" style="height: 30px;">  退出 {{login_user}}</span></a>
+                <a href="/logout"><span class="glyphicon glyphicon-off" style="height: 30px;">  退出 {{user_infos['login_user']}}</span></a>
               </li>
             </ul>
           </div>
         </div>
         {% end %}
         <!--写文章-->
-        {% if login_user is None %}
+        {% if user_infos['login_user'] is None %}
           <a href="/login">
             <div class="write-articles" onfocus="blur()">
               <svg class="icon" aria-hidden="true">

@@ -38,9 +38,9 @@
       </div>
       <!--加关注-->
       <div style="float: right; margin-top: -35px;">
-          {% if f_info['uid'] not in common_id %}
+          {% if f_info['uid'] not in user_infos['common_id'] %}
               <!--未登录的用户跳转到登录界面-->
-              {% if login_user is None%}
+              {% if user_infos['login_user'] is None%}
                 <div>
                   <span href="/login" style="text-decoration: none;" class="add-follow btn">
                   <svg class="icon" aria-hidden="true">
@@ -51,7 +51,7 @@
                 </div>
               {% else %}
                 <!--不关注自己-->
-                {% if login_user == f_info['username'] %}
+                {% if user_infos['login_user'] == f_info['username'] %}
                   <div></div>
                 {%else%}
                   <div id="following-follower">

@@ -4,54 +4,37 @@
 from base import BaseHandler
 from forms.form import BasicsettingForm
 from forms.form import ChangepasswordForm
+from user_main import UserBaseHandler as UBH
 import os
 import hashlib
 import base64
 
-class SettingHandler(BaseHandler):
+class SettingHandler(UBH):
   def get(self,*args,**kwargs):
-    #登录用户信息
-    if self.current_user is not None:
-      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
-      login_user_pic = login_user_info[0]['pic']
-      login_user_id = login_user_info[0]['uid']
-      login_user = self.current_user
-    else:
-      login_user_pic = None
-      login_user_id = None
-      login_user = None
+    UBH.login_user_infos(self)
+    UBH.personal_infos(self)
 
+    #登录用户信息
+    
     action = "_%s_action" % self.arg
     if hasattr(self,action):
-      getattr(self,action)(login_user,login_user_id,login_user_pic)
+      getattr(self,action)(UBH.user_infos)
 
 
-  def _basic_action(self,login_user,login_user_id,login_user_pic):
-    self.render("setting.html",
-                 login_user=login_user,
-                 login_user_id=login_user_id,
-                 login_user_pic=login_user_pic)
+  def _basic_action(self,user_infos):
+    self.render("setting.html",user_infos=user_infos)
 
-  def _profile_action(self,login_user,login_user_id,login_user_pic):
+  def _profile_action(self,user_infos):
     if self.personal_info:
       gender = self.personal_info[0]['gender']
       webchat_code = self.personal_info[0]['webchat_code']
       personal_profile = self.personal_info[0]['personal_profile']
     else:
       gender = webchat_code = personal_profile =None
-    self.render("profile.html",
-                 login_user=login_user,
-                 login_user_id=login_user_id,
-                 login_user_pic=login_user_pic,
-                 gender =  gender,
-                 webchat_code=webchat_code,
-                 personal_profile=personal_profile)
+    self.render("profile.html",user_infos=user_infos)
   
-  def _account_manage_action(self,login_user,login_user_id,login_user_pic):
-    self.render("account_manage.html",
-                 login_user=login_user,
-                 login_user_id=login_user_id,
-                 login_user_pic=login_user_pic)
+  def _account_manage_action(self,user_infos):
+    self.render("account_manage.html",user_infos = user_infos)
 
   def post(self,*args,**kwargs):
     action = self.arg

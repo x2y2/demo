@@ -2,7 +2,7 @@
 #coding=utf8
 
 from base import BaseHandler
-from user_main import UserBaseHandler
+from user_main import UserBaseHandler as UBH
 import sys
 import datetime
 import hashlib
@@ -15,19 +15,10 @@ import ujson
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-class BlogContentHandler(UserBaseHandler):
+class BlogContentHandler(UBH):
   def get(self):
     #登录用户信息
-    if self.current_user is not None:
-      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
-      login_user_pic = login_user_info[0]['pic']
-      login_user_id = login_user_info[0]['uid']
-      login_user = self.current_user
-    else:
-      login_user_pic = None
-      login_user_id = None
-      login_user = None
-    
+    UBH.login_user_infos(self)
     bid = self.id
     #记录阅读次数
     self.db.execute("update articles set read_count=read_count + 1 where aid=%s",bid)
@@ -101,9 +92,7 @@ class BlogContentHandler(UserBaseHandler):
     self.render("blog.html",
                 b_infos=b_infos,
                 c_infos_html= html,
-                login_user=login_user,
-                login_user_id=login_user_id,
-                login_user_pic=login_user_pic,
+                user_infos = UBH.user_infos,
                 comment_infos=comment_infos,
                 followed=followed,
                 upvote_state=upvote_state,
@@ -141,27 +130,18 @@ class BlogContentHandler(UserBaseHandler):
     except Exception as e:
       self.json('error',e)
 
-class NewBlogHandler(BaseHandler):
+class NewBlogHandler(UBH):
   def get(self,*args,**kwargs):
-    if self.current_user:
-      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
-      login_user_pic = login_user_info[0]['pic']
-      login_user_id = login_user_info[0]['uid']
-      login_user = self.current_user
-    else:
-      login_user_pic = None
-      login_user_id = None
-      login_user = None
-
+    UBH.login_user_infos(self)
     action = "_%s_action" % args[0]
     if hasattr(self,action):
-      getattr(self,action)(login_user,login_user_id,login_user_pic)
+      getattr(self,action)(UBH.user_infos)
     else:
       m_infos = self.db.query("select id,title from articles")
-      self.render("index.html",m_infos = m_infos,login_user=login_user,login_user_id=login_user_id,login_user_pic=login_user_pic)
+      self.render("index.html",m_infos = m_infos,user_infos=UBH.user_infos)
 
-  def _info_action(self,login_user,login_user_id,login_user_pic):
-    self.render("newblog.html",login_user=login_user,login_user_id=login_user_id,login_user_pic=login_user_pic)
+  def _info_action(self,user_infos):
+    self.render("newblog.html",user_infos=user_infos)
 
   def post(self,*args,**kwargs):
     action = "_%s_action" % args[0]
@@ -200,36 +180,23 @@ class NewBlogHandler(BaseHandler):
     except Exception as e:
       self.json('error',str(e))
 
-class EditBlogHandler(BaseHandler):
+class EditBlogHandler(UBH):
   def get(self,*args,**kwargs):
-    if self.current_user is not None:
-      login_user_info = self.db.query("SELECT uid,pic FROM user WHERE username=%s",self.current_user)
-      login_user_pic = login_user_info[0]['pic']
-      login_user_id = login_user_info[0]['uid']
-      login_user = self.current_user
-    else:
-      login_user_pic = None
-      login_user_id = None
-      login_user = None
-
+    UBH.login_user_infos(self)
     action = "_%s_action" % args[0]
     if hasattr(self,action):
-      getattr(self,action)(login_user,login_user_id,login_user_pic)
+      getattr(self,action)(UBH.user_infos)
     else:
       m_infos = self.db.query("select aid,title from articles")
       self.render("index.html",
                    m_infos = m_infos,
-                   login_user=login_user,
-                   login_user_id=login_user_id,
-                   login_user_pic=login_user_pic)
+                   user_infos = UBH.user_infos)
 
-  def _info_action(self,login_user,login_user_id,login_user_pic):
+  def _info_action(self,user_infos):
     blog_id = self.get_argument('id',default="")
     blog_title_content = self.db.query("select title,content from articles where aid=%s",blog_id)
     self.render("editblog.html",
-                 login_user=login_user,
-                 login_user_id=login_user_id,
-                 login_user_pic=login_user_pic,
+                 user_infos = user_infos,
                  blog_id=blog_id,
                  blog_title=blog_title_content[0]['title'],
                  blog_content=blog_title_content[0]['content'])

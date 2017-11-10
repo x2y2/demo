@@ -23,16 +23,6 @@ class App(tornado.web.Application):
     self.redis_port = conf.get('redis','redis_port')
     self.redis_password = conf.get('redis','redis_password')
     self.redis_db = conf.get('redis','redis_db')
-    #define("mysql_host",default="127.0.0.1",help="database host")
-    #define("mysql_user",default="wangpei",help="database user")
-    #define("mysql_password",default="123456",help="database password")
-    #define("mysql_database",default="suibi",help="database name")
-    #define("mysql_charset",default="utf8mb4",help="database charset")
-
-    #define("redis_host",default="127.0.0.1",help="reids host")
-    #define("redis_port",default="6379",help="redis port")
-    #define("redis_password",default="",help="redis password")
-    #define("redis_db",default="0",help="redis db")
 
     settings = dict(template_path = os.path.join(os.path.dirname(__file__),"templates"),
                     static_path = os.path.join(os.path.dirname(__file__),"statics"),
@@ -65,5 +55,4 @@ class App(tornado.web.Application):
                                      port=self.redis_port,
                                      db=self.redis_db)
 
-    self.session_manager = SessionManager(settings["session_secret"],
-                                          settings['store_options'])
+    self.session_manager = SessionManager(settings["session_secret"],settings['store_options'])

@@ -22,8 +22,8 @@
           </span>
         </div>
         <!--添加关注-->
-        {% if login_user is not None%}
-          {% if login_user != b_infos[0]['username'] %}
+        {% if user_infos['login_user'] is not None%}
+          {% if user_infos['login_user'] != b_infos[0]['username'] %}
               {% if followed == False %}
               <div id="blog-follower" style="margin-left: 100px; margin-top: -25px;">
                 <a  class="blog-add-follow btn" style="color: white;">
@@ -76,7 +76,7 @@
           <li><span style="color: gray;">评论 {{b_infos[0]['comment_count']}}</span></li>
           <li><span style="color: gray;">喜欢 0</span></li>
         </ul>
-        {% if login_user == b_infos[0]['username']%}
+        {% if user_infos['login_user'] == b_infos[0]['username']%}
         <a href="/blog/edit/info?id={{b_infos[0]['aid']}}" style="color: gray;" onfocus="blur()">
           <div class="blog-edit">
             <span>编辑文章</span>
@@ -91,7 +91,7 @@
     </div>
     <!--评论-->
     <div style="margin-bottom: 20px;">
-      {% if login_user is not None %}
+      {% if user_infos['login_user'] is not None %}
         <form role="form"　name="comment-form" action="/blog/{{b_infos[0]['aid']}}/add_comment" method="POST">
           <input name="article_aid" style="display: none;" value="{{b_infos[0]['aid']}}" />
           <div>
@@ -99,9 +99,9 @@
               <textarea id="new-comment" name="new-comment" class="textarea" placeholder="写下你的评论"></textarea>
             </div>
             <div>
-            {% if login_user_pic is not None %}
+            {% if user_infos['login_user_pic'] is not None %}
               <a>
-                <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 30px;height: 30px;">
+                <img src="{{static_url("upload/img/" + user_infos['login_user_pic'])}}" class="img-circle" style="width: 30px;height: 30px;">
               </a>
             {% else %}
               <a>
@@ -171,7 +171,7 @@
 
             <h4 id="upvote_state" style="display: none;">{{upvote_state[comment_info['comment_cid']]}}</h4>
             <div style="margin-top: 10px;font-size: 14px;">
-              {% if login_user %}
+              {% if user_infos['login_user'] %}
                 {% if upvote_state[comment_info['comment_cid']] == '1' %}
                   <i id="comment_upvote" style="cursor: pointer;color: red" class="zan-iconfont icon-zan"></i>
                   <span id="upvote_count">{{dic_upvote[comment_info['comment_cid']]}}</span>

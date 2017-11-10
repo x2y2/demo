@@ -7,8 +7,8 @@
     <tr>
       <td style="width: 200px;">
         <div>
-          {% if login_user_pic %}
-          <img src="{{static_url("upload/img/" + login_user_pic)}}" class="img-circle" style="width: 80px;height: 80px;">
+          {% if user_infos['login_user_pic'] %}
+          <img src="{{static_url("upload/img/" + user_infos['login_user_pic'])}}" class="img-circle" style="width: 80px;height: 80px;">
           {% else %}
           <img src="{{static_url("img/user.jpg")}}" class="img-circle" style="width: 80px;height: 80px;">
           {% end %}
@@ -40,7 +40,7 @@
             </td>
             <td>
               <div style="margin-top: 20px;margin-bottom: 20px;">
-                <input type="text" name="nickname" id="setting_basic_username" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称" value="{{login_user}}" maxlength="10" required="">
+                <input type="text" name="nickname" id="setting_basic_username" class="setting-basic-input" style="width: 200px;" placeholder="请输入昵称" value="{{ user_infos['login_user'] }}" maxlength="10" required="">
               </div>
             </td>
           </tr>

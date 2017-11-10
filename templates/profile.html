@@ -1,6 +1,6 @@
 {% extends "setting_base.html" %}
 {% block setting_content%}
-<h4 id='login_user_id' style="display: none;">{{login_user_id}}</h4>
+<h4 id='login_user_id' style="display: none;">{{ user_infos['login_user_id'] }}</h4>
 <div class="container" style="padding-left: 80px;margin-top: 80px;">
   <div class="col-xs-8">
     <table class="table" rules="rows">
@@ -13,11 +13,11 @@
           </td>
           <td>
             <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
-              {% if gender == '1' %}
+              {% if user_infos['gender'] == '1' %}
                 <input type="radio" name="optionsradio" value="male" checked="true">男</input>
                 <input type="radio" name="optionsradio" value="female" style="margin-left: 20px;">女</input>
                 <input type="radio" name="optionsradio" value="secret"  style="margin-left: 20px;">保密</input>
-              {% elif gender == '0' %}
+              {% elif user_infos['gender'] == '0' %}
                 <input type="radio" name="optionsradio" value="male">男</input>
                 <input type="radio" name="optionsradio" value="female" checked="true" style="margin-left: 20px;">女</input>
                 <input type="radio" name="optionsradio" value="secret" style="margin-left: 20px;">保密</input>
@@ -37,8 +37,8 @@
           </td>
           <td>
             <div style="color: gray;margin-top: 20px;margin-bottom: 20px;">
-              {% if personal_profile %}
-                <textarea class="textarea" style="margin-bottom: 20px;">{{personal_profile}}</textarea>
+              {% if user_infos['personal_profile'] %}
+                <textarea class="textarea" style="margin-bottom: 20px;">{{ user_infos['personal_profile'] }}</textarea>
               {% else %}
                 <textarea class="textarea" style="margin-bottom: 20px;"></textarea>
               {% end %}
@@ -56,7 +56,7 @@
               <div style="float:right;font-size: 14px;color: gray;">
                 <span>上传后在个人主页显示图标</span> 
               </div>
-              {% if not webchat_code %}
+              {% if not user_infos['webchat_code'] %}
               <div style="color: gray;margin-top: 20px;margin-bottom: 20px;padding-top: 25px;padding-bottom: 25px;">
                 <form role="form" name="webchat-upload-pic" id="webchat-pic-form" action="/setting/profile/webchat_upload" enctype="multipart/form-data" method="post">
                   <div class="webchat-pic">
@@ -70,7 +70,7 @@
               {% else %}
               <div>
                 <div style="float: left;">
-                  <img src="{{static_url("upload/webchat/" + webchat_code)}}" class="img" style="width: 80px;height: 80px;">
+                  <img src="{{static_url("upload/webchat/" + user_infos['webchat_code'])}}" class="img" style="width: 80px;height: 80px;">
                 </div>
                 <div id="webchat_pic_delete" style="float:right; cursor: pointer;margin-right: 65px;display: none;">
                   <span style="color: gray">删除</span>

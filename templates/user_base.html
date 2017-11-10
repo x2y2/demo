@@ -5,10 +5,10 @@
     <div class="col-xs-8">
       <div class="users-header">
         <div class="main-top">
-          <a href="/users/{{author_id}}" class="avatar" onfocus="blur()">
+          <a href="/users/{{user_infos['author_id']}}" class="avatar" onfocus="blur()">
             <!--显示作者头像-->
-            {% if author_pic is not None %}
-            <img src="{{static_url("upload/img/" + author_pic)}}"  class="img-circle" style="width: 80px;height: 80px;">
+            {% if user_infos['author_pic'] is not None %}
+            <img src="{{static_url("upload/img/" + user_infos['author_pic'])}}"  class="img-circle" style="width: 80px;height: 80px;">
             {% else %}
             <img src="{{static_url("img/user.jpg")}}"  class="img-circle" style="width: 80px;height: 80px;">
             {% end %}
@@ -16,10 +16,10 @@
         </div>
         <!--显示作者名称-->
         <div class="title">
-          <a href="/users/{{author_id}}" style="text-decoration: none; color: black;" onfocus="blur()">{{author_name}}</a>
-          {% if gender == '1' %}
+          <a href="/users/{{user_infos['author_id']}}" style="text-decoration: none; color: black;" onfocus="blur()">{{user_infos['author_name']}}</a>
+          {% if user_infos['gender'] == '1' %}
             <i class="nan-iconfont icon-xingbienan"></i>
-          {% elif gender == '0' %}
+          {% elif user_infos['gender'] == '0' %}
              <i class="female-iconfont icon-Female"></i>
           {% else %}
             <div style="display: none;"></div>
@@ -27,7 +27,7 @@
         </div>
         <!--添加关注和发简讯-->
         <div style="float: right;margin-top:10px;">
-        {% if login_user is None%}
+        {% if user_infos['login_user'] is None%}
         <div>
           <a href="/login" class="add-follow btn" style="color: white;">
           <svg class="icon" aria-hidden="true">
@@ -37,8 +37,8 @@
           </a>
         </div>
         {% else %}
-          {% if login_user != author_name %}
-            {% if follower == False %}
+          {% if user_infos['login_user'] != user_infos['author_name'] %}
+            {% if user_infos['followed'] == False %}
               <div id="follower">
                 <span class="add-follow btn" style="color: white;">
                 <svg class="icon" aria-hidden="true">
@@ -81,24 +81,24 @@
           <ul class="list-inline">
             <li>
               <div class="meta-block">
-                <a href="/users/{{author_id}}/following" style="color: gray;" onfocus="blur()">
-                  <p>{{following_count}}</p>关注
+                <a href="/users/{{user_infos['author_id']}}/following" style="color: gray;" onfocus="blur()">
+                  <p>{{user_infos['following_count']}}</p>关注
                   <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
                 </a>
               </div>
             </li>
             <li>
               <div class="meta-block">
-                <a href="/users/{{author_id}}?order_by=created_at" style="color: gray;" onfocus="blur()">
-                  <p>{{count_article}}</p>文章
+                <a href="/users/{{user_infos['author_id']}}?order_by=created_at" style="color: gray;" onfocus="blur()">
+                  <p>{{user_infos['count_article']}}</p>文章
                   <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
                 </a>
               </div>
             </li>
             <li>
               <div class="meta-block">
-                <a href="/users/{{author_id}}/followers" style="color: gray;" onfocus="blur()">
-                  <p>{{follower_count}}</p>粉丝
+                <a href="/users/{{user_infos['author_id']}}/followers" style="color: gray;" onfocus="blur()">
+                  <p>{{user_infos['follower_count']}}</p>粉丝
                   <i class="asmkticon0207-iconfont icon-asmkticon0207"></i>
                 </a>
               </div>
@@ -116,22 +116,22 @@
       <div class="users-body">
         <ul id="menu-list" class="trigger-menu list-inline">
           <li>
-            <a href="/users/{{author_id}}?order_by=created_at" onfocus="this.blur()">文章</a>
+            <a href="/users/{{user_infos['author_id']}}?order_by=created_at" onfocus="this.blur()">文章</a>
           </li>
           <li>
-            <a href="/users/{{author_id}}" onfocus="this.blur()">动态</a>
+            <a href="/users/{{user_infos['author_id']}}" onfocus="this.blur()">动态</a>
           </li>
           <li>
-            <a href="/users/{{author_id}}?order_by=commented_at" onfocus="this.blur()">最新评论</a>
+            <a href="/users/{{user_infos['author_id']}}?order_by=commented_at" onfocus="this.blur()">最新评论</a>
           </li>
           <li>
-            <a href="/users/{{author_id}}?order_by=top" onfocus="this.blur()">热门</a>
+            <a href="/users/{{user_infos['author_id']}}?order_by=top" onfocus="this.blur()">热门</a>
           </li>
           <li>
-            <a href="/users/{{author_id}}/following" onfocus="this.blur()">关注用户</a>
+            <a href="/users/{{user_infos['author_id']}}/following" onfocus="this.blur()">关注用户</a>
           </li>
           <li>
-            <a href="/users/{{author_id}}/followers" onfocus="this.blur()">粉丝</a>
+            <a href="/users/{{user_infos['author_id']}}/followers" onfocus="this.blur()">粉丝</a>
           </li>
         </ul>
         {% block user_content %} {% end %}
@@ -146,7 +146,7 @@
               <div style="color: gray;margin-bottom: 20px;">
                 <span >个人介绍</span>
                 <div id="personal-intr-edit" style="float: right;cursor: pointer;">
-                  {% if login_user == author_name %}
+                  {% if user_infos['login_user'] == user_infos['author_name'] %}
                     <i class="icon iconfont icon-5"></i>
                     <span>编辑</span>
                   {% else %}
@@ -155,14 +155,14 @@
                 </div>
               </div>
               <div id="personal_profile" style="font-size: 14px;">
-                {% if personal_profile %}
-                <span>{%raw personal_profile %}</span>
+                {% if user_infos['personal_profile'] %}
+                <span>{%raw user_infos['personal_profile'] %}</span>
                 {% else %}
                 <span></span>
                 {% end %}
               </div>
               <div id="personal-intr" style="display: none;">
-                <textarea class="personal-textarea">{{ personal_profile }}</textarea>
+                <textarea class="personal-textarea">{{ user_infos['personal_profile'] }}</textarea>
               </div>
               <div id="personal-intr-control" style="margin-top: 10px;margin-bottom: 20px;display: none;">
                 <div class="personal-message">
@@ -173,10 +173,10 @@
                 </div>
               </div>
               <div>
-                {% if webchat_code %}
+                {% if user_infos['webchat_code'] %}
                 <div style="margin-top: 10px;padding-left: 5px;padding-right: 5px; cursor: pointer;width: 35px;" id="webchat-pic" data-placement="bottom" data-toggle="popover" data-html="true" data-content="
                   <div>
-                    <img src='{{static_url('upload/webchat/' + webchat_code)}}' style='width: 150px;height: 180px;'/>
+                    <img src='{{static_url('upload/webchat/' + user_infos['webchat_code'])}}' style='width: 150px;height: 180px;'/>
                   </div>
                   " data-original-title="" title="">
                   <i class="weixin-icon iconfont icon-weixin1"></i>
@@ -213,7 +213,7 @@
           <tr>
             <td>
               <div style="color: gray;margin-top: 20px; margin-bottom: 20px;">
-              {% if login_user == author_name %}
+              {% if user_infos['login_user'] == user_infos['author_name'] %}
                 <a></a>
               {% else %}
                 <a href="#" style="color: gray;" onfocus="blur()">加入黑名单</a>
