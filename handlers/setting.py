@@ -4,33 +4,24 @@
 from base import BaseHandler
 from forms.form import BasicsettingForm
 from forms.form import ChangepasswordForm
-from user_main import UserBaseHandler as UBH
 import os
 import hashlib
 import base64
 
-class SettingHandler(UBH):
+class SettingHandler(BaseHandler):
   def get(self,*args,**kwargs):
-    UBH.login_user_infos(self)
-    UBH.personal_infos(self)
+    self.login_user_infos()
+    self.personal_infos()
 
-    #登录用户信息
-    
     action = "_%s_action" % self.arg
     if hasattr(self,action):
-      getattr(self,action)(UBH.user_infos)
+      getattr(self,action)(self.user_infos)
 
 
   def _basic_action(self,user_infos):
     self.render("setting.html",user_infos=user_infos)
 
   def _profile_action(self,user_infos):
-    if self.personal_info:
-      gender = self.personal_info[0]['gender']
-      webchat_code = self.personal_info[0]['webchat_code']
-      personal_profile = self.personal_info[0]['personal_profile']
-    else:
-      gender = webchat_code = personal_profile =None
     self.render("profile.html",user_infos=user_infos)
   
   def _account_manage_action(self,user_infos):

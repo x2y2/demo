@@ -2,31 +2,29 @@
 #coding=utf-8
 
 from base import BaseHandler
-from user_main import UserBaseHandler as UBH
 import hashlib
 import urlparse
 import json
 import HTMLParser
 import ujson
 
-class ArticlesHandler(UBH):
-
+class ArticlesHandler(BaseHandler):
   def get(self):
-    UBH.login_user_infos(self)
-    UBH.author_infos(self)
-    UBH.count_articles(self)
-    UBH.follower_counts(self)
-    UBH.following_counts(self)
-    UBH.followeds(self)
-    UBH.personal_infos(self)
+    self.login_user_infos()
+    self.author_infos()
+    self.count_articles()
+    self.follower_counts()
+    self.following_counts()
+    self.followeds()
+    self.personal_infos()
    
     #根据URL选择执行方法
     url = self.get_argument("order_by",default="")
     action = "_%s" % url
     if hasattr(self,action):
-      getattr(self,action)(UBH.user_infos)
+      getattr(self,action)(self.user_infos)
     else:
-      self.user_info(UBH.user_infos)
+      self.user_info(self.user_infos)
 
   #用户动态信息
   def user_info(self,user_infos):
@@ -88,21 +86,21 @@ class ArticlesHandler(UBH):
       self.json('error',e)
 
 #关注用户
-class FollowingHandler(UBH):
+class FollowingHandler(BaseHandler):
   def get(self):
-    UBH.login_user_infos(self)
-    UBH.author_infos(self)
-    UBH.count_articles(self)
-    UBH.follower_counts(self)
-    UBH.following_counts(self)
-    UBH.followeds(self)
-    UBH.common_ids(self)
-    UBH.personal_infos(self)
+    self.login_user_infos()
+    self.author_infos()
+    self.count_articles()
+    self.follower_counts()
+    self.following_counts()
+    self.followeds()
+    self.common_ids()
+    self.personal_infos()
     #根据URI选择执行方法
     url = self.arg
     action = "_%s" % url
     if hasattr(self,action):
-      getattr(self,action)(UBH.user_infos)
+      getattr(self,action)(self.user_infos)
     else:
       pass
 
@@ -157,8 +155,8 @@ class FollowingHandler(UBH):
         dic_articles[articles_u_count['uid']] += 1
 
     self.render('following.html',f_infos=f_infos,user_infos = user_infos,
-                 dic_following = dic_following,
-                 dic_follower = dic_follower,dic_articles=dic_articles)
+                 dic_following = dic_following,dic_follower = dic_follower,
+                 dic_articles=dic_articles)
 
 
   def post(self):
@@ -222,21 +220,21 @@ class FollowingHandler(UBH):
     except Exception as e:
       self.json('error',e)
 
-class FollowersHandler(UBH):
+class FollowersHandler(BaseHandler):
   def get(self):
-    UBH.login_user_infos(self)
-    UBH.author_infos(self)
-    UBH.count_articles(self)
-    UBH.follower_counts(self)
-    UBH.following_counts(self)
-    UBH.followeds(self)
-    UBH.common_ids(self)
-    UBH.personal_infos(self)
+    self.login_user_infos()
+    self.author_infos()
+    self.count_articles()
+    self.follower_counts()
+    self.following_counts()
+    self.followeds()
+    self.common_ids()
+    self.personal_infos()
     #根据URI最后的关键字选择执行方法
     string = self.arg
     action = "_%s" % string
     if hasattr(self,action):
-      getattr(self,action)(UBH.user_infos)
+      getattr(self,action)(self.user_infos)
     else:
       pass
   def _followers(self,user_infos):

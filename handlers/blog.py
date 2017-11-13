@@ -2,7 +2,6 @@
 #coding=utf8
 
 from base import BaseHandler
-from user_main import UserBaseHandler as UBH
 import sys
 import datetime
 import hashlib
@@ -15,10 +14,10 @@ import ujson
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-class BlogContentHandler(UBH):
+class BlogContentHandler(BaseHandler):
   def get(self):
     #登录用户信息
-    UBH.login_user_infos(self)
+    self.login_user_infos()
     bid = self.id
     #记录阅读次数
     self.db.execute("update articles set read_count=read_count + 1 where aid=%s",bid)
@@ -92,7 +91,7 @@ class BlogContentHandler(UBH):
     self.render("blog.html",
                 b_infos=b_infos,
                 c_infos_html= html,
-                user_infos = UBH.user_infos,
+                user_infos = self.user_infos,
                 comment_infos=comment_infos,
                 followed=followed,
                 upvote_state=upvote_state,
@@ -130,15 +129,16 @@ class BlogContentHandler(UBH):
     except Exception as e:
       self.json('error',e)
 
-class NewBlogHandler(UBH):
+class NewBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
-    UBH.login_user_infos(self)
+    self.login_user_infos()
+    
     action = "_%s_action" % args[0]
     if hasattr(self,action):
-      getattr(self,action)(UBH.user_infos)
+      getattr(self,action)(self.user_infos)
     else:
       m_infos = self.db.query("select id,title from articles")
-      self.render("index.html",m_infos = m_infos,user_infos=UBH.user_infos)
+      self.render("index.html",m_infos = m_infos,user_infos=self.user_infos)
 
   def _info_action(self,user_infos):
     self.render("newblog.html",user_infos=user_infos)
@@ -180,17 +180,15 @@ class NewBlogHandler(UBH):
     except Exception as e:
       self.json('error',str(e))
 
-class EditBlogHandler(UBH):
+class EditBlogHandler(BaseHandler):
   def get(self,*args,**kwargs):
-    UBH.login_user_infos(self)
+    self.login_user_infos()
     action = "_%s_action" % args[0]
     if hasattr(self,action):
-      getattr(self,action)(UBH.user_infos)
+      getattr(self,action)(self.user_infos)
     else:
       m_infos = self.db.query("select aid,title from articles")
-      self.render("index.html",
-                   m_infos = m_infos,
-                   user_infos = UBH.user_infos)
+      self.render("index.html",m_infos = m_infos, user_infos = self.user_infos)
 
   def _info_action(self,user_infos):
     blog_id = self.get_argument('id',default="")
